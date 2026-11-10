@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="km" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>«សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព និងកាឡូរីឆ្លាតវៃ</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="«សុខភាពខ្ញុំ» Web Application គ្រប់គ្រងសុខភាព តាមដានកាឡូរី ដំណេក និងលំហាត់ប្រាណវ័យ ៤០+ ជាភាសាខ្មែរ ១០០% ស្របតាមស្តង់ដារវចនានុក្រមសម្តេចព្រះសង្ឃរាជ ជួន ណាត">
+</head>
+<body>
+
+  <!-- ======================================================================
+       HEADER & NAVIGATION BAR (LEFT-ALIGNED BRANDING)
+       ====================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      
+      <!-- Left-Aligned Branding with S-Icon.png -->
+      <a href="#" class="brand-group" id="brandLogoLink" title="«សុខភាពខ្ញុំ»">
+        <img src="S-Icon.png" alt="សុខភាពខ្ញុំ Logo" class="brand-logo" width="44" height="44">
+        <div class="brand-info">
+          <h1 class="brand-title">«សុខភាពខ្ញុំ»</h1>
+          <span class="brand-tagline">កម្មវិធីតាមដានសុខភាព & កាឡូរី</span>
+        </div>
+      </a>
+
+      <!-- Smooth Navigation Links -->
+      <nav class="header-nav" id="mainHeaderNav">
+        <button class="nav-link-btn active" data-tab-target="tabDashboard">
+          <span>⚡</span> ផ្ទាំងគ្រប់គ្រង
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabFood">
+          <span>🥗</span> កត់ត្រាអាហារ (៥ មុខម្ហូប)
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabWorkout">
+          <span>🏃</span> ការហាត់ប្រាណ
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabSleep">
+          <span>🌙</span> ដំណេក (យប់/ថ្ងៃ)
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabAdvisory40">
+          <span>🧘‍♂️</span> វ័យ ៤០+
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabAnalytics">
+          <span>📊</span> ស្ថិតិ និងរបាយការណ៍
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabHealthTips">
+          <span>💡</span> គន្លឹះសុខភាព
+        </button>
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="header-actions">
+        <div class="live-date-pill" id="liveDatePill">
+          <span>📅</span>
+          <span id="currentDateText">កំពុងផ្ទុកកាលបរិច្ឆេទ...</span>
+        </div>
+
+        <button class="btn-profile-badge" id="btnOpenProfileModal" title="កែប្រែប្រវត្តិរូប និងគោលដៅ">
+          <span id="headerProfileIcon">👨</span>
+          <span id="headerProfileText">វ័យ ៤៥ ឆ្នាំ</span>
+        </button>
+
+        <button class="btn-goal-header" id="btnOpenGoalModal" title="កែប្រែកាឡូរីគោលដៅ">
+          <span>🎯</span>
+          <span id="headerGoalDisplay">2,000</span>
+          <span>kcal</span>
+        </button>
+
+        <button class="theme-toggle-btn" id="themeToggleBtn" title="ប្តូរ Dark / Light Mode" aria-label="Toggle Theme">
+          <span id="themeIcon">☀️</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ======================================================================
+         AUTOMATIC HEALTH THRESHOLD WARNINGS (បំរាមសុខភាព)
+         ====================================================================== -->
+    <div class="health-alerts-container" id="healthAlertsContainer">
+      
+      <!-- Critical Low Warning Banner -->
+      <div class="alert-banner alert-critical-low" id="bannerCriticalLow" style="display: none;">
+        <span class="alert-icon">⚠️</span>
+        <div class="alert-body">
+          <div class="alert-title">កម្រិតទាបហួសប្រមាណ (Critical Low Intake)</div>
+          <div class="alert-message">
+            ការប្រុងប្រយ័ត្ន៖ បរិមាណកាឡូរីរបស់អ្នកចុះទាបពេកហើយ! ការញ៉ាំតិចជាងកម្រិត BMR អាចបណ្តាលឱ្យចុះខ្សោយសាច់ដុំ បាត់បង់ថាមពល និងបន្ថយល្បឿននៃការរំលាយអាហារ។
+          </div>
+        </div>
+      </div>
+
+      <!-- Excess Surplus Warning Banner -->
+      <div class="alert-banner alert-excess-surplus" id="bannerExcessSurplus" style="display: none;">
+        <span class="alert-icon">🚨</span>
+        <div class="alert-body">
+          <div class="alert-title">កម្រិតខ្ពស់ហួសកម្រិត (Excess Calorie Surplus)</div>
+          <div class="alert-message">
+            ការដាស់តឿន៖ កាឡូរីរបស់អ្នកលើសកម្រិតកំណត់ប្រចាំថ្ងៃលើសពី ២៥%! សូមពិចារណាបន្ថែមការហាត់ប្រាណ ឬកាត់បន្ថយអាហារផ្អែម និងខ្លាញ់ ដើម្បីរក្សាតុល្យភាពទម្ងន់។
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================================
+         SECTION 1: DASHBOARD HERO (ផ្ទាំងគ្រប់គ្រង)
+         ====================================================================== -->
+    <section class="tab-section-view active" id="tabDashboard">
+      
+      <div class="dashboard-hero">
+        
+        <!-- Circular Progress Ring Card -->
+        <div class="card-hero-ring">
+          <div class="ring-title-badge">
+            <span>⚡</span>
+            <span>កាឡូរីសុទ្ធនៅសល់ថ្ងៃនេះ</span>
+          </div>
+
+          <div class="ring-container">
+            <svg class="ring-svg" viewBox="0 0 230 230">
+              <defs>
+                <linearGradient id="emeraldCyanGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#10b981" />
+                  <stop offset="100%" stop-color="#06b6d4" />
+                </linearGradient>
+                <linearGradient id="warnGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#f59e0b" />
+                  <stop offset="100%" stop-color="#fbbf24" />
+                </linearGradient>
+                <linearGradient id="dangerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ef4444" />
+                  <stop offset="100%" stop-color="#f87171" />
+                </linearGradient>
+              </defs>
+              <circle class="ring-bg" cx="115" cy="115" r="95" />
+              <circle class="ring-progress" id="calorieProgressCircle" cx="115" cy="115" r="95" />
+            </svg>
+
+            <div class="ring-content">
+              <span class="ring-rem-label">នៅសល់ (Remaining)</span>
+              <span class="ring-rem-number" id="netRemainingCalories">2,000</span>
+              <span class="ring-rem-unit">kcal</span>
+            </div>
+          </div>
+
+          <div class="ring-status-pill status-good" id="calorieStatusBadge">
+            <span>✅</span>
+            <span id="calorieStatusText">ស្ថិតក្នុងកម្រិតល្អប្រសើរ</span>
+          </div>
+        </div>
+
+        <!-- Right Column: High-level Equation & Details -->
+        <div class="dashboard-stats-grid">
+          
+          <!-- Equation Bar -->
+          <div class="card-equation">
+            <div class="equation-item">
+              <span class="eq-label">🎯 គោលដៅ (Goal)</span>
+              <span class="eq-val eq-goal" id="statGoalCalories">2,000</span>
+            </div>
+            <span class="equation-symbol">−</span>
+            <div class="equation-item">
+              <span class="eq-label">🥗 ញ៉ាំសរុប (Intake)</span>
+              <span class="eq-val eq-intake" id="statIntakeCalories">0</span>
+            </div>
+            <span class="equation-symbol">+</span>
+            <div class="equation-item">
+              <span class="eq-label">🏃 ដុតកីឡា (Burned)</span>
+              <span class="eq-val eq-burned" id="statBurnedCalories">0</span>
+            </div>
+            <span class="equation-symbol">=</span>
+            <div class="equation-item">
+              <span class="eq-label">✨ សុទ្ធនៅសល់ (Net)</span>
+              <span class="eq-val eq-net" id="statNetEquation">2,000</span>
+            </div>
+          </div>
+
+          <!-- 3 Detail Metric Cards -->
+          <div class="metric-cards-row">
+            <div class="card-metric">
+              <div class="metric-icon-box icon-goal">🎯</div>
+              <div class="metric-info">
+                <div class="metric-label-row">
+                  <span class="metric-label">កាឡូរីគោលដៅ</span>
+                  <button class="btn-item-del" id="btnEditGoalInline" title="កែប្រែ">✏️</button>
+                </div>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="cardGoalNum">2,000</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kcal</span>
+                </div>
+                <span class="metric-sub" id="cardProfileSub">បុរស ៤៥ ឆ្នាំ (BMR: 1,550)</span>
+              </div>
+            </div>
+
+            <div class="card-metric">
+              <div class="metric-icon-box icon-intake">🥗</div>
+              <div class="metric-info">
+                <div class="metric-label-row">
+                  <span class="metric-label">បានញ៉ាំរួច</span>
+                </div>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="cardIntakeNum">0</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kcal</span>
+                </div>
+                <span class="metric-sub" id="cardIntakePercent">0% នៃគោលដៅ</span>
+              </div>
+            </div>
+
+            <div class="card-metric">
+              <div class="metric-icon-box icon-burned">🔥</div>
+              <div class="metric-info">
+                <div class="metric-label-row">
+                  <span class="metric-label">បានដុតបំផ្លាញ</span>
+                </div>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="cardBurnedNum">0</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kcal</span>
+                </div>
+                <span class="metric-sub" id="cardWorkoutCount">០ សកម្មភាព</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Macro Nutrients Breakdown Card -->
+          <div class="card-macros">
+            <div class="macros-header">
+              <h4><span>🥑</span> សារធាតុចិញ្ចឹមគោល (Macronutrients Breakdown)</h4>
+              <span style="font-size: 0.78rem; color: var(--text-muted);">គណនាស្វ័យប្រវត្តតាមអាហារ</span>
+            </div>
+            <div class="macro-bars-grid">
+              <div class="macro-item">
+                <div class="macro-name-row">
+                  <span>🥩 ប្រូតេអ៊ីន (Protein)</span>
+                  <span id="proteinGrams">0g / 125g</span>
+                </div>
+                <div class="macro-track">
+                  <div class="macro-fill fill-protein" id="proteinBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="macro-item">
+                <div class="macro-name-row">
+                  <span>🍚 កាបូអ៊ីដ្រាត (Carbs)</span>
+                  <span id="carbsGrams">0g / 225g</span>
+                </div>
+                <div class="macro-track">
+                  <div class="macro-fill fill-carbs" id="carbsBar" style="width: 0%;"></div>
+                </div>
+              </div>
+
+              <div class="macro-item">
+                <div class="macro-name-row">
+                  <span>🥑 ខ្លាញ់ល្អ (Fats)</span>
+                  <span id="fatsGrams">0g / 55g</span>
+                </div>
+                <div class="macro-track">
+                  <div class="macro-fill fill-fat" id="fatsBar" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Quick Shortcuts to Food Menus -->
+      <div style="margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn-primary" data-switch-to-menu="breakfast">
+            <span>🌅</span> កត់ត្រាអាហារពេលព្រឹក
+          </button>
+          <button class="btn-secondary" data-switch-to-menu="lunch">
+            <span>☀️</span> អាហារថ្ងៃត្រង់
+          </button>
+          <button class="btn-secondary" data-switch-to-menu="dinner">
+            <span>🌙</span> អាហារពេលល្ងាច
+          </button>
+          <button class="btn-secondary" data-switch-to-menu="snacks">
+            <span>🍿</span> អាហារសម្រន់
+          </button>
+          <button class="btn-secondary" data-switch-to-menu="party">
+            <span>🎉</span> អាហារកម្មវិធីជប់លៀង
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn-secondary" id="btnResetDay" title="កំណត់ទិន្នន័យថ្ងៃនេះឡើងវិញ">
+            <span>🔄</span> សម្អាតថ្ងៃនេះ
+          </button>
+          <button class="btn-secondary" id="btnExportData" title="ទាញយកទិន្នន័យ Backup">
+            <span>💾</span> រក្សាទុក Backup
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ======================================================================
+         SECTION 2: COMPREHENSIVE KHMER FOOD TRACKER (៥ ប្រភេទមុខម្ហូប)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabFood">
+      <div class="food-tracker-container">
+        
+        <!-- 5 Menus Sub-Tabs -->
+        <div class="food-menus-nav" id="foodMenusSubNav">
+          <button class="menu-tab-btn active" data-menu="breakfast">
+            <span>🌅</span> Menu 1: អាហារពេលព្រឹក
+          </button>
+          <button class="menu-tab-btn" data-menu="lunch">
+            <span>☀️</span> Menu 2: អាហារពេលថ្ងៃត្រង់
+          </button>
+          <button class="menu-tab-btn" data-menu="dinner">
+            <span>🌙</span> Menu 3: អាហារពេលល្ងាច
+          </button>
+          <button class="menu-tab-btn" data-menu="snacks">
+            <span>🍿</span> Menu 4: អាហារសម្រន់របស់អ្នក
+          </button>
+          <button class="menu-tab-btn" data-menu="party">
+            <span>🎉</span> Menu 5: អាហារក្នុងកម្មវិធីរបស់អ្នក
+          </button>
+        </div>
+
+        <!-- Search & Custom Food Controls -->
+        <div class="menu-controls-bar">
+          <div class="search-input-wrap">
+            <span class="search-icon-pos">🔍</span>
+            <input type="text" id="foodSearchInput" placeholder="ស្វែងរកមុខម្ហូបក្នុងបញ្ជី (ឧ. បាយសាច់ជ្រូក, សម្លម្ជូរ, កាហ្វេ...)" autocomplete="off">
+          </div>
+          <button class="btn-primary" id="btnOpenCustomFoodModal">
+            <span>➕</span> បន្ថែមមុខម្ហូបផ្ទាល់ខ្លួន...
+          </button>
+        </div>
+
+        <!-- 1. MENU 1: អាហារពេលព្រឹក (19 Items) -->
+        <div class="menu-view-panel active" id="panelMenu-breakfast">
+          <div class="menu-header-box">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon">🌅</div>
+              <div>
+                <h3>Menu 1: «សូមជ្រើសរើសអាហារពេលព្រឹក»</h3>
+                <p>មុខម្ហូបពេលព្រឹកខ្មែរពេញនិយមចំនួន ១៩ មុខ ជាមួយជម្រើសជ្រើសរើសទំហំចំណែក (Portions)</p>
+              </div>
+            </div>
+            <div class="menu-stats-pills">
+              <span class="menu-sub-count" id="count-breakfast">0 មុខ</span>
+              <span class="menu-kcal-pill" id="kcal-breakfast">0 kcal</span>
+            </div>
+          </div>
+
+          <div class="food-items-grid" id="gridMenu-breakfast">
+            <!-- 13 Breakfast Items Injected by JS -->
+          </div>
+
+          <!-- Logged Breakfast Items -->
+          <div class="logged-items-card">
+            <div class="logged-items-header">
+              <h4><span>📋</span> បញ្ជីអាហារពេលព្រឹកដែលបានទទួលទាន</h4>
+              <button class="btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;" data-open-custom-for="breakfast">
+                + បន្ថែមផ្ទាល់ខ្លួន
+              </button>
+            </div>
+            <ul class="meal-items-list" id="list-breakfast"></ul>
+          </div>
+        </div>
+
+        <!-- 2. MENU 2: អាហារពេលថ្ងៃត្រង់ (23 Items) -->
+        <div class="menu-view-panel" id="panelMenu-lunch">
+          <div class="menu-header-box">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon">☀️</div>
+              <div>
+                <h3>Menu 2: «សូមជ្រើសរើសអាហារពេលថ្ងៃត្រង់»</h3>
+                <p>មុខម្ហូបបាយ សម្ល និងឆាខ្មែរពេញនិយមចំនួន ២៣ មុខ ផ្តល់ថាមពលពេញមួយថ្ងៃ</p>
+              </div>
+            </div>
+            <div class="menu-stats-pills">
+              <span class="menu-sub-count" id="count-lunch">0 មុខ</span>
+              <span class="menu-kcal-pill" id="kcal-lunch">0 kcal</span>
+            </div>
+          </div>
+
+          <div class="food-items-grid" id="gridMenu-lunch">
+            <!-- 23 Lunch Items Injected by JS -->
+          </div>
+
+          <!-- Logged Lunch Items -->
+          <div class="logged-items-card">
+            <div class="logged-items-header">
+              <h4><span>📋</span> បញ្ជីអាហារថ្ងៃត្រង់ដែលបានទទួលទាន</h4>
+              <button class="btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;" data-open-custom-for="lunch">
+                + បន្ថែមផ្ទាល់ខ្លួន
+              </button>
+            </div>
+            <ul class="meal-items-list" id="list-lunch"></ul>
+          </div>
+        </div>
+
+        <!-- 3. MENU 3: អាហារពេលល្ងាច (23 Items) -->
+        <div class="menu-view-panel" id="panelMenu-dinner">
+          <div class="menu-header-box">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon">🌙</div>
+              <div>
+                <h3>Menu 3: «សូមជ្រើសរើសអាហារពេលល្ងាច»</h3>
+                <p>មុខម្ហូបពេលល្ងាចចំនួន ២៣ មុខ ជាមួយចំណែកស្រាលសមស្របសម្រាប់ការរំលាយអាហារពេលយប់</p>
+              </div>
+            </div>
+            <div class="menu-stats-pills">
+              <span class="menu-sub-count" id="count-dinner">0 មុខ</span>
+              <span class="menu-kcal-pill" id="kcal-dinner">0 kcal</span>
+            </div>
+          </div>
+
+          <div class="food-items-grid" id="gridMenu-dinner">
+            <!-- 23 Dinner Items Injected by JS -->
+          </div>
+
+          <!-- Logged Dinner Items -->
+          <div class="logged-items-card">
+            <div class="logged-items-header">
+              <h4><span>📋</span> បញ្ជីអាហារពេលល្ងាចដែលបានទទួលទាន</h4>
+              <button class="btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;" data-open-custom-for="dinner">
+                + បន្ថែមផ្ទាល់ខ្លួន
+              </button>
+            </div>
+            <ul class="meal-items-list" id="list-dinner"></ul>
+          </div>
+        </div>
+
+        <!-- 4. MENU 4: អាហារសម្រន់របស់អ្នក (6 Items) -->
+        <div class="menu-view-panel" id="panelMenu-snacks">
+          <div class="menu-header-box">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon">🍿</div>
+              <div>
+                <h3>Menu 4: «អាហារសម្រន់របស់អ្នក»</h3>
+                <p>ផ្លែឈើ គ្រាប់ធញ្ញជាតិ និងអាហារសម្រន់សុខភាពចំនួន ៦ មុខ</p>
+              </div>
+            </div>
+            <div class="menu-stats-pills">
+              <span class="menu-sub-count" id="count-snacks">0 មុខ</span>
+              <span class="menu-kcal-pill" id="kcal-snacks">0 kcal</span>
+            </div>
+          </div>
+
+          <div class="food-items-grid" id="gridMenu-snacks">
+            <!-- 6 Snacks Items Injected by JS -->
+          </div>
+
+          <!-- Logged Snacks Items -->
+          <div class="logged-items-card">
+            <div class="logged-items-header">
+              <h4><span>📋</span> បញ្ជីអាហារសម្រន់ដែលបានទទួលទាន</h4>
+              <button class="btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;" data-open-custom-for="snacks">
+                + បន្ថែមផ្ទាល់ខ្លួន
+              </button>
+            </div>
+            <ul class="meal-items-list" id="list-snacks"></ul>
+          </div>
+        </div>
+
+        <!-- 5. MENU 5: អាហារក្នុងកម្មវិធីរបស់អ្នក (Party / Celebration) -->
+        <div class="menu-view-panel" id="panelMenu-party">
+          <div class="menu-header-box">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon">🎉</div>
+              <div>
+                <h3>Menu 5: «សូមជ្រើសរើសអាហារក្នុងកម្មវិធីរបស់អ្នក»</h3>
+                <p>ភេសជ្ជៈជប់លៀង គ្រឿងស្រវឹង និងម្ហូបក្លែម ដើម្បីតាមដានតុល្យភាពកាឡូរីក្នុងពិធីជួបជុំ</p>
+              </div>
+            </div>
+            <div class="menu-stats-pills">
+              <span class="menu-sub-count" id="count-party">0 មុខ</span>
+              <span class="menu-kcal-pill" id="kcal-party">0 kcal</span>
+            </div>
+          </div>
+
+          <div class="food-items-grid" id="gridMenu-party">
+            <!-- Party Drinks & Bites Injected by JS -->
+          </div>
+
+          <!-- Logged Party Items -->
+          <div class="logged-items-card">
+            <div class="logged-items-header">
+              <h4><span>📋</span> បញ្ជីអាហារក្នុងកម្មវិធីដែលបានទទួលទាន</h4>
+              <button class="btn-secondary" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;" data-open-custom-for="party">
+                + បន្ថែមផ្ទាល់ខ្លួន
+              </button>
+            </div>
+            <ul class="meal-items-list" id="list-party"></ul>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 3: WORKOUT & BURNED TRACKER (ការហាត់ប្រាណ)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabWorkout">
+      <div class="workout-section-wrap">
+        
+        <!-- Left: Exercise Presets Grid -->
+        <div class="card-workout-presets">
+          <div class="section-head-title">
+            <span>⚡</span>
+            <span>ប្រភេទកីឡាពេញនិយម (ចុច ១ Click បញ្ចូលភ្លាម)</span>
+          </div>
+
+          <div class="workout-presets-grid">
+            <div class="workout-preset-card" data-wname="រត់ត្រឹកៗ (Jogging)" data-min="30" data-kcal="300">
+              <span class="workout-preset-icon">🏃‍♂️</span>
+              <span class="workout-preset-name">រត់ត្រឹកៗ</span>
+              <div class="workout-preset-meta">
+                <span>៣០ នាទី</span>
+                <span class="burn">~300 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="ដើរលឿន (Brisk Walk)" data-min="30" data-kcal="150">
+              <span class="workout-preset-icon">🚶‍♂️</span>
+              <span class="workout-preset-name">ដើរលឿន</span>
+              <div class="workout-preset-meta">
+                <span>៣០ នាទី</span>
+                <span class="burn">~150 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="ជិះកង់ (Cycling)" data-min="30" data-kcal="250">
+              <span class="workout-preset-icon">🚴‍♂️</span>
+              <span class="workout-preset-name">ជិះកង់</span>
+              <div class="workout-preset-meta">
+                <span>៣០ នាទី</span>
+                <span class="burn">~250 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="ហែលទឹក (Swimming)" data-min="30" data-kcal="350">
+              <span class="workout-preset-icon">🏊‍♂️</span>
+              <span class="workout-preset-name">ហែលទឹក</span>
+              <div class="workout-preset-meta">
+                <span>៣០ នាទី</span>
+                <span class="burn">~350 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="លើកទម្ងន់ (Resistance Training)" data-min="45" data-kcal="220">
+              <span class="workout-preset-icon">🏋️‍♂️</span>
+              <span class="workout-preset-name">លើកទម្ងន់</span>
+              <div class="workout-preset-meta">
+                <span>៤៥ នាទី</span>
+                <span class="burn">~220 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="យូហ្គា (Yoga)" data-min="30" data-kcal="120">
+              <span class="workout-preset-icon">🧘‍♀️</span>
+              <span class="workout-preset-name">យូហ្គា</span>
+              <div class="workout-preset-meta">
+                <span>៣០ នាទី</span>
+                <span class="burn">~120 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="វាយសី (Badminton)" data-min="40" data-kcal="280">
+              <span class="workout-preset-icon">🏸</span>
+              <span class="workout-preset-name">វាយសី</span>
+              <div class="workout-preset-meta">
+                <span>៤០ នាទី</span>
+                <span class="burn">~280 kcal</span>
+              </div>
+            </div>
+
+            <div class="workout-preset-card" data-wname="លោតអន្ទាក់ (Jump Rope)" data-min="20" data-kcal="240">
+              <span class="workout-preset-icon">⚡</span>
+              <span class="workout-preset-name">លោតអន្ទាក់</span>
+              <div class="workout-preset-meta">
+                <span>២០ នាទី</span>
+                <span class="burn">~240 kcal</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-primary" style="width: 100%;" id="btnOpenWorkoutModal">
+            <span>➕</span> បញ្ចូលលំហាត់ប្រាណផ្ទាល់ខ្លួន...
+          </button>
+        </div>
+
+        <!-- Right: Logged Workouts List -->
+        <div class="card-workout-log">
+          <div class="menu-header-box" style="margin-bottom: 1rem; padding: 0.9rem 1.15rem;">
+            <div class="menu-title-group">
+              <div class="menu-badge-icon" style="background: rgba(16, 185, 129, 0.12); color: var(--accent-emerald);">🔥</div>
+              <div>
+                <h3 style="font-size: 1.05rem;">សកម្មភាពដុតបំផ្លាញថ្ងៃនេះ</h3>
+                <span class="meal-sub-count" id="workoutCountText">0 សកម្មភាព</span>
+              </div>
+            </div>
+            <div class="menu-kcal-pill" style="color: var(--accent-emerald); border-color: rgba(16, 185, 129, 0.3); background: rgba(16, 185, 129, 0.12);">
+              -<span id="workoutTotalBurned">0</span> kcal
+            </div>
+          </div>
+
+          <ul class="workout-log-list" id="workoutsList">
+            <!-- Workouts injected by JS -->
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 4: SMART SLEEP TRACKER (ការតាមដានដំណេក យប់/ថ្ងៃ)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabSleep">
+      <div class="sleep-tracker-container">
+        
+        <div class="sleep-calculator-card">
+          <div class="menu-title-group" style="margin-bottom: 1rem;">
+            <div class="menu-badge-icon" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan); font-size: 1.6rem;">🌙</div>
+            <div>
+              <h3>Smart Sleep Tracker (ការតាមដានដំណេក យប់ និងថ្ងៃ)</h3>
+              <p>គណនារយៈពេលគេងស្វ័យប្រវត្ត ផ្តល់ការវាយតម្លៃសុខភាព និងដាស់តឿនអ័រម៉ូនស្ត្រេស Cortisol</p>
+            </div>
+          </div>
+
+          <!-- Time Inputs Grid -->
+          <div class="sleep-grid-inputs">
+            
+            <!-- Night Sleep Inputs -->
+            <div class="sleep-input-box">
+              <div class="sleep-input-title">
+                <span>🌌</span> ដំណេកពេលយប់ (Night Sleep)
+              </div>
+              <div class="sleep-time-row">
+                <div class="input-time-group">
+                  <label for="sleepBedtime">ម៉ោងចូលគេង</label>
+                  <input type="time" id="sleepBedtime" value="22:30">
+                </div>
+                <div class="input-time-group">
+                  <label for="sleepWakeTime">ម៉ោងភ្ញាក់</label>
+                  <input type="time" id="sleepWakeTime" value="06:30">
+                </div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--text-muted);">ប្រព័ន្ធគណនាឆ្លងកាត់អធ្រាត្រដោយស្វ័យប្រវត្ត</span>
+            </div>
+
+            <!-- Day Nap Inputs -->
+            <div class="sleep-input-box">
+              <div class="sleep-input-title">
+                <span>☀️</span> ដំណេកថ្ងៃត្រង់ (Day Nap)
+              </div>
+              <div class="sleep-time-row">
+                <div class="input-time-group">
+                  <label for="napStartTime">ម៉ោងចាប់ផ្តើម</label>
+                  <input type="time" id="napStartTime" value="12:30">
+                </div>
+                <div class="input-time-group">
+                  <label for="napEndTime">ម៉ោងភ្ញាក់</label>
+                  <input type="time" id="napEndTime" value="13:00">
+                </div>
+              </div>
+              <span style="font-size: 0.76rem; color: var(--text-muted);">ការសម្រាកថ្ងៃ ២០-៣០ នាទី ជួយឱ្យខួរក្បាលស្រស់ថ្លា</span>
+            </div>
+
+          </div>
+
+          <!-- Sleep Duration Output & Rules Feedback -->
+          <div class="sleep-results-box">
+            <div class="sleep-metric-highlight">
+              <div>
+                <span style="font-size: 0.85rem; color: var(--text-muted); font-weight: 600;">រយៈពេលគេងសរុប (Total Sleep Duration)</span>
+                <div class="sleep-hours-val" id="sleepTotalHoursDisplay">8.5 ម៉ោង</div>
+              </div>
+              <button class="btn-primary" id="btnSaveSleepRecord">
+                <span>💾</span> រក្សាទុកកំណត់ត្រាដំណេកថ្ងៃនេះ
+              </button>
+            </div>
+
+            <!-- Feedback Banner Triggered Dynamically -->
+            <div class="sleep-feedback-banner adequate" id="sleepFeedbackBanner">
+              <div id="sleepFeedbackText">
+                អស្ចារ្យណាស់! អ្នកគេងបាន ៨.៥ ម៉ោងគ្រប់គ្រាន់តាមក្បួនវេជ្ជសាស្ត្រ។ ការគេងស្កប់ស្កល់ជួយឱ្យសាច់ដុំឆាប់ជាសះស្បើយ គ្រប់គ្រងអ័រម៉ូនឃ្លាន និងបង្កើនប្រសិទ្ធភាពសម្រកទម្ងន់! 🎉
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Sleep History Card -->
+        <div class="sleep-history-card">
+          <div class="section-head-title">
+            <span>📅</span>
+            <span>ប្រវត្តិដំណេកថ្មីៗ (Sleep History)</span>
+          </div>
+          <ul class="sleep-history-list" id="sleepHistoryList">
+            <!-- Sleep records injected by JS -->
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 5: 40+ FITNESS ADVISORY (វ័យ ៤០ឆ្នាំឡើង)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabAdvisory40">
+      <div class="advisory-container">
+        
+        <div class="advisory-header-card">
+          <div class="advisory-header-info">
+            <h3><span>🛡️</span> ការណែនាំសុខភាព និងលំហាត់ប្រាណវ័យ ៤០ ឆ្នាំឡើង</h3>
+            <p>វេជ្ជសាស្ត្រកីឡា និងការថែទាំអ័រម៉ូន សាច់ដុំ សន្លាក់ និងដង់ស៊ីតេឆ្អឹង សម្រាប់មនុស្សពេញវ័យ</p>
+          </div>
+
+          <div class="gender-toggle-group">
+            <button class="btn-gender active" id="btnGenderMale" data-gender="male">
+              <span>👨</span> បុរស (Male)
+            </button>
+            <button class="btn-gender" id="btnGenderFemale" data-gender="female">
+              <span>👩</span> ស្រី (Female)
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Medical Advice Cards for 40+ -->
+        <div class="advisory-cards-grid" id="advisoryCardsGrid">
+          <!-- Injected dynamically based on selected gender -->
+        </div>
+
+        <!-- Sample Weekly Routine Schedule for 40+ -->
+        <div class="routine-schedule-card">
+          <div class="section-head-title">
+            <span>📆</span>
+            <span>កាលវិភាគហាត់ប្រាណគំរូ ៧ ថ្ងៃ (Recommended Weekly Routine)</span>
+          </div>
+          <div class="routine-days-grid" id="routineDaysGrid">
+            <!-- Routine items injected by JS -->
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 6: ANALYTICS & TIMEFRAME SUMMARIES (ស្ថិតិ និងរបាយការណ៍)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabAnalytics">
+      <div class="analytics-container">
+        
+        <div class="card-chart-main">
+          <div class="chart-header-row">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800;">📈 និន្នាការកាឡូរី (Calorie Trend Analytics)</h3>
+              <p style="font-size: 0.82rem; color: var(--text-muted);">ប្រៀបធៀបបរិមាណញ៉ាំចូល ដុតចេញ និងបន្ទាត់គោលដៅ TDEE</p>
+            </div>
+
+            <div class="period-pills">
+              <button class="period-pill active" data-period="daily">ប្រចាំថ្ងៃ</button>
+              <button class="period-pill" data-period="weekly">ប្រចាំសប្តាហ៍</button>
+              <button class="period-pill" data-period="monthly">ប្រចាំខែ</button>
+            </div>
+          </div>
+
+          <!-- 4 Visual Metric Cards -->
+          <div class="analytics-metrics-grid">
+            <div class="card-metric">
+              <div class="metric-icon-box icon-intake">🥗</div>
+              <div class="metric-info">
+                <span class="metric-label">កាឡូរីមធ្យមញ៉ាំក្នុងមួយថ្ងៃ</span>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="anAvgIntake">1,850</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kcal</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-metric">
+              <div class="metric-icon-box icon-burned">🔥</div>
+              <div class="metric-info">
+                <span class="metric-label">កាឡូរីដុតបំផ្លាញសរុប</span>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="anTotalBurned">2,450</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kcal</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-metric">
+              <div class="metric-icon-box icon-goal">⚖️</div>
+              <div class="metric-info">
+                <span class="metric-label">តុល្យភាពទម្ងន់រំពឹងទុក</span>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="anExpectedWeight">-0.5</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">kg</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-metric">
+              <div class="metric-icon-box" style="background: rgba(6, 182, 212, 0.12); color: var(--accent-cyan);">🌙</div>
+              <div class="metric-info">
+                <span class="metric-label">ម៉ោងគេងមធ្យម</span>
+                <div class="metric-number-row">
+                  <span class="metric-number" id="anAvgSleep">7.8</span>
+                  <span style="font-size: 0.8rem; color: var(--text-muted);">ម៉ោង</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- HTML5 Canvas Chart -->
+          <div class="chart-canvas-box">
+            <canvas id="calorieChartCanvas"></canvas>
+          </div>
+
+          <!-- Calorie Status Notice -->
+          <div class="alert-banner alert-optimal-health" style="margin-top: 1.25rem;">
+            <span class="alert-icon">🎯</span>
+            <div class="alert-body">
+              <div class="alert-title">ការវិភាគនិន្នាការទម្ងន់ (Weight Delta Analysis)</div>
+              <div class="alert-message" id="chartAnalysisText">
+                បរិមាណកាឡូរីរបស់អ្នកស្ថិតក្នុងតំបន់ Calorie Deficit ល្អប្រសើរ ដែលជួយឱ្យសម្រកខ្លាញ់បានរហូតដល់ ០.៥ គីឡូក្រាមក្នុងមួយសប្តាហ៍ដោយសុវត្ថិភាព។
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 7: HEALTH TIPS & HYDRATION (គន្លឹះសុខភាព)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabHealthTips">
+      <div class="health-dashboard-wrap">
+        
+        <!-- Dynamic Smart Tip Card -->
+        <div class="card-dynamic-tip">
+          <div class="tip-badge">
+            <span>✨</span> ដំបូន្មានឆ្លាតវៃពេលនេះ (Smart Health Advisor)
+          </div>
+          <div class="tip-content-box">
+            <p id="dynamicTipText" style="font-size: 0.95rem; line-height: 1.6; font-weight: 600;">
+              កំពុងគណនាដំបូន្មានស្របតាមបរិមាណកាឡូរីបច្ចុប្បន្នរបស់អ្នក...
+            </p>
+          </div>
+          <span style="font-size: 0.76rem; color: var(--text-muted);">
+            គន្លឹះនេះផ្លាស់ប្តូរដោយស្វ័យប្រវត្តទៅតាមស្ថានភាពតុល្យភាពកាឡូរីជាក់ស្តែងរបស់អ្នក។
+          </span>
+        </div>
+
+        <!-- Water Intake Tracker -->
+        <div class="card-water-tracker">
+          <div class="water-header">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 800;">💧 តាមដានការផឹកទឹក (Water Tracker)</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);">គោលដៅប្រចាំថ្ងៃ៖ ៨ កែវ (~២,០០០ ml)</span>
+            </div>
+            <div class="water-amount-large">
+              <span id="waterCurrentMl">0</span> / 2000 ml
+            </div>
+          </div>
+
+          <div class="water-glasses-row" id="waterGlassesContainer">
+            <!-- 8 Glass buttons injected by JS -->
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
+            <button class="btn-secondary" id="btnAddWaterQuick">
+              <span>➕</span> ផឹកទឹក +១ កែវ (250ml)
+            </button>
+            <button class="btn-item-del" id="btnResetWater" title="កំណត់ទឹកឡើងវិញ">🔄</button>
+          </div>
+        </div>
+
+        <!-- BMI Calculator Widget Card -->
+        <div class="card-bmi-calc">
+          <div class="bmi-inputs-col">
+            <h3 style="font-size: 1.1rem; font-weight: 800;">⚖️ គណនាសន្ទស្សន៍ម៉ាសរាងកាយ (BMI)</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted);">ស្វែងយល់ពីស្ថានភាពទម្ងន់ និងកម្រិតកាឡូរីដែលស័ក្តិសមសម្រាប់រាងកាយអ្នក</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="input-group">
+                <label>កម្ពស់ (cm)</label>
+                <input type="number" class="input-control" id="bmiHeight" placeholder="ឧ. 170" value="168">
+              </div>
+              <div class="input-group">
+                <label>ទម្ងន់ (kg)</label>
+                <input type="number" class="input-control" id="bmiWeight" placeholder="ឧ. 65" value="65">
+              </div>
+            </div>
+
+            <button class="btn-primary" id="btnCalcBMI">
+              <span>⚡</span> គណនា BMI ភ្លាមៗ
+            </button>
+          </div>
+
+          <div class="bmi-result-col">
+            <span style="font-size: 0.85rem; color: var(--text-muted);">ពិន្ទុ BMI របស់អ្នក</span>
+            <div class="bmi-val-big" id="bmiResultNum">23.0</div>
+            <div class="bmi-badge-status status-good" id="bmiStatusBadge">ទម្ងន់សមស្រប (Healthy)</div>
+            <span style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem;" id="bmiAdviceText">
+              ទម្ងន់ស្ថិតក្នុងកម្រិតល្អប្រសើរ គួរបន្តថែរក្សាការញ៉ាំ និងហាត់ប្រាណទៀងទាត់។
+            </span>
+          </div>
+        </div>
+
+        <!-- Scientific Health Tips Grid -->
+        <div class="science-tips-grid">
+          <div class="science-tip-card">
+            <div class="s-icon">💤</div>
+            <h4>គេងឱ្យបាន ៧-៩ ម៉ោង</h4>
+            <p>ការគេងគ្រប់គ្រាន់ជួយគ្រប់គ្រងអ័រម៉ូនឃ្លាន (Ghrelin) និងជួយដល់ការដុតរំលាយជាតិខ្លាញ់បានរហូតដល់ ២០% បន្ថែម។</p>
+          </div>
+
+          <div class="science-tip-card">
+            <div class="s-icon">💧</div>
+            <h4>ផឹកទឹក ៥០០ml មុនពេលបាយ</h4>
+            <p>ការពិសាទឹក ២ កែវ មុនពេលទទួលទានអាហារ ៣០ នាទី ជួយកាត់បន្ថយការញ៉ាំលើសកម្រិត និងជួយបង្កើនការរំលាយអាហារ។</p>
+          </div>
+
+          <div class="science-tip-card">
+            <div class="s-icon">⚖️</div>
+            <h4>គោលការណ៍ Calorie Deficit</h4>
+            <p>ការកាត់បន្ថយ ៣០០-៥០០ kcal ពី TDEE ជារៀងរាល់ថ្ងៃ នឹងជួយអ្នកសម្រកបាន ០.៥ គីឡូក្រាមក្នុងមួយសប្តាហ៍ប្រកបដោយចីរភាព។</p>
+          </div>
+
+          <div class="science-tip-card">
+            <div class="s-icon">🥩</div>
+            <h4>សារៈសំខាន់នៃប្រូតេអ៊ីន</h4>
+            <p>ប្រូតេអ៊ីនជួយការពារការបាត់បង់សាច់ដុំពេលសម្រកគីឡូ និងជួយឱ្យអ្នកឆ្អែតបានយូរជាងអាហារប្រភេទស្ករ ឬម្សៅ។</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       MODAL 1: ADD CUSTOM FOOD
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalAddFood">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 id="modalFoodTitle">🥗 បន្ថែមអាហារផ្ទាល់ខ្លួន</h3>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+      <form id="formAddFood">
+        <div class="modal-body">
+          <div class="input-group">
+            <label>ពេលអាហារ (Menu Category)</label>
+            <select class="input-control" id="inputFoodCategory" required>
+              <option value="breakfast">🌅 Menu 1: អាហារពេលព្រឹក</option>
+              <option value="lunch">☀️ Menu 2: អាហារពេលថ្ងៃត្រង់</option>
+              <option value="dinner">🌙 Menu 3: អាហារពេលល្ងាច</option>
+              <option value="snacks">🍿 Menu 4: អាហារសម្រន់របស់អ្នក</option>
+              <option value="party">🎉 Menu 5: អាហារក្នុងកម្មវិធីរបស់អ្នក</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+            <label>ឈ្មោះអាហារ / ភេសជ្ជៈ</label>
+            <input type="text" class="input-control" id="inputFoodName" placeholder="ឧ. បាយដំណើបសាច់មាន់, សាឡាដ, តែបៃតង..." required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="input-group">
+              <label>ចំនួនកាឡូរី (kcal)</label>
+              <input type="number" class="input-control" id="inputFoodKcal" placeholder="ឧ. 350" min="1" max="5000" required>
+            </div>
+            <div class="input-group">
+              <label>បរិមាណ (Portion)</label>
+              <input type="text" class="input-control" id="inputFoodPortion" placeholder="ឧ. ១ ចាន, ១ កែវ" value="១ ចាន">
+            </div>
+          </div>
+
+          <details style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">
+            <summary style="cursor: pointer; font-weight: 600; color: var(--accent-emerald);">
+              ⚙️ បញ្ចូល Macronutrients (ជម្រើសបន្ថែម)
+            </summary>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; margin-top: 0.6rem;">
+              <div class="input-group">
+                <label style="font-size: 0.75rem;">ប្រូតេអ៊ីន (g)</label>
+                <input type="number" class="input-control" id="inputFoodProtein" placeholder="g" value="0">
+              </div>
+              <div class="input-group">
+                <label style="font-size: 0.75rem;">កាបូអ៊ីដ្រាត (g)</label>
+                <input type="number" class="input-control" id="inputFoodCarbs" placeholder="g" value="0">
+              </div>
+              <div class="input-group">
+                <label style="font-size: 0.75rem;">ខ្លាញ់ល្អ (g)</label>
+                <input type="number" class="input-control" id="inputFoodFat" placeholder="g" value="0">
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal>បោះបង់</button>
+          <button type="submit" class="btn-primary">រក្សាទុកអាហារ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: ADD CUSTOM WORKOUT
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalAddWorkout">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>🏃 បន្ថែមការហាត់ប្រាណផ្ទាល់ខ្លួន</h3>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+      <form id="formAddWorkout">
+        <div class="modal-body">
+          <div class="input-group">
+            <label>ឈ្មោះលំហាត់ប្រាណ / កីឡា</label>
+            <input type="text" class="input-control" id="inputWorkoutName" placeholder="ឧ. វាយសី, ឡើងជណ្តើរ, តេក្វាន់ដូ..." required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="input-group">
+              <label>រយៈពេល (នាទី)</label>
+              <input type="number" class="input-control" id="inputWorkoutMinutes" placeholder="ឧ. 30" min="1" max="600" value="30" required>
+            </div>
+            <div class="input-group">
+              <label>កាឡូរីដុតបំផ្លាញ (kcal)</label>
+              <input type="number" class="input-control" id="inputWorkoutKcal" placeholder="ឧ. 250" min="1" max="5000" required>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal>បោះបង់</button>
+          <button type="submit" class="btn-primary">រក្សាទុកការហាត់ប្រាណ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: EDIT DAILY GOAL & PROFILE
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalEditGoal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>🎯 កំណត់កាឡូរីគោលដៅ និងប្រវត្តិរូប</h3>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+      <form id="formEditGoal">
+        <div class="modal-body">
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="input-group">
+              <label>ភេទ (Gender)</label>
+              <select class="input-control" id="inputProfileGender">
+                <option value="male">👨 បុរស (Male)</option>
+                <option value="female">👩 ស្រី (Female)</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label>អាយុ (ឆ្នាំ)</label>
+              <input type="number" class="input-control" id="inputProfileAge" min="15" max="100" value="45">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label>កាឡូរីគោលដៅ TDEE (kcal/ថ្ងៃ)</label>
+            <input type="number" class="input-control" id="inputGoalValue" placeholder="ឧ. 2000" min="800" max="6000" value="2000" required>
+          </div>
+
+          <div style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; background: var(--bg-card-subtle); padding: 0.75rem; border-radius: var(--radius-sm);">
+            💡 <strong>គន្លឹះកំណត់កាឡូរី៖</strong>
+            <ul style="margin-left: 1.2rem; margin-top: 0.3rem;">
+              <li>ស្ត្រី៖ BMR អប្បបរមា ១,០០០ kcal</li>
+              <li>បុរស៖ BMR អប្បបរមា ១,២០០ kcal</li>
+              <li>សម្រកទម្ងន់ទូទៅ៖ ១,៥០០ - ១,៨០០ kcal</li>
+              <li>រក្សាទម្ងន់ថេរ៖ ២,០០០ - ២,២០០ kcal</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal>បោះបង់</button>
+          <button type="submit" class="btn-primary">រក្សាទុកការកែប្រែ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>«សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព កាឡូរី និងដំណេកឆ្លាតវៃ © ២០២៦ រក្សាសិទ្ធិគ្រប់យ៉ាង</p>
+    </div>
+  </footer>
+
+  <!-- Application Engine -->
+  <script src="app.js"></script>
+</body>
+</html>
