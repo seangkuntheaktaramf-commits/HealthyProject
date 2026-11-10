@@ -8,22 +8,183 @@
 // 1. CONFIGURATION & STATE MANAGEMENT
 // =============================================================================
 const STORAGE_KEYS = {
-  THEME: 'sokhapheap_theme',
-  GOAL: 'sokhapheap_goal',
-  MEALS: 'sokhapheap_meals',
-  WORKOUTS: 'sokhapheap_workouts',
-  WATER: 'sokhapheap_water',
-  SLEEP_CURRENT: 'sokhapheap_sleep_current',
-  SLEEP_HISTORY: 'sokhapheap_sleep_history',
-  PROFILE: 'sokhapheap_profile',
-  HISTORY: 'sokhapheap_history',
-  COMMUNITY_POSTS: 'sokhapheap_community_posts',
+  THEME: 'sabay_theme',
+  GOAL: 'sabay_goal',
+  MEALS: 'sabay_meals',
+  WORKOUTS: 'sabay_workouts',
+  WATER: 'sabay_water',
+  SLEEP_CURRENT: 'sabay_sleep_current',
+  SLEEP_HISTORY: 'sabay_sleep_history',
+  PROFILE: 'sabay_profile',
+  HISTORY: 'sabay_history',
+  COMMUNITY_POSTS: 'sabay_community_posts',
+  USERS: 'sabay_registered_users',
+  CURRENT_USER_ID: 'sabay_current_user_id',
 };
+
+// Pre-seeded Multi-User Directory
+const DEFAULT_USERS = [
+  {
+    id: 'user_seang',
+    name: 'Seang Kunthea',
+    email: 'seang.kunthea@sabay.com',
+    avatar: 'profile_avatar_seang.jpg',
+    cover: 'profile_cover.jpg',
+    bioRole: 'Royal Cambodia Armed Forces 🇰🇭',
+    followers: '5.1K',
+    following: '838',
+    livesIn: 'Phnom Penh',
+    fromPlace: 'Kampot, Cambodia',
+    family: 'Ph Vanra and VanraRaa',
+    gender: 'male',
+    age: 45,
+    height: 168,
+    weight: 65,
+    goal: 2000,
+    bmi: 23.0,
+    bmr: 1580,
+    registeredAt: 1700000000000,
+  },
+  {
+    id: 'user_hout',
+    name: 'Hout Kimsan',
+    email: 'hout.kimsan@sabay.com',
+    avatar: 'post_hout_avatar.jpg',
+    cover: 'profile_cover.jpg',
+    bioRole: 'មន្ត្រីកងយោធពលខេមរភូមិន្ទ 🇰🇭',
+    followers: '1.8K',
+    following: '420',
+    livesIn: 'Phnom Penh',
+    fromPlace: 'Takeo, Cambodia',
+    family: 'Kimsan Family',
+    gender: 'male',
+    age: 52,
+    height: 170,
+    weight: 66,
+    goal: 2100,
+    bmi: 22.8,
+    bmr: 1540,
+    registeredAt: 1700100000000,
+  },
+  {
+    id: 'user_vibol',
+    name: 'សុខ វិបុល',
+    email: 'vibol.sok@sabay.com',
+    avatar: 'story_oeun.jpg',
+    cover: 'profile_cover.jpg',
+    bioRole: 'អ្នកស្រលាញ់ការរត់ប្រណាំង 🏃‍♂️',
+    followers: '940',
+    following: '310',
+    livesIn: 'Siem Reap',
+    fromPlace: 'Siem Reap, Cambodia',
+    family: 'Vibol & Sreyneath',
+    gender: 'male',
+    age: 36,
+    height: 172,
+    weight: 68,
+    goal: 2200,
+    bmi: 23.0,
+    bmr: 1620,
+    registeredAt: 1700200000000,
+  },
+  {
+    id: 'user_lina',
+    name: 'លីណា វ័យ ៤២ ឆ្នាំ',
+    email: 'lina.wellness@sabay.com',
+    avatar: 'story_oun.jpg',
+    cover: 'profile_cover.jpg',
+    bioRole: 'Yoga & Wellness Trainer 🧘‍♀️',
+    followers: '2.4K',
+    following: '560',
+    livesIn: 'Battambang',
+    fromPlace: 'Battambang, Cambodia',
+    family: 'Lina Wellness Family',
+    gender: 'female',
+    age: 42,
+    height: 160,
+    weight: 54,
+    goal: 1800,
+    bmi: 21.1,
+    bmr: 1350,
+    registeredAt: 1700300000000,
+  },
+];
 
 // Initial default state
 const AppState = {
   theme: localStorage.getItem(STORAGE_KEYS.THEME) || 'dark',
   goal: parseInt(localStorage.getItem(STORAGE_KEYS.GOAL), 10) || 2000,
+  users: [],
+  currentUser: null,
+  isLoggedIn: false,
+  viewingUser: null,
+  account: {
+    name: 'Seang Kunthea',
+    email: 'seang.kunthea@sabay.com',
+    avatar: 'profile_avatar_seang.jpg',
+    cover: 'profile_cover.jpg',
+    bioRole: 'Royal Cambodia Armed Forces 🇰🇭',
+    followers: '5.1K',
+    following: '838',
+    livesIn: 'Phnom Penh',
+    fromPlace: 'Kampot, Cambodia',
+    family: 'Ph Vanra and VanraRaa',
+    registeredAt: Date.now(),
+  },
+  personalInfo: {
+    name: 'Seang Kunthea',
+    gender: 'male',
+    age: 45,
+    height: 168,
+    weight: 65,
+    activity: 1.55,
+    goal: 'maintain',
+    avatar: 'profile_avatar_seang.jpg',
+    cover: 'profile_cover.jpg',
+  },
+  stories: [
+    {
+      id: 'story_1',
+      author: 'Chhorm Ratha',
+      avatar: 'story_chhorm.jpg',
+      image: 'story_chhorm.jpg',
+      time: '២ ម៉ោងមុន',
+      isUser: false,
+    },
+    {
+      id: 'story_2',
+      author: 'Oeun Sok Neath',
+      avatar: 'story_oeun.jpg',
+      image: 'story_oeun.jpg',
+      time: '៣ ម៉ោងមុន',
+      isUser: false,
+    },
+    {
+      id: 'story_3',
+      author: 'Violet Muse',
+      avatar: 'story_violet.jpg',
+      image: 'story_violet.jpg',
+      time: '៤ ម៉ោងមុន',
+      isUser: false,
+    },
+    {
+      id: 'story_4',
+      author: 'Oun Makara',
+      avatar: 'story_oun.jpg',
+      image: 'story_oun.jpg',
+      time: '៦ ម៉ោងមុន',
+      isUser: false,
+    },
+    {
+      id: 'story_5',
+      author: 'Leakhena Long',
+      avatar: 'story_leakhena.jpg',
+      image: 'story_leakhena.jpg',
+      time: '៨ ម៉ោងមុន',
+      isUser: false,
+    },
+  ],
+  currentStoryIdx: 0,
   profile: {
     gender: 'male', // 'male' or 'female'
     age: 45,
@@ -182,13 +343,48 @@ const ALL_MENUS = {
 // =============================================================================
 // 4. INITIALIZATION & DATA SEEDING
 // =============================================================================
+function saveUsersAndSession() {
+  localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(AppState.users));
+  if (AppState.isLoggedIn && AppState.currentUser) {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, AppState.currentUser.id);
+  } else {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER_ID, 'guest');
+  }
+}
+
 function initAppState() {
+  // Load users directory
+  const savedUsers = localStorage.getItem(STORAGE_KEYS.USERS);
+  if (savedUsers) {
+    try {
+      AppState.users = JSON.parse(savedUsers);
+    } catch (e) {
+      AppState.users = DEFAULT_USERS.slice();
+    }
+  } else {
+    AppState.users = DEFAULT_USERS.slice();
+  }
+
+  // Load current session
+  const savedUserId = localStorage.getItem(STORAGE_KEYS.CURRENT_USER_ID);
+  if (savedUserId === 'guest') {
+    AppState.currentUser = null;
+    AppState.isLoggedIn = false;
+  } else if (savedUserId) {
+    AppState.currentUser = AppState.users.find((u) => u.id === savedUserId) || AppState.users[0];
+    AppState.isLoggedIn = true;
+  } else {
+    // Default active user is Seang Kunthea
+    AppState.currentUser = AppState.users[0];
+    AppState.isLoggedIn = true;
+  }
+
   // Load profile
   const savedProfile = localStorage.getItem(STORAGE_KEYS.PROFILE);
   if (savedProfile) {
     try {
       AppState.profile = Object.assign(AppState.profile, JSON.parse(savedProfile));
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // Load meals
@@ -278,7 +474,7 @@ function initAppState() {
   if (savedSleepCurrent) {
     try {
       AppState.sleepCurrent = JSON.parse(savedSleepCurrent);
-    } catch (e) {}
+    } catch (e) { }
   }
 
   const savedSleepHistory = localStorage.getItem(STORAGE_KEYS.SLEEP_HISTORY);
@@ -458,32 +654,102 @@ function generateInitialCommunityPosts() {
   const todayStr = new Date().toISOString().split('T')[0];
   return [
     {
-      id: 'post_seed_1',
-      isMyPost: false,
-      userName: 'សុខ វិបុល',
-      userAvatar: '🏃‍♂️',
-      text: 'ព្រឹកនេះបានរត់ត្រឹកៗ ៥ គីឡូម៉ែត្រនៅសួនច្បារវត្តភ្នំ អារម្មណ៍ស្រស់ថ្លា និងមានថាមពលពេញមួយថ្ងៃ! 💪🔥 #រត់ពេលព្រឹក #សុខភាពខ្ញុំ #ហាត់ប្រាណ',
+      id: 'post_seed_hout',
+      userId: 'user_hout',
+      userName: 'Hout Kimsan',
+      userAvatar: 'post_hout_avatar.jpg',
+      text: 'អាហារពេលព្រឹកទាំងអស់គ្នា មុនដំណើរការកិច្ចការប្រចាំថ្ងៃ ! ☕🍳🌿',
+      images: ['post_hout_top.jpg', 'post_hout_bottom_left.jpg', 'post_hout_bottom_right.jpg'],
       imageData: null,
-      timestamp: now - 3600 * 1000 * 3, // 3 hours ago
+      timestamp: now - 3600 * 1000 * 4,
       dateStr: todayStr,
-      timeStr: '៣ ម៉ោងមុន',
-      likes: 15,
+      timeStr: '៤ ម៉ោងមុន',
+      likes: 155,
       isLiked: false,
+      shares: 6,
+      comments: [
+        {
+          id: 'c_hout_1',
+          userId: 'user_vibol',
+          userName: 'សុខ វិបុល',
+          userAvatar: 'story_oeun.jpg',
+          text: 'អាហារពេលព្រឹកពោរពេញដោយថាមពលណាស់បង! 💪',
+          timeStr: '៣ ម៉ោងមុន',
+          replies: [
+            {
+              id: 'r_hout_1',
+              userId: 'user_hout',
+              userName: 'Hout Kimsan',
+              userAvatar: 'post_hout_avatar.jpg',
+              text: 'អរគុណប្អូនប្រុស! ញ៉ាំឱ្យឆ្អែតមុនចេញបំពេញភារកិច្ច។ 😊',
+              timeStr: '២ ម៉ោងមុន',
+            },
+          ],
+        },
+        {
+          id: 'c_hout_2',
+          userId: 'user_lina',
+          userName: 'លីណា វ័យ ៤២ ឆ្នាំ',
+          userAvatar: 'story_oun.jpg',
+          text: 'គួរឱ្យចង់ញ៉ាំខ្លាំងណាស់លោកបង! 🍳☕',
+          timeStr: '១ ម៉ោងមុន',
+          replies: [],
+        },
+      ],
     },
     {
-      id: 'post_seed_2',
-      isMyPost: false,
-      userName: 'លីណា វ័យ ៤២ ឆ្នាំ',
-      userAvatar: '🧘‍♀️',
-      text: 'បានហាត់យូហ្គា និងពត់ពែនខ្លួន ៤០ នាទី ជួយបំបាត់ការឈឺចង្កេះ និងសម្រួលសន្លាក់បានយ៉ាងអស្ចារ្យ។ កុំភ្លេចថែរក្សាសុខភាពទាំងអស់គ្នាណា! ✨🌿 #Yoga #វ័យ៤០ឡើង #សុខភាព',
+      id: 'post_seed_vibol',
+      userId: 'user_vibol',
+      userName: 'សុខ វិបុល',
+      userAvatar: 'story_oeun.jpg',
+      text: 'ព្រឹកនេះបានរត់ត្រឹកៗ ៥ គីឡូម៉ែត្រនៅសួនច្បារវត្តភ្នំ អារម្មណ៍ស្រស់ថ្លា និងមានថាមពលពេញមួយថ្ងៃ! 💪🔥 #រត់ពេលព្រឹក #សុខភាព #ហាត់ប្រាណ',
+      images: ['story_oeun.jpg'],
       imageData: null,
-      timestamp: now - 3600 * 1000 * 18, // 18 hours ago
+      timestamp: now - 3600 * 1000 * 8,
+      dateStr: todayStr,
+      timeStr: '៨ ម៉ោងមុន',
+      likes: 42,
+      isLiked: false,
+      shares: 2,
+      comments: [
+        {
+          id: 'c_vibol_1',
+          userId: 'user_seang',
+          userName: 'Seang Kunthea',
+          userAvatar: 'profile_avatar_seang.jpg',
+          text: 'សកម្មភាពល្អណាស់ប្អូន! រក្សាសុខភាពបែបនេះជារឿងអស្ចារ្យ។ 👍',
+          timeStr: '៦ ម៉ោងមុន',
+          replies: [],
+        },
+      ],
+    },
+    {
+      id: 'post_seed_lina',
+      userId: 'user_lina',
+      userName: 'លីណា វ័យ ៤២ ឆ្នាំ',
+      userAvatar: 'story_oun.jpg',
+      text: 'បានហាត់យូហ្គា និងពត់ពែនខ្លួន ៤០ នាទី ជួយបំបាត់ការឈឺចង្កេះ និងសម្រួលសន្លាក់បានយ៉ាងអស្ចារ្យ។ កុំភ្លេចថែរក្សាសុខភាពទាំងអស់គ្នាណា! ✨🌿 #Yoga #វ័យ៤០ឡើង #សុខភាព',
+      images: ['story_oun.jpg'],
+      imageData: null,
+      timestamp: now - 3600 * 1000 * 18,
       dateStr: todayStr,
       timeStr: 'ម្សិលមិញ',
-      likes: 22,
+      likes: 68,
       isLiked: false,
+      shares: 5,
+      comments: [],
     },
   ];
+}
+
+// Check if user is logged in, otherwise show Require Sign Up prompt
+function checkAuthOrPrompt(actionName = '') {
+  if (!AppState.isLoggedIn || !AppState.currentUser) {
+    const modal = document.getElementById('modalGuestRequireSignUp');
+    if (modal) modal.classList.add('active');
+    return false;
+  }
+  return true;
 }
 
 // Render Water Hydration Monitor on Dashboard
@@ -492,7 +758,6 @@ function renderWaterDashboardMonitor() {
   const mlEl = document.getElementById('waterDashboardMlText');
   const barEl = document.getElementById('waterDashboardProgressBar');
   const glassesRow = document.getElementById('waterDashboardGlassesRow');
-  const tipEl = document.getElementById('waterStatusTipText');
 
   const maxGlasses = 8;
   const currentGlasses = AppState.water;
@@ -511,58 +776,63 @@ function renderWaterDashboardMonitor() {
       btn.innerHTML = i <= currentGlasses ? '💧' : '🥛';
       btn.title = `កែវទី ${toKhmerNumber(i)} (250 ml)`;
       btn.addEventListener('click', () => {
-        AppState.water = AppState.water === i ? i - 1 : i;
+        AppState.water = i;
         saveWater();
-        renderAll();
-        showToast(`កម្រិតជាតិទឹក៖ ${(AppState.water * 250).toLocaleString()} ml`, 'info');
+        renderWaterDashboardMonitor();
+        if (typeof renderWaterTracker === 'function') renderWaterTracker();
       });
       glassesRow.appendChild(btn);
     }
   }
+}
 
-  if (tipEl) {
-    if (currentGlasses === 0) {
-      tipEl.textContent = '💡 ចាប់ផ្តើមថ្ងៃថ្មីដោយពិសាទឹក ១-២ កែវ ដើម្បីដាស់ប្រព័ន្ធរំលាយអាហារ។';
-    } else if (currentGlasses <= 3) {
-      tipEl.textContent = '⚠️ កម្រិតជាតិទឹកទាបពេក! សូមបន្តពិសាទឹកឱ្យបានច្រើនដើម្បីការពារការខ្សោះជាតិទឹក។';
-    } else if (currentGlasses <= 7) {
-      tipEl.textContent = '💧 ល្អណាស់! អ្នកកំពុងបំពេញជាតិទឹកបានល្អ បន្តពិសាបន្ថែមទៀតដើម្បីសម្រេចគោលដៅ។';
-    } else {
-      tipEl.textContent = '🎉 អស្ចារ្យណាស់! អ្នកបានសម្រេចគោលដៅជាតិទឹក ២,០០០ ml ពេញលេញសម្រាប់ថ្ងៃនេះ!';
-    }
+// Weekly Cleanup (7 days purge)
+function purgeOldCommunityPosts(forceReset = false) {
+  const sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  const beforeLen = AppState.communityPosts.length;
+
+  if (forceReset) {
+    AppState.communityPosts = generateInitialCommunityPosts();
+    saveCommunityPosts();
+    renderCommunityFeed();
+    showToast('បានសម្អាតកម្រងរូបភាពឡើងវិញរួចរាល់ (៧ ថ្ងៃ)! 🧹', 'success');
+    return;
+  }
+
+  AppState.communityPosts = AppState.communityPosts.filter((p) => p.timestamp >= sevenDaysAgo);
+  if (AppState.communityPosts.length !== beforeLen) {
+    saveCommunityPosts();
   }
 }
 
-// Render Community Feed (for both Dashboard and Food Tab)
+// Render Community Feed
 function renderCommunityFeed() {
   purgeOldCommunityPosts();
 
   const dashFeedList = document.getElementById('dashboardCommunityFeedList');
   const foodFeedList = document.getElementById('communityFeedList');
-  
+
   const dashQuotaNum = document.getElementById('dashboardUserQuotaNum');
   const foodQuotaNum = document.getElementById('dailyPostCountNum');
-  
+
   const dashQuotaTag = document.getElementById('dashboardQuotaTag');
   const foodQuotaTag = document.getElementById('foodQuotaTag');
-  
+
   const dashSubmitBtn = document.getElementById('btnDashboardSubmitPost');
   const foodSubmitBtn = document.getElementById('btnSubmitPost');
-  
+
   const feedTotalCountText = document.getElementById('feedTotalCountText');
 
-  // Rule: Max 3 posts per person (ក្នុងមួយនាក់អាច Post បានតែ ៣ ដងគត់)
-  const myPosts = AppState.communityPosts.filter((p) => p.isMyPost);
+  // Rule: Max 3 posts per person
+  const myPosts = AppState.communityPosts.filter((p) => AppState.currentUser && p.userId === AppState.currentUser.id);
   const myCount = myPosts.length;
   const remaining = Math.max(0, 3 - myCount);
   const isQuotaFull = myCount >= 3;
 
-  // Update Quota Badges (កូតារបស់អ្នក៖ X/៣ ដង)
   if (dashQuotaNum) dashQuotaNum.textContent = toKhmerNumber(myCount);
   if (foodQuotaNum) foodQuotaNum.textContent = toKhmerNumber(myCount);
   if (feedTotalCountText) feedTotalCountText.textContent = toKhmerNumber(AppState.communityPosts.length);
 
-  // Update Quota Tags
   [dashQuotaTag, foodQuotaTag].forEach((tag) => {
     if (tag) {
       if (isQuotaFull) {
@@ -575,7 +845,6 @@ function renderCommunityFeed() {
     }
   });
 
-  // Update Submit Buttons
   [dashSubmitBtn, foodSubmitBtn].forEach((btn) => {
     if (btn) {
       if (isQuotaFull) {
@@ -592,13 +861,10 @@ function renderCommunityFeed() {
     }
   });
 
-  // Build Feed HTML
   const feedHtml = buildCommunityFeedHtml();
-
   if (dashFeedList) dashFeedList.innerHTML = feedHtml;
   if (foodFeedList) foodFeedList.innerHTML = feedHtml;
 
-  // Attach post interaction listeners
   setupPostCardListeners();
 }
 
@@ -606,77 +872,245 @@ function buildCommunityFeedHtml() {
   if (AppState.communityPosts.length === 0) {
     return `
       <div class="empty-meal-msg" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
-        <span>📸 មិនទាន់មានការបង្ហោះសកម្មភាពហាត់ប្រាណនៅឡើយទេ</span>
+        <span>📸 មិនទាន់មានការបង្ហោះសកម្មភាពនៅឡើយទេ</span>
         <span style="font-size: 0.78rem;">(សូមក្លាយជាអ្នកដំបូងគេដែលចែករំលែករូបភាព និងការខិតខំហាត់ប្រាណ!)</span>
       </div>
     `;
   }
 
   return AppState.communityPosts.map((post) => {
+    const isOwner = AppState.currentUser && post.userId === AppState.currentUser.id;
     const formattedText = escapeHtml(post.text).replace(
       /(#[^\s#]+)/g,
       '<span class="post-hashtag">$1</span>'
     );
 
-    let imageHtml = '';
-    if (post.imageData) {
-      imageHtml = `
-        <div class="post-image-box">
-          <img src="${post.imageData}" alt="សកម្មភាពហាត់ប្រាណ" loading="lazy">
+    // Images Gallery (1, 2, or 3 images)
+    const imgs = (post.images && post.images.length > 0)
+      ? post.images
+      : (post.imageData ? [post.imageData] : []);
+
+    let imagesHtml = '';
+    if (imgs.length === 1) {
+      imagesHtml = `
+        <div class="fb-photo-gallery gallery-1">
+          <div class="photo-item" data-lightbox-src="${imgs[0]}">
+            <img src="${imgs[0]}" alt="Post Photo" loading="lazy">
+          </div>
+        </div>
+      `;
+    } else if (imgs.length === 2) {
+      imagesHtml = `
+        <div class="fb-photo-gallery gallery-2">
+          <div class="photo-item" data-lightbox-src="${imgs[0]}"><img src="${imgs[0]}" alt="Photo 1" loading="lazy"></div>
+          <div class="photo-item" data-lightbox-src="${imgs[1]}"><img src="${imgs[1]}" alt="Photo 2" loading="lazy"></div>
+        </div>
+      `;
+    } else if (imgs.length >= 3) {
+      imagesHtml = `
+        <div class="fb-photo-gallery gallery-3">
+          <div class="photo-item photo-top" data-lightbox-src="${imgs[0]}"><img src="${imgs[0]}" alt="Photo Top" loading="lazy"></div>
+          <div class="photo-item photo-bot" data-lightbox-src="${imgs[1]}"><img src="${imgs[1]}" alt="Photo Bottom Left" loading="lazy"></div>
+          <div class="photo-item photo-bot" data-lightbox-src="${imgs[2]}"><img src="${imgs[2]}" alt="Photo Bottom Right" loading="lazy"></div>
         </div>
       `;
     }
 
-    const deleteBtnHtml = post.isMyPost
-      ? `<button class="btn-item-del" data-del-post="${post.id}" title="លុបការបង្ហោះរបស់អ្នក (ដើម្បីទទួលបានកូតាវិញ)">&times;</button>`
-      : '';
+    const isAvatarImg = post.userAvatar && (post.userAvatar.startsWith('data:image') || post.userAvatar.includes('.jpg') || post.userAvatar.includes('.png'));
+    const avatarHtml = isAvatarImg
+      ? `<img src="${post.userAvatar}" alt="${escapeHtml(post.userName)}">`
+      : `<span style="font-size: 1.4rem;">${post.userAvatar || '🏋️‍♂️'}</span>`;
 
-    const myBadgeHtml = post.isMyPost
-      ? `<span style="font-size: 0.72rem; padding: 0.15rem 0.5rem; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border-radius: var(--radius-full); margin-left: 0.4rem; font-weight: 700;">🌟 អ្នក (You)</span>`
-      : '';
+    const comments = post.comments || [];
+    const commentsListHtml = comments.map((c) => {
+      const isCAvatarImg = c.userAvatar && (c.userAvatar.startsWith('data:image') || c.userAvatar.includes('.jpg') || c.userAvatar.includes('.png'));
+      const cAvatarHtml = isCAvatarImg
+        ? `<img src="${c.userAvatar}" class="comment-avatar" data-view-user="${c.userId}" alt="${escapeHtml(c.userName)}">`
+        : `<div class="comment-avatar" data-view-user="${c.userId}" style="display:flex;align-items:center;justify-content:center;background:#2a2b2e;font-size:1.1rem;">${c.userAvatar || '👤'}</div>`;
+
+      const repliesHtml = (c.replies || []).map((r) => {
+        const isRAvatarImg = r.userAvatar && (r.userAvatar.startsWith('data:image') || r.userAvatar.includes('.jpg') || r.userAvatar.includes('.png'));
+        const rAvatarHtml = isRAvatarImg
+          ? `<img src="${r.userAvatar}" class="comment-avatar" data-view-user="${r.userId}" alt="${escapeHtml(r.userName)}">`
+          : `<div class="comment-avatar" data-view-user="${r.userId}" style="display:flex;align-items:center;justify-content:center;background:#2a2b2e;font-size:1.1rem;">${r.userAvatar || '👤'}</div>`;
+
+        return `
+          <div class="comment-item reply-item">
+            ${rAvatarHtml}
+            <div class="comment-bubble">
+              <div class="comment-author-name" data-view-user="${r.userId}">${escapeHtml(r.userName)}</div>
+              <div class="comment-text">${escapeHtml(r.text)}</div>
+              <div class="comment-actions-bar">
+                <span>${escapeHtml(r.timeStr || 'ថ្មីៗ')}</span>
+                <button type="button" class="comment-act-btn" data-reply-to="${escapeHtml(r.userName)}" data-post-id="${post.id}">ឆ្លើយតប</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="comment-item">
+          ${cAvatarHtml}
+          <div class="comment-bubble">
+            <div class="comment-author-name" data-view-user="${c.userId}">${escapeHtml(c.userName)}</div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+            <div class="comment-actions-bar">
+              <span>${escapeHtml(c.timeStr || 'ថ្មីៗ')}</span>
+              <button type="button" class="comment-act-btn" data-reply-to="${escapeHtml(c.userName)}" data-post-id="${post.id}">ឆ្លើយតប</button>
+            </div>
+            ${repliesHtml ? `<div class="comment-replies-list">${repliesHtml}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    const currentAvatar = (AppState.currentUser && AppState.currentUser.avatar) ? AppState.currentUser.avatar : 'profile_avatar_seang.jpg';
 
     return `
       <div class="feed-post-card" id="${post.id}">
+        
+        <!-- Post Header -->
         <div class="post-header">
-          <div class="post-author-group">
-            <div class="post-author-avatar">${post.userAvatar || '🏋️‍♂️'}</div>
+          <div class="post-author-group" data-view-user="${post.userId}" title="ចុចដើម្បីមើល Profile របស់ ${escapeHtml(post.userName)}">
+            <div class="post-author-avatar-img">
+              ${avatarHtml}
+            </div>
             <div>
               <div class="post-author-name">
-                ${escapeHtml(post.userName)}
-                ${myBadgeHtml}
+                <span class="author-name-text">${escapeHtml(post.userName)}</span>
+                ${isOwner ? '<span class="author-owner-badge" style="font-size:0.72rem;padding:0.15rem 0.5rem;background:rgba(16,185,129,0.15);color:var(--accent-emerald);border-radius:var(--radius-full);margin-left:0.4rem;font-weight:700;">🌟 អ្នក</span>' : ''}
               </div>
-              <div class="post-time-meta">⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌍 សាធារណៈ</div>
+              <div class="post-time-meta">⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌐 សាធារណៈ</div>
             </div>
           </div>
-          ${deleteBtnHtml}
-        </div>
 
-        <div class="post-content-text">${formattedText}</div>
-
-        ${imageHtml}
-
-        <div class="post-actions-bar">
-          <button class="btn-like-post ${post.isLiked ? 'liked' : ''}" data-like-post="${post.id}">
-            <span>${post.isLiked ? '❤️' : '🤍'}</span>
-            <span>${toKhmerNumber(post.likes || 0)} ចូលចិត្ត</span>
-          </button>
-
-          <div style="display: flex; gap: 0.4rem;">
-            <button class="post-cheers-btn" data-cheer-post="${post.id}">
-              <span>👏</span> លើកទឹកចិត្ត
-            </button>
+          <!-- Three Dots Menu (សញ្ញាចុច ៣ តូចៗ នៅខាងលើ ផ្នែកខាងស្តាំ) -->
+          <div class="post-options-dropdown-wrap">
+            <button type="button" class="btn-post-dots" data-toggle-dots="${post.id}" title="ជម្រើសបន្ថែម">···</button>
+            <div class="post-dropdown-menu" id="dropdown-${post.id}">
+              ${isOwner ? `
+                <button type="button" class="dropdown-item-danger" data-del-post="${post.id}">
+                  <span>🗑️</span> លុបរូបចេញ
+                </button>
+              ` : `
+                <div class="dropdown-item-disabled" title="User មួយ មិនអាចលុប ឬកែប្រែ ទិន្នន័យ User មួយទៀតបានទេ">
+                  <span>🔒</span> ការពារសិទ្ធិអ្នកនិពន្ធ
+                </div>
+              `}
+            </div>
           </div>
         </div>
+
+        <!-- Post Content Text -->
+        <div class="post-content-text">${formattedText}</div>
+
+        <!-- Post Image Gallery (Clickable to Lightbox) -->
+        ${imagesHtml}
+
+        <!-- Stats Row -->
+        <div class="post-stats-row">
+          <div><span class="like-badge-circle">👍</span> <span id="likeCount-${post.id}">${toKhmerNumber(post.likes || 0)}</span></div>
+          <div>
+            <span id="commentCount-${post.id}">${toKhmerNumber(comments.length)} មតិ</span> • 
+            <span>${toKhmerNumber(post.shares || 0)} ចែករំលែក</span>
+          </div>
+        </div>
+
+        <!-- 3 Small Action Buttons (NO TEXT LABELS) -->
+        <div class="post-action-buttons-3">
+          <button type="button" class="btn-action-small ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត (Like)">
+            <span>${post.isLiked ? '❤️' : '👍'}</span>
+          </button>
+          <button type="button" class="btn-action-small" data-act-comment="${post.id}" title="បញ្ចេញមតិ (Comment)">
+            <span>💬</span>
+          </button>
+          <button type="button" class="btn-action-small" data-act-share="${post.id}" title="ចែករំលែក (Share)">
+            <span>↗️</span>
+          </button>
+        </div>
+
+        <!-- Interactive Comments Section (អាចបញ្ចេញមតិឆ្លងឆ្លើយបាន) -->
+        <div class="post-comments-section" id="commentsSection-${post.id}">
+          <div class="comments-list" id="commentsList-${post.id}">
+            ${commentsListHtml}
+          </div>
+
+          <form class="form-add-comment" data-comment-form="${post.id}">
+            <img src="${currentAvatar}" class="comment-input-avatar" alt="Avatar">
+            <input type="text" class="comment-input-field" placeholder="សរសេរមតិឆ្លើយតប..." required>
+            <button type="submit" class="btn-send-comment" title="ផ្ញើមតិ">➤</button>
+          </form>
+        </div>
+
       </div>
     `;
   }).join('');
 }
 
 function setupPostCardListeners() {
-  // Like button
-  document.querySelectorAll('[data-like-post]').forEach((btn) => {
+  // Lightbox click on photos
+  document.querySelectorAll('[data-lightbox-src]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const src = el.getAttribute('data-lightbox-src');
+      const modal = document.getElementById('modalPhotoLightbox');
+      const img = document.getElementById('lightboxImg');
+      if (modal && img) {
+        img.src = src;
+        modal.classList.add('active');
+      }
+    });
+  });
+
+  // Click author avatar or name to view their profile (User មួយ អាចមើល Profile User មួយទៀតបាន)
+  document.querySelectorAll('[data-view-user]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const userId = el.getAttribute('data-view-user');
+      viewUserProfile(userId);
+    });
+  });
+
+  // Three dots toggle
+  document.querySelectorAll('[data-toggle-dots]').forEach((btn) => {
     btn.addEventListener('click', (e) => {
-      const postId = btn.getAttribute('data-like-post');
+      e.stopPropagation();
+      const postId = btn.getAttribute('data-toggle-dots');
+      const menu = document.getElementById(`dropdown-${postId}`);
+      document.querySelectorAll('.post-dropdown-menu').forEach((m) => {
+        if (m !== menu) m.classList.remove('active');
+      });
+      if (menu) menu.classList.toggle('active');
+    });
+  });
+
+  // Delete post ("លុបរូបចេញ") - Only owner permitted
+  document.querySelectorAll('[data-del-post]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!checkAuthOrPrompt('delete')) return;
+      const postId = btn.getAttribute('data-del-post');
+      const post = AppState.communityPosts.find((p) => p.id === postId);
+      if (!post) return;
+      if (!AppState.currentUser || post.userId !== AppState.currentUser.id) {
+        showToast('⚠️ អ្នកមិនអាចលុបការបង្ហោះរបស់អ្នកដទៃបានទេ!', 'warn');
+        return;
+      }
+      if (confirm('តើអ្នកពិតជាចង់លុបរូបភាព និងការបង្ហោះនេះចេញមែនទេ?')) {
+        AppState.communityPosts = AppState.communityPosts.filter((p) => p.id !== postId);
+        saveCommunityPosts();
+        renderCommunityFeed();
+        showToast('បានលុបរូបចេញដោយជោគជ័យ!', 'info');
+      }
+    });
+  });
+
+  // Button 1: Like
+  document.querySelectorAll('[data-act-like]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!checkAuthOrPrompt('like')) return;
+      const postId = btn.getAttribute('data-act-like');
       const post = AppState.communityPosts.find((p) => p.id === postId);
       if (post) {
         if (post.isLiked) {
@@ -693,28 +1127,80 @@ function setupPostCardListeners() {
     });
   });
 
-  // Cheer button
-  document.querySelectorAll('[data-cheer-post]').forEach((btn) => {
+  // Button 2: Comment (focus comment input)
+  document.querySelectorAll('[data-act-comment]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      showToast('អ្នកបានផ្ញើសារលើកទឹកចិត្ត៖ "តស៊ូឡើង! សុខភាពល្អជាទ្រព្យធនធំបំផុត!" 👏', 'success');
+      if (!checkAuthOrPrompt('comment')) return;
+      const postId = btn.getAttribute('data-act-comment');
+      const input = document.querySelector(`[data-comment-form="${postId}"] .comment-input-field`);
+      if (input) {
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     });
   });
 
-  // Delete button
-  document.querySelectorAll('[data-del-post]').forEach((btn) => {
+  // Button 3: Share
+  document.querySelectorAll('[data-act-share]').forEach((btn) => {
     btn.addEventListener('click', () => {
-      const postId = btn.getAttribute('data-del-post');
-      if (confirm('តើអ្នកពិតជាចង់លុបការបង្ហោះនេះមែនទេ?')) {
-        AppState.communityPosts = AppState.communityPosts.filter((p) => p.id !== postId);
+      if (!checkAuthOrPrompt('share')) return;
+      const postId = btn.getAttribute('data-act-share');
+      const post = AppState.communityPosts.find((p) => p.id === postId);
+      if (post) {
+        post.shares = (post.shares || 0) + 1;
         saveCommunityPosts();
         renderCommunityFeed();
-        showToast('បានលុបការបង្ហោះរួចរាល់', 'info');
+        showToast('បានចែករំលែកការបង្ហោះនេះជាសាធារណៈ! ↗️', 'success');
+      }
+    });
+  });
+
+  // Submit comment
+  document.querySelectorAll('[data-comment-form]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!checkAuthOrPrompt('comment')) return;
+      const postId = form.getAttribute('data-comment-form');
+      const post = AppState.communityPosts.find((p) => p.id === postId);
+      const input = form.querySelector('.comment-input-field');
+      if (!post || !input || !input.value.trim()) return;
+
+      const user = AppState.currentUser;
+      const newComment = {
+        id: 'c_' + Date.now(),
+        userId: user.id,
+        userName: user.name,
+        userAvatar: user.avatar || 'profile_avatar_seang.jpg',
+        text: input.value.trim(),
+        timeStr: 'ទើបតែឆ្លើយតប',
+        replies: [],
+      };
+
+      if (!post.comments) post.comments = [];
+      post.comments.push(newComment);
+      saveCommunityPosts();
+      renderCommunityFeed();
+      showToast('បានបញ្ចេញមតិឆ្លើយតបរួចរាល់! 💬', 'success');
+      input.value = '';
+    });
+  });
+
+  // Reply to comment
+  document.querySelectorAll('[data-reply-to]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (!checkAuthOrPrompt('comment')) return;
+      const postId = btn.getAttribute('data-post-id');
+      const replyUser = btn.getAttribute('data-reply-to');
+      const input = document.querySelector(`[data-comment-form="${postId}"] .comment-input-field`);
+      if (input) {
+        input.value = `@${replyUser} `;
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
   });
 }
 
-// Compress Image using HTML5 Canvas (keeps base64 small for localStorage)
 function compressImageFile(file, callback) {
   const reader = new FileReader();
   reader.onload = function (e) {
@@ -799,8 +1285,12 @@ function setupCommunityComposerListeners() {
       formEl.addEventListener('submit', (e) => {
         e.preventDefault();
 
+        // Prohibit guest from posting: Require Sign Up first
+        if (!checkAuthOrPrompt('post')) return;
+
+        const user = AppState.currentUser;
         // Rule: Max 3 posts per person strictly (ក្នុងមួយនាក់អាច Post បានតែ ៣ ដងគត់)
-        const myPosts = AppState.communityPosts.filter((p) => p.isMyPost);
+        const myPosts = AppState.communityPosts.filter((p) => p.userId === user.id);
         if (myPosts.length >= 3) {
           alert('⚠️ លោកអ្នកបានបង្ហោះគ្រប់កូតា ៣ ដងគត់ហើយ! ក្នុងម្នាក់អាចបង្ហោះបានតែ ៣ ដងប៉ុណ្ណោះ។ សូមរង់ចាំការសម្អាតប្រចាំសប្តាហ៍ (៧ ថ្ងៃ) ឬលុបការបង្ហោះចាស់ចេញ ទើបអាចបង្ហោះថ្មីបាន។');
           return;
@@ -814,23 +1304,25 @@ function setupCommunityComposerListeners() {
           return;
         }
 
-        const isMale = AppState.profile.gender === 'male';
-        const userAvatar = isMale ? '🏋️‍♂️' : '🧘‍♀️';
         const now = Date.now();
         const todayStr = new Date().toISOString().split('T')[0];
 
+        // បើ User ចង់ Post រូបភាព គឺត្រូវ Post ចេញ Account របស់ខ្លួនឯង
         const newPost = {
           id: 'post_' + now + '_' + Math.floor(Math.random() * 1000),
-          isMyPost: true, // Marked as current user's post
-          userName: isMale ? 'បុរសសុខភាពល្អ' : 'ស្រ្តីសុខភាពល្អ',
-          userAvatar,
+          userId: user.id,
+          userName: user.name,
+          userAvatar: user.avatar || 'profile_avatar_seang.jpg',
           text,
           imageData: imgData,
+          images: imgData ? [imgData] : [],
           timestamp: now,
           dateStr: todayStr,
           timeStr: 'ទើបតែបង្ហោះមុននេះ',
           likes: 0,
           isLiked: false,
+          shares: 0,
+          comments: [],
         };
 
         AppState.communityPosts.unshift(newPost);
@@ -920,10 +1412,12 @@ function renderAll() {
   renderWorkoutsList();
   renderSleepTracker();
   renderAdvisory40();
+  renderStoriesTray();
   renderCommunityFeed();
   renderWaterTracker();
   renderSmartHealthTip();
   renderAnalytics();
+  renderHeaderUserState();
 }
 
 // Theme
@@ -1794,8 +2288,653 @@ function calculateBMI() {
 }
 
 // =============================================================================
-// 14. EVENT LISTENERS & USER INTERACTIONS
 // =============================================================================
+// 19. SABAY FEATURES: FACEBOOK PROFILE PAGE (IMAGE 2) & STORIES TRAY (IMAGE 1)
+// =============================================================================
+// Story viewer modal removed as requested
+
+function renderStoriesTray() {
+  const wrap = document.getElementById('fbStoriesScrollWrap');
+  if (!wrap) return;
+
+  const acc = AppState.account || { avatar: 'profile_avatar_seang.jpg' };
+  const userAvatarSrc = acc.avatar || 'profile_avatar_seang.jpg';
+
+  let html = `
+    <!-- Card 1: Create story -->
+    <div class="fb-story-card create-card" id="btnCreateStoryCard" title="ចុចដើម្បីបង្កើត Story ថ្មី">
+      <div class="story-img-top">
+        <img src="${userAvatarSrc}" alt="User Avatar" id="storyUserAvatarImg">
+      </div>
+      <div class="story-plus-btn"><span>+</span></div>
+      <div class="story-create-label">Create story</div>
+    </div>
+  `;
+
+  AppState.stories.forEach((story, idx) => {
+    html += `
+      <div class="fb-story-card" data-story-idx="${idx}" title="មើល Story របស់ ${escapeHtml(story.author)}">
+        <img src="${story.image}" class="story-bg-img" alt="${escapeHtml(story.author)}">
+        <div class="story-author-badge">
+          <img src="${story.avatar}" alt="${escapeHtml(story.author)}">
+        </div>
+        <div class="story-author-name">${escapeHtml(story.author)}</div>
+      </div>
+    `;
+  });
+
+  wrap.innerHTML = html;
+
+  // Re-attach card clicks
+  const createCard = document.getElementById('btnCreateStoryCard');
+  if (createCard) {
+    createCard.addEventListener('click', () => {
+      const modal = document.getElementById('modalCreateStory');
+      if (modal) modal.classList.add('active');
+    });
+  }
+
+  // Story cards display directly in tray without viewer popup
+}
+
+// Render Header User State (Guest vs. Signed-up User)
+function renderHeaderUserState() {
+  const signUpBtn = document.getElementById('btnHeaderSignUp');
+  const signUpIcon = document.getElementById('signUpBtnIcon');
+  const signUpText = document.getElementById('signUpBtnText');
+
+  const profileBadge = document.getElementById('btnOpenProfileModal');
+  const profileIcon = document.getElementById('headerProfileIcon');
+  const profileText = document.getElementById('headerProfileText');
+
+  const logoutBtn = document.getElementById('btnHeaderLogout');
+  const logoutText = document.getElementById('logoutBtnText');
+
+  const quickAvatar = document.getElementById('quickBarAvatarImg');
+  const quickPlaceholder = document.getElementById('quickBarPlaceholderText');
+  const storyUserAvatar = document.getElementById('storyUserAvatarImg');
+
+  if (AppState.isLoggedIn && AppState.currentUser) {
+    const user = AppState.currentUser;
+    if (signUpText) signUpText.textContent = `${user.name} (គណនី)`;
+    if (signUpIcon) signUpIcon.textContent = '✨';
+
+    if (profileText) profileText.textContent = user.name;
+    if (profileIcon) profileIcon.textContent = user.gender === 'female' ? '👩' : '👨';
+
+    if (logoutBtn) logoutBtn.style.display = 'inline-flex';
+    if (logoutText) logoutText.textContent = 'ចាកចេញ';
+
+    if (quickAvatar) quickAvatar.src = user.avatar || 'profile_avatar_seang.jpg';
+    if (quickPlaceholder) quickPlaceholder.textContent = `តើថ្ងៃនេះអ្នកកំពុងគិតអ្វីដែរ, ${user.name}?`;
+    if (storyUserAvatar) storyUserAvatar.src = user.avatar || 'profile_avatar_seang.jpg';
+  } else {
+    // Guest Mode (User មិនទាន់ Sign Up)
+    if (signUpText) signUpText.textContent = '✨ ចុះឈ្មោះ (Sign Up)';
+    if (signUpIcon) signUpIcon.textContent = '✨';
+
+    if (profileText) profileText.textContent = 'ភ្ញៀវ (Guest)';
+    if (profileIcon) profileIcon.textContent = '👤';
+
+    if (logoutBtn) logoutBtn.style.display = 'none';
+
+    if (quickAvatar) quickAvatar.src = 'profile_avatar_seang.jpg';
+    if (quickPlaceholder) quickPlaceholder.textContent = 'សូមចុះឈ្មោះជាមុនសិន បែប ងាយ ងាយ...';
+    if (storyUserAvatar) storyUserAvatar.src = 'profile_avatar_seang.jpg';
+  }
+}
+
+// User មួយ អាចមើល Profile User មួយទៀតបាន
+function viewUserProfile(userId) {
+  const user = AppState.users.find((u) => u.id === userId) ||
+    (AppState.currentUser && AppState.currentUser.id === userId ? AppState.currentUser : null);
+
+  if (user) {
+    renderUserProfileView(user);
+  } else {
+    const post = AppState.communityPosts.find((p) => p.userId === userId);
+    if (post) {
+      renderUserProfileView({
+        id: post.userId,
+        name: post.userName,
+        avatar: post.userAvatar || 'story_oeun.jpg',
+        cover: 'profile_cover.jpg',
+        followers: '1.2K',
+        following: '300',
+        bioRole: 'សមាជិក សប្បាយ សប្បាយ 🇰🇭',
+        livesIn: 'Phnom Penh',
+        fromPlace: 'Cambodia',
+        gender: 'male',
+        bmi: 22.5,
+        bmr: 1600,
+        goal: 2000,
+      });
+    }
+  }
+}
+
+function renderUserProfileView(user) {
+  if (!user) return;
+  AppState.viewingUser = user;
+
+  const isOwner = AppState.currentUser && AppState.currentUser.id === user.id;
+
+  const coverImg = document.getElementById('profileCoverImg');
+  const avatarImg = document.getElementById('fbProfileAvatarDisplay');
+  const nameEl = document.getElementById('fbProfileFullName');
+  const followersEl = document.getElementById('fbFollowersCount');
+  const followingEl = document.getElementById('fbFollowingCount');
+  const orgEl = document.getElementById('fbOrgSubtitle');
+
+  if (coverImg) coverImg.src = user.cover || 'profile_cover.jpg';
+  if (avatarImg) avatarImg.src = user.avatar || 'profile_avatar_seang.jpg';
+  if (nameEl) nameEl.textContent = user.name || 'User';
+  if (followersEl) followersEl.textContent = `${user.followers || '1.2K'} followers`;
+  if (followingEl) followingEl.textContent = `${user.following || '350'} following`;
+  if (orgEl) orgEl.textContent = user.bioRole || 'សមាជិក សប្បាយ សប្បាយ 🇰🇭';
+
+  // Breadcrumb at top of profile
+  const breadcrumbText = document.querySelector('.profile-breadcrumb-text');
+  if (breadcrumbText) {
+    breadcrumbText.textContent = isOwner
+      ? `👤 គណនីផ្ទាល់ខ្លួន • ${user.name}`
+      : `👤 កំពុងមើល Profile របស់ • ${user.name}`;
+  }
+
+  // Cover & Avatar edit buttons - ONLY shown if isOwner! (User មួយ មិនអាចលុប ឬកែប្រែ ទិន្នន័យ User មួយទៀតបានទេ)
+  const btnEditCover = document.querySelector('.btn-edit-cover-photo');
+  const btnAvatarCam = document.querySelector('.btn-avatar-cam-badge');
+  const btnProfileEdit = document.getElementById('btnProfileEditAction');
+
+  if (btnEditCover) btnEditCover.style.display = isOwner ? 'inline-flex' : 'none';
+  if (btnAvatarCam) btnAvatarCam.style.display = isOwner ? 'flex' : 'none';
+  if (btnProfileEdit) btnProfileEdit.style.display = isOwner ? 'inline-flex' : 'none';
+
+  // Details column
+  const livesEl = document.getElementById('profDetailLives');
+  const fromEl = document.getElementById('profDetailFrom');
+  if (livesEl) livesEl.textContent = user.livesIn || 'Phnom Penh';
+  if (fromEl) fromEl.textContent = user.fromPlace || 'Cambodia';
+
+  // Health metrics in profile
+  const bmiEl = document.getElementById('profileBmiSummary');
+  const bmrEl = document.getElementById('profileBmrSummary');
+  const goalEl = document.getElementById('profileGoalSummary');
+  if (bmiEl) bmiEl.textContent = toKhmerNumber((user.bmi || 22.5).toFixed(1));
+  if (bmrEl) bmrEl.textContent = `${toKhmerNumber((user.bmr || 1650).toLocaleString())} kcal`;
+  if (goalEl) goalEl.textContent = `${toKhmerNumber((user.goal || 2000).toLocaleString())} kcal`;
+
+  // Render that specific user's posts in their profile
+  renderProfileUserPosts(user.id);
+
+  // Switch to Profile Tab in the lower frame, keeping top frame intact
+  switchMainTab('tabUserProfileView');
+}
+
+function openUserProfileView() {
+  if (AppState.isLoggedIn && AppState.currentUser) {
+    renderUserProfileView(AppState.currentUser);
+  } else {
+    checkAuthOrPrompt('profile');
+  }
+}
+
+function openUserProfileModal() {
+  openUserProfileView();
+}
+
+function renderProfileUserPosts(targetUserId) {
+  const listEl = document.getElementById('fbProfileUserPostsList');
+  if (!listEl) return;
+
+  const targetId = targetUserId || (AppState.viewingUser ? AppState.viewingUser.id : AppState.currentUser?.id);
+  const userPosts = AppState.communityPosts.filter((p) => p.userId === targetId);
+
+  if (userPosts.length === 0) {
+    listEl.innerHTML = `
+      <div style="text-align: center; padding: 2rem; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); color: var(--text-muted);">
+        <span>📷 មិនទាន់មានការបង្ហោះរូបភាព ឬសកម្មភាពនៅឡើយទេ</span>
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = userPosts.map((post) => {
+    const formattedText = escapeHtml(post.text).replace(
+      /(#[^\s#]+)/g,
+      '<span class="post-hashtag">$1</span>'
+    );
+
+    const imgs = (post.images && post.images.length > 0) ? post.images : (post.imageData ? [post.imageData] : []);
+    let photosHtml = '';
+    if (imgs.length === 1) {
+      photosHtml = `<div class="fb-photo-gallery gallery-1"><div class="photo-item" data-lightbox-src="${imgs[0]}"><img src="${imgs[0]}" alt="Photo" loading="lazy"></div></div>`;
+    } else if (imgs.length === 2) {
+      photosHtml = `<div class="fb-photo-gallery gallery-2"><div class="photo-item" data-lightbox-src="${imgs[0]}"><img src="${imgs[0]}" alt="Photo 1" loading="lazy"></div><div class="photo-item" data-lightbox-src="${imgs[1]}"><img src="${imgs[1]}" alt="Photo 2" loading="lazy"></div></div>`;
+    } else if (imgs.length >= 3) {
+      photosHtml = `<div class="fb-photo-gallery gallery-3"><div class="photo-item" data-lightbox-src="${imgs[0]}"><img src="${imgs[0]}" alt="Photo 1" loading="lazy"></div><div class="photo-item" data-lightbox-src="${imgs[1]}"><img src="${imgs[1]}" alt="Photo 2" loading="lazy"></div><div class="photo-item" data-lightbox-src="${imgs[2]}"><img src="${imgs[2]}" alt="Photo 3" loading="lazy"></div></div>`;
+    }
+
+    const isAvatarImg = post.userAvatar && (post.userAvatar.startsWith('data:image') || post.userAvatar.includes('.jpg') || post.userAvatar.includes('.png'));
+    const avatarHtml = isAvatarImg
+      ? `<img src="${post.userAvatar}" alt="${escapeHtml(post.userName)}">`
+      : `<span style="font-size: 1.4rem;">${post.userAvatar || '🏋️‍♂️'}</span>`;
+
+    return `
+      <div class="fb-user-post-card">
+        <div class="fb-post-card-header">
+          <div class="fb-post-avatar-circle">
+            ${avatarHtml}
+          </div>
+          <div class="fb-post-meta">
+            <h4>${escapeHtml(post.userName)}</h4>
+            <span>⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌐 សាធារណៈ</span>
+          </div>
+        </div>
+        <div class="fb-post-body-text">${formattedText}</div>
+        ${photosHtml}
+        <div class="fb-post-social-bar">
+          <div class="post-action-buttons-3" style="border: none; margin: 0; padding: 0.25rem 0;">
+            <button type="button" class="btn-action-small ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត">
+              <span>${post.isLiked ? '❤️' : '👍'}</span>
+            </button>
+            <button type="button" class="btn-action-small" data-act-comment="${post.id}" title="បញ្ចេញមតិ">
+              <span>💬</span>
+            </button>
+            <button type="button" class="btn-action-small" data-act-share="${post.id}" title="ចែករំលែក">
+              <span>↗️</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function setupSabayFeatures() {
+  // 1. Click user name in header or badge
+  const btnHeaderSignUp = document.getElementById('btnHeaderSignUp');
+  if (btnHeaderSignUp) {
+    btnHeaderSignUp.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (AppState.isLoggedIn && AppState.currentUser) {
+        viewUserProfile(AppState.currentUser.id);
+      } else {
+        const modal = document.getElementById('modalSignUp');
+        if (modal) modal.classList.add('active');
+      }
+    });
+  }
+
+  const btnOpenProfileModal = document.getElementById('btnOpenProfileModal');
+  if (btnOpenProfileModal) {
+    btnOpenProfileModal.addEventListener('click', (e) => {
+      e.preventDefault();
+      openUserProfileView();
+    });
+  }
+
+  // Header Logout / Switch to Guest Mode
+  const btnHeaderLogout = document.getElementById('btnHeaderLogout');
+  if (btnHeaderLogout) {
+    btnHeaderLogout.addEventListener('click', () => {
+      if (AppState.isLoggedIn) {
+        AppState.isLoggedIn = false;
+        AppState.currentUser = null;
+        saveUsersAndSession();
+        renderHeaderUserState();
+        renderCommunityFeed();
+        showToast('បានចាកចេញពីគណនី (ស្ថិតក្នុងទម្រង់ជាភ្ញៀវ/Guest)', 'info');
+      }
+    });
+  }
+
+  // Require Sign Up Trigger in modalGuestRequireSignUp
+  const btnRequireSignUpTrigger = document.getElementById('btnRequireSignUpTrigger');
+  if (btnRequireSignUpTrigger) {
+    btnRequireSignUpTrigger.addEventListener('click', () => {
+      const reqModal = document.getElementById('modalGuestRequireSignUp');
+      if (reqModal) reqModal.classList.remove('active');
+      const signUpModal = document.getElementById('modalSignUp');
+      if (signUpModal) signUpModal.classList.add('active');
+    });
+  }
+
+  // 2. Quick Composer Bar Click
+  const quickBar = document.getElementById('btnOpenQuickComposerBar');
+  if (quickBar) {
+    quickBar.addEventListener('click', (e) => {
+      if (!checkAuthOrPrompt('post')) return;
+      if (e.target.closest('#btnQuickPhotoVideo')) {
+        const fileInput = document.getElementById('dashboardPostImageFileInput');
+        if (fileInput) fileInput.click();
+        return;
+      }
+      const postInput = document.getElementById('dashboardPostTextInput');
+      if (postInput) {
+        postInput.focus();
+        postInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  // 3. Stories Tray Scroll Button Right
+  const btnScrollRight = document.getElementById('btnStoryScrollRight');
+  const storiesScrollWrap = document.getElementById('fbStoriesScrollWrap');
+  if (btnScrollRight && storiesScrollWrap) {
+    btnScrollRight.addEventListener('click', () => {
+      storiesScrollWrap.scrollBy({ left: 260, behavior: 'smooth' });
+    });
+  }
+
+  // 4. Create Story Card Click
+  const btnCreateStoryCard = document.getElementById('btnCreateStoryCard');
+  if (btnCreateStoryCard) {
+    btnCreateStoryCard.addEventListener('click', () => {
+      if (!checkAuthOrPrompt('story')) return;
+      const modal = document.getElementById('modalCreateStory');
+      if (modal) modal.classList.add('active');
+    });
+  }
+
+  // 5. Create Story Form Submit
+  const formStory = document.getElementById('formCreateStory');
+  const inputStoryFile = document.getElementById('inputStoryFile');
+  const previewStoryImg = document.getElementById('storyCreatePreviewImg');
+
+  if (inputStoryFile) {
+    inputStoryFile.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (base64) => {
+        if (previewStoryImg) previewStoryImg.src = base64;
+      });
+    });
+  }
+
+  if (formStory) {
+    formStory.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!checkAuthOrPrompt('story')) return;
+      const file = inputStoryFile ? inputStoryFile.files[0] : null;
+      const caption = document.getElementById('inputStoryCaption')?.value.trim() || '';
+
+      const handleAddStory = (imgSrc) => {
+        const user = AppState.currentUser;
+        const newStory = {
+          id: 'story_' + Date.now(),
+          author: user ? user.name : 'Seang Kunthea',
+          avatar: user ? (user.avatar || 'profile_avatar_seang.jpg') : 'profile_avatar_seang.jpg',
+          image: imgSrc,
+          time: 'ទើបតែបង្ហោះ',
+          isUser: true,
+          caption,
+        };
+
+        AppState.stories.unshift(newStory);
+        localStorage.setItem(STORAGE_KEYS.STORIES, JSON.stringify(AppState.stories));
+        renderStoriesTray();
+
+        const modal = document.getElementById('modalCreateStory');
+        if (modal) modal.classList.remove('active');
+        showToast('បានបង្ហោះ Story ថ្មីដោយជោគជ័យ! 🎉', 'success');
+      };
+
+      if (file) {
+        compressImageFile(file, handleAddStory);
+      } else {
+        handleAddStory(previewStoryImg.src || 'story_create.jpg');
+      }
+    });
+  }
+
+  // 6. Cover Photo Upload in Profile View (Only for owner)
+  const inputCover = document.getElementById('inputCoverPhotoUpload');
+  if (inputCover) {
+    inputCover.addEventListener('change', (e) => {
+      if (!AppState.currentUser) return;
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (base64) => {
+        AppState.currentUser.cover = base64;
+        const coverImg = document.getElementById('profileCoverImg');
+        if (coverImg) coverImg.src = base64;
+        saveUsersAndSession();
+        showToast('បានផ្លាស់ប្តូររូបភាព Cover ដោយជោគជ័យ! 📷', 'success');
+      });
+    });
+  }
+
+  // 7. Avatar Photo Upload in Profile View (Only for owner)
+  const inputAvatarChange = document.getElementById('inputProfileAvatarChange');
+  if (inputAvatarChange) {
+    inputAvatarChange.addEventListener('change', (e) => {
+      if (!AppState.currentUser) return;
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (base64) => {
+        AppState.currentUser.avatar = base64;
+        const avatarImg = document.getElementById('fbProfileAvatarDisplay');
+        if (avatarImg) avatarImg.src = base64;
+
+        saveUsersAndSession();
+        renderHeaderUserState();
+        renderStoriesTray();
+        renderCommunityFeed();
+        showToast('បានផ្លាស់ប្តូររូបថត Profile ដោយជោគជ័យ! 📷', 'success');
+      });
+    });
+  }
+
+  // 8. Profile Return to Home & Actions (Dashboard, Edit)
+  const btnReturnHomeProfile = document.getElementById('btnReturnHomeFromProfileHeader');
+  if (btnReturnHomeProfile) {
+    btnReturnHomeProfile.addEventListener('click', () => {
+      switchMainTab('tabDashboard');
+    });
+  }
+
+  const btnProfileDash = document.getElementById('btnProfileDashboardAction');
+  if (btnProfileDash) {
+    btnProfileDash.addEventListener('click', () => {
+      switchMainTab('tabDashboard');
+    });
+  }
+
+  const btnProfileEdit = document.getElementById('btnProfileEditAction');
+  const btnGoToPersonal = document.getElementById('btnGoToPersonalInfoTab');
+  const btnEditDetails = document.getElementById('btnEditPersonalDetails');
+  [btnProfileEdit, btnGoToPersonal, btnEditDetails].forEach((btn) => {
+    if (btn) {
+      btn.addEventListener('click', () => {
+        if (!AppState.currentUser) {
+          checkAuthOrPrompt('edit');
+          return;
+        }
+        switchMainTab('tabPersonalInfo');
+      });
+    }
+  });
+
+  // 9. Lightbox Close Listeners
+  const btnCloseLightbox = document.getElementById('btnCloseLightbox');
+  const modalLightbox = document.getElementById('modalPhotoLightbox');
+  const closeLightbox = () => {
+    if (modalLightbox) modalLightbox.classList.remove('active');
+    const img = document.getElementById('lightboxImg');
+    if (img) img.src = '';
+    const cap = document.getElementById('lightboxCaption');
+    if (cap) cap.textContent = '';
+  };
+  if (btnCloseLightbox && modalLightbox) {
+    btnCloseLightbox.addEventListener('click', closeLightbox);
+    modalLightbox.addEventListener('click', (e) => {
+      if (e.target === modalLightbox) {
+        closeLightbox();
+      }
+    });
+  }
+
+  // 10. Sign Up Form Submit -> Open Onboarding
+  const formSignUp = document.getElementById('formSignUp');
+  const inputSignUpName = document.getElementById('signUpInputName');
+  const inputSignUpEmail = document.getElementById('signUpInputEmail');
+  const inputSignUpAvatarFile = document.getElementById('inputSignUpAvatarFile');
+  const signUpAvatarImg = document.getElementById('signUpAvatarImg');
+
+  let currentSignUpAvatarBase64 = null;
+  if (inputSignUpAvatarFile) {
+    inputSignUpAvatarFile.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (base64) => {
+        currentSignUpAvatarBase64 = base64;
+        if (signUpAvatarImg) signUpAvatarImg.src = base64;
+      });
+    });
+  }
+
+  if (formSignUp) {
+    formSignUp.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = inputSignUpName ? inputSignUpName.value.trim() : '';
+      const email = inputSignUpEmail ? inputSignUpEmail.value.trim() : '';
+      if (!name || !email) {
+        showToast('សូមបញ្ចូលឈ្មោះ និងអ៊ីមែលរបស់អ្នក', 'warn');
+        return;
+      }
+
+      const newUserId = 'user_' + Date.now();
+      const newUser = {
+        id: newUserId,
+        name: name,
+        email: email,
+        avatar: currentSignUpAvatarBase64 || 'profile_avatar_seang.jpg',
+        cover: 'profile_cover.jpg',
+        bioRole: 'សមាជិក សប្បាយ សប្បាយ 🇰🇭',
+        followers: '1',
+        following: '0',
+        livesIn: 'Phnom Penh',
+        fromPlace: 'Cambodia',
+        gender: 'male',
+        age: 30,
+        height: 168,
+        weight: 65,
+        goal: 2000,
+        bmi: 23.0,
+        bmr: 1580,
+        registeredAt: Date.now(),
+      };
+
+      AppState.users.push(newUser);
+      AppState.currentUser = newUser;
+      AppState.isLoggedIn = true;
+      saveUsersAndSession();
+
+      const modalSignUp = document.getElementById('modalSignUp');
+      if (modalSignUp) modalSignUp.classList.remove('active');
+
+      renderHeaderUserState();
+      renderCommunityFeed();
+
+      // Open Onboarding Modal to complete Profile & Health Details
+      const onboardingModal = document.getElementById('modalAccountOnboarding');
+      const onbName = document.getElementById('onboardingInputName');
+      const onbAvatar = document.getElementById('onboardingAvatarPreview');
+      if (onbName) onbName.value = name;
+      if (onbAvatar) onbAvatar.src = newUser.avatar;
+      if (onboardingModal) onboardingModal.classList.add('active');
+
+      showToast(`សូមស្វាគមន៍ ${name}! សូមបំពេញព័ត៌មាន Profile របស់អ្នក`, 'success');
+    });
+  }
+
+  // 11. Onboarding Form Submit
+  const formOnboarding = document.getElementById('formAccountOnboarding');
+  const inputOnbAvatar = document.getElementById('inputOnboardingAvatar');
+  const inputOnbCover = document.getElementById('inputOnboardingCover');
+  const previewOnbAvatar = document.getElementById('onboardingAvatarPreview');
+  const previewOnbCover = document.getElementById('onboardingCoverPreview');
+
+  let currentOnbAvatarBase64 = null;
+  let currentOnbCoverBase64 = null;
+
+  if (inputOnbAvatar) {
+    inputOnbAvatar.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (b64) => {
+        currentOnbAvatarBase64 = b64;
+        if (previewOnbAvatar) previewOnbAvatar.src = b64;
+      });
+    });
+  }
+
+  if (inputOnbCover) {
+    inputOnbCover.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (b64) => {
+        currentOnbCoverBase64 = b64;
+        if (previewOnbCover) previewOnbCover.src = b64;
+      });
+    });
+  }
+
+  if (formOnboarding) {
+    formOnboarding.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (!AppState.currentUser) return;
+
+      const user = AppState.currentUser;
+      const name = document.getElementById('onboardingInputName')?.value.trim() || user.name;
+      const gender = document.getElementById('onboardingSelectGender')?.value || 'male';
+      const age = parseInt(document.getElementById('onboardingInputAge')?.value, 10) || 30;
+      const height = parseFloat(document.getElementById('onboardingInputHeight')?.value) || 168;
+      const weight = parseFloat(document.getElementById('onboardingInputWeight')?.value) || 65;
+      const goal = parseInt(document.getElementById('onboardingInputGoal')?.value, 10) || 2000;
+      const location = document.getElementById('onboardingInputLocation')?.value.trim() || 'Phnom Penh';
+      const bio = document.getElementById('onboardingInputBio')?.value.trim() || 'សមាជិក សប្បាយ សប្បាយ 🇰🇭';
+
+      user.name = name;
+      user.gender = gender;
+      user.age = age;
+      user.height = height;
+      user.weight = weight;
+      user.goal = goal;
+      user.livesIn = location;
+      user.bioRole = bio;
+      if (currentOnbAvatarBase64) user.avatar = currentOnbAvatarBase64;
+      if (currentOnbCoverBase64) user.cover = currentOnbCoverBase64;
+
+      const hM = height / 100;
+      user.bmi = weight / (hM * hM);
+      user.bmr = gender === 'male'
+        ? 10 * weight + 6.25 * height - 5 * age + 5
+        : 10 * weight + 6.25 * height - 5 * age - 161;
+
+      AppState.profile.gender = gender;
+      AppState.profile.age = age;
+      AppState.profile.height = height;
+      AppState.profile.weight = weight;
+      AppState.goal = goal;
+      saveProfile();
+
+      saveUsersAndSession();
+
+      const onboardingModal = document.getElementById('modalAccountOnboarding');
+      if (onboardingModal) onboardingModal.classList.remove('active');
+
+      renderHeaderUserState();
+      renderCommunityFeed();
+      renderAll();
+
+      renderUserProfileView(user);
+      showToast('🎉 បានរក្សាទុកព័ត៌មាន Profile និងទិន្នន័យសុខភាពដោយជោគជ័យ!', 'success');
+    });
+  }
+}
+
 function setupEventListeners() {
   // Navigation Bar Links (Smooth switching between SPA tabs)
   document.querySelectorAll('#mainHeaderNav .nav-link-btn').forEach((btn) => {
@@ -1836,6 +2975,7 @@ function setupEventListeners() {
 
   // Modals Open/Close
   setupModalHandlers();
+  setupSabayFeatures();
 
   // Custom Food Form Submit
   const formAddFood = document.getElementById('formAddFood');
@@ -2039,11 +3179,26 @@ function switchMainTab(tabId) {
     btn.classList.toggle('active', btn.getAttribute('data-tab-target') === tabId);
   });
 
+  // Toggle active highlight on header Account buttons if viewing profile
+  const headerSignUp = document.getElementById('btnHeaderSignUp');
+  const headerProfile = document.getElementById('btnOpenProfileModal');
+  if (tabId === 'tabUserProfileView') {
+    if (headerSignUp) headerSignUp.classList.add('account-tab-active');
+    if (headerProfile) headerProfile.classList.add('account-tab-active');
+  } else {
+    if (headerSignUp) headerSignUp.classList.remove('account-tab-active');
+    if (headerProfile) headerProfile.classList.remove('account-tab-active');
+  }
+
   document.querySelectorAll('.tab-section-view').forEach((sec) => {
     sec.classList.toggle('active', sec.id === tabId);
   });
 
-  if (tabId === 'tabFood') {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (tabId === 'tabUserProfileView') {
+    updateUserProfileData();
+  } else if (tabId === 'tabFood') {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (tabId === 'tabAnalytics') {
     setTimeout(drawAnalyticsChart, 50);
@@ -2287,4 +3442,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initAppState();
   setupEventListeners();
   renderAll();
+  // បើកដំបូង សូមបង្ហាញ Page ទំព័រដើម (Initial view is always Home / Dashboard)
+  switchMainTab('tabDashboard');
 });

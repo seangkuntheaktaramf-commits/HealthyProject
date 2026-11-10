@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>«សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព និងកាឡូរីឆ្លាតវៃ</title>
-  <link rel="icon" type="image/jpeg" href="S-Icon1.jpg">
+  <title>សប្បាយ សប្បាយ</title>
+  <link rel="icon" type="image/jpeg" href="Sabay_Logo.jpg">
   <link rel="stylesheet" href="style.css">
   <meta name="description" content="«សុខភាពខ្ញុំ» Web Application គ្រប់គ្រងសុខភាព តាមដានកាឡូរី ដំណេក និងលំហាត់ប្រាណវ័យ ៤០+ ជាភាសាខ្មែរ ១០០% ស្របតាមស្តង់ដារវចនានុក្រមសម្តេចព្រះសង្ឃរាជ ជួន ណាត">
 </head>
@@ -30,9 +30,21 @@
             <span>kcal</span>
           </button>
 
+          <!-- Button Sign Up (ចុះឈ្មោះបង្កើតគណនី) -->
+          <button class="btn-signup-header" id="btnHeaderSignUp" title="ចុះឈ្មោះ / គណនីផ្ទាល់ខ្លួន">
+            <span id="signUpBtnIcon">✨</span>
+            <span id="signUpBtnText">Seang Kunthea (គណនី)</span>
+          </button>
+
           <button class="btn-profile-badge" id="btnOpenProfileModal" title="កែប្រែប្រវត្តិរូប និងគោលដៅ">
             <span id="headerProfileIcon">👨</span>
-            <span id="headerProfileText">វ័យ ៤៥ ឆ្នាំ</span>
+            <span id="headerProfileText">Seang Kunthea</span>
+          </button>
+
+          <!-- Button Logout / Switch to Guest Mode -->
+          <button class="btn-logout-header" id="btnHeaderLogout" title="ចាកចេញ / ប្តូរទៅជាភ្ញៀវ (Guest)">
+            <span>🚪</span>
+            <span id="logoutBtnText">ចាកចេញ</span>
           </button>
 
           <div class="live-date-pill" id="liveDatePill">
@@ -41,20 +53,19 @@
           </div>
         </div>
 
-        <!-- Far-Right Branding with Logo S-Icon1.jpg and Brand Name «សុខភាពខ្ញុំ» -->
-        <a href="#" class="brand-group brand-right" id="brandLogoLink" title="«សុខភាពខ្ញុំ»">
+        <!-- Far-Right Branding with Logo Sabay_Logo.jpg and Brand Name សប្បាយ សប្បាយ -->
+        <a href="#" class="brand-group brand-right" id="brandLogoLink" title="សប្បាយ សប្បាយ">
           <div class="brand-info brand-info-right">
-            <h1 class="brand-title">«សុខភាពខ្ញុំ»</h1>
-            <span class="brand-tagline">កម្មវិធីតាមដានសុខភាព & កាឡូរី</span>
+            <h1 class="brand-title">សប្បាយ សប្បាយ</h1>
           </div>
-          <img src="S-Icon1.jpg" alt="សុខភាពខ្ញុំ Logo" class="brand-logo" width="48" height="48">
+          <img src="Sabay_Logo.jpg" alt="សប្បាយ សប្បាយ Logo" class="brand-logo" width="48" height="48">
         </a>
       </div>
 
       <!-- Bottom Tier: Full-Width Navigation Bar (Never Cut-Off) -->
       <nav class="header-nav-row" id="mainHeaderNav">
         <button class="nav-link-btn active" data-tab-target="tabDashboard">
-          <span>⚡</span> ផ្ទាំងគ្រប់គ្រង
+          <span>🏠</span> ទំព័រដើម
         </button>
         <button class="nav-link-btn" data-tab-target="tabFood">
           <span>🥗</span> កត់ត្រាអាហារ
@@ -62,20 +73,17 @@
         <button class="nav-link-btn" data-tab-target="tabWorkout">
           <span>🏃</span> ការហាត់ប្រាណ
         </button>
-        <button class="nav-link-btn" data-tab-target="tabCommunity">
-          <span>📸</span> សកម្មភាពហាត់ប្រាណ
-        </button>
         <button class="nav-link-btn" data-tab-target="tabSleep">
           <span>🌙</span> ដំណេក
-        </button>
-        <button class="nav-link-btn" data-tab-target="tabAdvisory40">
-          <span>🧘‍♂️</span> វ័យ ៤០+
         </button>
         <button class="nav-link-btn" data-tab-target="tabAnalytics">
           <span>📊</span> ស្ថិតិ និងរបាយការណ៍
         </button>
         <button class="nav-link-btn" data-tab-target="tabHealthTips">
-          <span>💡</span> គន្លឹះសុខភាព
+          <span>💡</span> គន្លឹះសុខភាព (វ័យ ៤០+)
+        </button>
+        <button class="nav-link-btn" data-tab-target="tabPersonalInfo">
+          <span>👤</span> ព័ត៌មានផ្ទាល់ខ្លួន
         </button>
       </nav>
 
@@ -114,7 +122,7 @@
     </div>
 
     <!-- ======================================================================
-         SECTION 1: DASHBOARD HERO (ផ្ទាំងគ្រប់គ្រង)
+         SECTION 1: DASHBOARD HERO (ទំព័រដើម)
          ====================================================================== -->
     <section class="tab-section-view active" id="tabDashboard">
       
@@ -334,7 +342,7 @@
 
       <!-- ======================================================================
            DASHBOARD: WORKOUT COMMUNITY & PUBLIC PHOTO FEED
-           (រូបភាពដែល USER POST ជា PUBLIC បង្ហាញនៅក្នុង ផ្ទាំងគ្រប់គ្រង)
+           (រូបភាពដែល USER POST ជា PUBLIC បង្ហាញនៅក្នុង ទំព័រដើម)
            ====================================================================== -->
       <div class="dashboard-community-showcase" id="dashboardCommunityShowcase">
         
@@ -343,7 +351,7 @@
           <div class="blue-divider-badge">
             <span class="blue-divider-icon">📸</span>
             <span class="blue-divider-text">សកម្មភាពហាត់ប្រាណសហគមន៍ (Public Workout Feed)</span>
-            <span class="blue-divider-sub">• បង្ហាញក្នុងផ្ទាំងគ្រប់គ្រង</span>
+            <span class="blue-divider-sub">• បង្ហាញក្នុងទំព័រដើម</span>
           </div>
           <div class="blue-divider-line"></div>
         </div>
@@ -369,12 +377,103 @@
             </div>
           </div>
 
+                    <!-- ======================================================================
+               FACEBOOK QUICK COMPOSER BAR & STORIES TRAY (ដូចក្នុងរូបទី១)
+               ====================================================================== -->
+          <!-- Quick Composer Input Pill with Live, Photo, Reel -->
+          <div class="fb-composer-quick-bar" id="btnOpenQuickComposerBar" title="ចុចដើម្បីសរសេរសារបង្ហោះ">
+            <div class="composer-quick-avatar">
+              <img src="profile_avatar_seang.jpg" alt="Seang Kunthea" id="quickBarAvatarImg">
+            </div>
+            <div class="composer-quick-input-pill">
+              <span id="quickBarPlaceholderText">What's on your mind, Seang?</span>
+            </div>
+            <div class="composer-quick-actions">
+              <button type="button" class="quick-action-item video" id="btnQuickLiveVideo" title="ផ្សាយផ្ទាល់ (Live Video)">
+                <span class="action-icon-pill icon-video">📹</span>
+                <span class="action-label">Live</span>
+              </button>
+              <button type="button" class="quick-action-item photo" id="btnQuickPhotoVideo" title="រូបថត / វីដេអូ (Photo/Video)">
+                <span class="action-icon-pill icon-photo">🖼️</span>
+                <span class="action-label">Photo</span>
+              </button>
+              <button type="button" class="quick-action-item reel" id="btnQuickReel" title="Reel">
+                <span class="action-icon-pill icon-reel">🎬</span>
+                <span class="action-label">Reel</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Facebook Stories Carousel Tray (ដូចក្នុងរូបទី១) -->
+          <div class="fb-stories-container">
+            <div class="fb-stories-scroll-wrap" id="fbStoriesScrollWrap">
+              <!-- Card 1: Create story -->
+              <div class="fb-story-card create-card" id="btnCreateStoryCard" title="ចុចដើម្បីបង្កើត Story ថ្មី">
+                <div class="story-img-top">
+                  <img src="profile_avatar_seang.jpg" alt="User Avatar" id="storyUserAvatarImg">
+                </div>
+                <div class="story-plus-btn"><span>+</span></div>
+                <div class="story-create-label">Create story</div>
+              </div>
+
+              <!-- Card 2: Chhorm Ratha -->
+              <div class="fb-story-card" data-story-idx="0" title="មើល Story របស់ Chhorm Ratha">
+                <img src="story_chhorm.jpg" class="story-bg-img" alt="Chhorm Ratha">
+                <div class="story-author-badge">
+                  <img src="story_chhorm.jpg" alt="Avatar">
+                </div>
+                <div class="story-author-name">Chhorm Ratha</div>
+              </div>
+
+              <!-- Card 3: Oeun Sok Neath -->
+              <div class="fb-story-card" data-story-idx="1" title="មើល Story របស់ Oeun Sok Neath">
+                <img src="story_oeun.jpg" class="story-bg-img" alt="Oeun Sok Neath">
+                <div class="story-author-badge">
+                  <img src="story_oeun.jpg" alt="Avatar">
+                </div>
+                <div class="story-author-name">Oeun Sok Neath</div>
+              </div>
+
+              <!-- Card 4: Violet Muse -->
+              <div class="fb-story-card" data-story-idx="2" title="មើល Story របស់ Violet Muse">
+                <img src="story_violet.jpg" class="story-bg-img" alt="Violet Muse">
+                <div class="story-author-badge">
+                  <img src="story_violet.jpg" alt="Avatar">
+                </div>
+                <div class="story-author-name">Violet Muse</div>
+              </div>
+
+              <!-- Card 5: Oun Makara -->
+              <div class="fb-story-card" data-story-idx="3" title="មើល Story របស់ Oun Makara">
+                <img src="story_oun.jpg" class="story-bg-img" alt="Oun Makara">
+                <div class="story-author-badge">
+                  <img src="story_oun.jpg" alt="Avatar">
+                </div>
+                <div class="story-author-name">Oun Makara</div>
+              </div>
+
+              <!-- Card 6: Leakhena Long -->
+              <div class="fb-story-card" data-story-idx="4" title="មើល Story របស់ Leakhena Long">
+                <img src="story_leakhena.jpg" class="story-bg-img" alt="Leakhena Long">
+                <div class="story-author-badge">
+                  <img src="story_leakhena.jpg" alt="Avatar">
+                </div>
+                <div class="story-author-name">Leakhena Long</div>
+              </div>
+            </div>
+
+            <!-- Right Scroll Navigation Arrow Button -->
+            <button class="btn-story-scroll-right" id="btnStoryScrollRight" title="រំកិលមើល Story បន្ថែម">
+              <span>❯</span>
+            </button>
+          </div>
+
           <!-- Post Creation Box on Dashboard (Facebook / Instagram Style) -->
           <div class="card-create-post" id="dashboardCreatePostCard">
             <div class="composer-header">
-              <div class="composer-user-avatar">🏋️‍♂️</div>
+              <div class="composer-user-avatar" id="dashboardComposerAvatar">🏋️‍♂️</div>
               <div class="composer-user-info">
-                <span class="composer-user-name">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
+                <span class="composer-user-name" id="dashboardComposerName">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
                 <span class="composer-badge-public">🌍 សាធារណៈ (Public)</span>
               </div>
               <span class="composer-quota-tag" id="dashboardQuotaTag">នៅសល់ ៣ ដង</span>
@@ -396,7 +495,7 @@
                   <label class="btn-tool-upload" for="dashboardPostImageFileInput" title="ជ្រើសរើសរូបភាព">
                     <span>📷</span> ភ្ជាប់រូបថតហាត់ប្រាណ
                   </label>
-                  <input type="file" id="dashboardPostImageFileInput" accept="image/*" style="display: none;">
+                  <input type="file" id="dashboardPostImageFileInput" accept="image/*" multiple style="display: none;">
                   <span class="upload-tip-text" id="dashboardUploadFilenameText">មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ</span>
                 </div>
 
@@ -646,9 +745,9 @@
           <!-- Post Creation Box (Facebook / Instagram Style) -->
           <div class="card-create-post">
             <div class="composer-header">
-              <div class="composer-user-avatar">🏋️‍♂️</div>
+              <div class="composer-user-avatar" id="foodComposerAvatar">🏋️‍♂️</div>
               <div class="composer-user-info">
-                <span class="composer-user-name">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
+                <span class="composer-user-name" id="foodComposerName">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
                 <span class="composer-badge-public">🌍 សាធារណៈ (Public)</span>
               </div>
               <span class="composer-quota-tag" id="foodQuotaTag">នៅសល់ ៣ ដង</span>
@@ -670,7 +769,7 @@
                   <label class="btn-tool-upload" for="postImageFileInput" title="ជ្រើសរើសរូបភាព">
                     <span>📷</span> ភ្ជាប់រូបថតហាត់ប្រាណ
                   </label>
-                  <input type="file" id="postImageFileInput" accept="image/*" style="display: none;">
+                  <input type="file" id="postImageFileInput" accept="image/*" multiple style="display: none;">
                   <span class="upload-tip-text" id="uploadFilenameText">មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ</span>
                 </div>
 
@@ -911,47 +1010,6 @@
     </section>
 
     <!-- ======================================================================
-         SECTION 5: 40+ FITNESS ADVISORY (វ័យ ៤០ឆ្នាំឡើង)
-         ====================================================================== -->
-    <section class="tab-section-view" id="tabAdvisory40">
-      <div class="advisory-container">
-        
-        <div class="advisory-header-card">
-          <div class="advisory-header-info">
-            <h3><span>🛡️</span> ការណែនាំសុខភាព និងលំហាត់ប្រាណវ័យ ៤០ ឆ្នាំឡើង</h3>
-            <p>វេជ្ជសាស្ត្រកីឡា និងការថែទាំអ័រម៉ូន សាច់ដុំ សន្លាក់ និងដង់ស៊ីតេឆ្អឹង សម្រាប់មនុស្សពេញវ័យ</p>
-          </div>
-
-          <div class="gender-toggle-group">
-            <button class="btn-gender active" id="btnGenderMale" data-gender="male">
-              <span>👨</span> បុរស (Male)
-            </button>
-            <button class="btn-gender" id="btnGenderFemale" data-gender="female">
-              <span>👩</span> ស្រី (Female)
-            </button>
-          </div>
-        </div>
-
-        <!-- Dynamic Medical Advice Cards for 40+ -->
-        <div class="advisory-cards-grid" id="advisoryCardsGrid">
-          <!-- Injected dynamically based on selected gender -->
-        </div>
-
-        <!-- Sample Weekly Routine Schedule for 40+ -->
-        <div class="routine-schedule-card">
-          <div class="section-head-title">
-            <span>📆</span>
-            <span>កាលវិភាគហាត់ប្រាណគំរូ ៧ ថ្ងៃ (Recommended Weekly Routine)</span>
-          </div>
-          <div class="routine-days-grid" id="routineDaysGrid">
-            <!-- Routine items injected by JS -->
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ======================================================================
          SECTION 6: ANALYTICS & TIMEFRAME SUMMARIES (ស្ថិតិ និងរបាយការណ៍)
          ====================================================================== -->
     <section class="tab-section-view" id="tabAnalytics">
@@ -1060,6 +1118,43 @@
           </span>
         </div>
 
+        <!-- 40+ Fitness & Health Advisory (រួមបញ្ចូលក្នុងគន្លឹះសុខភាព) -->
+        <div class="advisory-container">
+        
+        <div class="advisory-header-card">
+          <div class="advisory-header-info">
+            <h3><span>🛡️</span> ការណែនាំសុខភាព និងលំហាត់ប្រាណវ័យ ៤០ ឆ្នាំឡើង</h3>
+            <p>វេជ្ជសាស្ត្រកីឡា និងការថែទាំអ័រម៉ូន សាច់ដុំ សន្លាក់ និងដង់ស៊ីតេឆ្អឹង សម្រាប់មនុស្សពេញវ័យ</p>
+          </div>
+
+          <div class="gender-toggle-group">
+            <button class="btn-gender active" id="btnGenderMale" data-gender="male">
+              <span>👨</span> បុរស (Male)
+            </button>
+            <button class="btn-gender" id="btnGenderFemale" data-gender="female">
+              <span>👩</span> ស្រី (Female)
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic Medical Advice Cards for 40+ -->
+        <div class="advisory-cards-grid" id="advisoryCardsGrid">
+          <!-- Injected dynamically based on selected gender -->
+        </div>
+
+        <!-- Sample Weekly Routine Schedule for 40+ -->
+        <div class="routine-schedule-card">
+          <div class="section-head-title">
+            <span>📆</span>
+            <span>កាលវិភាគហាត់ប្រាណគំរូ ៧ ថ្ងៃ (Recommended Weekly Routine)</span>
+          </div>
+          <div class="routine-days-grid" id="routineDaysGrid">
+            <!-- Routine items injected by JS -->
+          </div>
+        </div>
+
+      </div>
+
         <!-- Water Intake Tracker -->
         <div class="card-water-tracker">
           <div class="water-header">
@@ -1143,6 +1238,381 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 7: PERSONAL INFO & HEALTH PROFILE (ព័ត៌មានផ្ទាល់ខ្លួន)
+         ====================================================================== -->
+    <section class="tab-section-view" id="tabPersonalInfo">
+      <div class="personal-info-container">
+        
+        <div class="personal-info-header-card">
+          <div class="personal-info-title-group">
+            <h2><span>👤</span> ព័ត៌មានផ្ទាល់ខ្លួន និងប្រវត្តិរូបសុខភាព</h2>
+            <p>គ្រប់គ្រងទិន្នន័យរាងកាយ កំណត់រូប Profile និងគណនាកម្រិតកាឡូរី BMR, TDEE និងគោលដៅសុខភាពជាក់ស្តែង</p>
+          </div>
+          <div class="personal-account-badge" id="personalAccountBadge">
+            <span id="personalAccountBadgeIcon">✨</span>
+            <span id="personalAccountBadgeText">គណនីភ្ញៀវ (Guest)</span>
+          </div>
+        </div>
+
+        <!-- Profile Avatar & Overview Card -->
+        <div class="profile-avatar-overview-card">
+          <div class="profile-avatar-box-wrap">
+            <div class="profile-avatar-display" id="profileAvatarDisplayBox">
+              <img src="S-Icon1.jpg" alt="រូប Profile" id="profileAvatarImg" class="profile-avatar-image">
+            </div>
+            <div class="profile-avatar-buttons">
+              <label for="inputProfileAvatarFile" class="btn-avatar-action" title="ចុចដើម្បីជ្រើសរើសរូបថតថ្មី">
+                <span>📷</span> ផ្លាស់ប្តូររូប Profile
+              </label>
+              <input type="file" id="inputProfileAvatarFile" accept="image/*" style="display: none;">
+              <button type="button" class="btn-avatar-action danger" id="btnRemoveProfileAvatar" title="កំណត់រូបលំនាំដើមឡើងវិញ">
+                <span>🗑️</span> ដករូបចេញ
+              </button>
+            </div>
+          </div>
+
+          <div class="profile-overview-text">
+            <div class="profile-name-row">
+              <h3 id="profileDisplayName">លោក សុខ វិបុល</h3>
+              <span class="profile-account-tag" id="profileAccountTag">សមាជិក «សុខភាពខ្ញុំ»</span>
+            </div>
+            <div class="profile-meta-tags">
+              <span class="meta-tag" id="profileDisplayGenderTag">👨 បុរស</span>
+              <span class="meta-tag" id="profileDisplayAgeTag">អាយុ ៤៥ ឆ្នាំ</span>
+              <span class="meta-tag" id="profileDisplayHeightTag">កម្ពស់ ១៦៨ cm</span>
+              <span class="meta-tag" id="profileDisplayWeightTag">ទម្ងន់ ៦៥ kg</span>
+            </div>
+            <p class="profile-bio-text" id="profileBioText">
+              បានភ្ជាប់គណនីដើម្បីកត់ត្រាអាហារ តាមដានដំណេក និងចែករំលែកសកម្មភាពសុខភាពជាសាធារណៈ។
+            </p>
+          </div>
+        </div>
+
+        <!-- Personal Form & Realtime Calculated Metrics Grid -->
+        <div class="personal-details-grid">
+          
+          <!-- Left Column: Body Information Form -->
+          <div class="personal-form-card">
+            <h3 class="card-inner-title"><span>📝</span> បញ្ចូលទិន្នន័យរាងកាយ</h3>
+            <form id="formPersonalInfo">
+              <div class="input-group">
+                <label for="inputPersonName">ឈ្មោះពេញរបស់អ្នក (Full Name)</label>
+                <input type="text" class="input-control" id="inputPersonName" placeholder="ឧ. សុខ វិបុល" value="សុខ វិបុល" required>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                <div class="input-group">
+                  <label for="inputPersonGender">ភេទ (Gender)</label>
+                  <select class="input-control" id="inputPersonGender">
+                    <option value="male">👨 បុរស (Male)</option>
+                    <option value="female">👩 ស្រ្តី (Female)</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label for="inputPersonAge">អាយុ (ឆ្នាំ)</label>
+                  <input type="number" class="input-control" id="inputPersonAge" min="10" max="120" value="45" required>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.85rem;">
+                <div class="input-group">
+                  <label for="inputPersonHeight">កម្ពស់ (cm)</label>
+                  <input type="number" class="input-control" id="inputPersonHeight" min="50" max="250" value="168" required>
+                </div>
+                <div class="input-group">
+                  <label for="inputPersonWeight">ទម្ងន់ (kg)</label>
+                  <input type="number" class="input-control" id="inputPersonWeight" min="20" max="300" step="0.5" value="65" required>
+                </div>
+              </div>
+
+              <div class="input-group">
+                <label for="inputPersonActivity">កម្រិតសកម្មភាពហាត់ប្រាណប្រចាំថ្ងៃ</label>
+                <select class="input-control" id="inputPersonActivity">
+                  <option value="1.2">អង្គុយច្រើន / មិនសូវធ្វើចលនា (Sedentary ×1.2)</option>
+                  <option value="1.375">ហាត់ស្រាលៗ ១-៣ ថ្ងៃ/សប្តាហ៍ (Light ×1.375)</option>
+                  <option value="1.55" selected>ហាត់មធ្យម ៣-៥ ថ្ងៃ/សប្តាហ៍ (Moderate ×1.55)</option>
+                  <option value="1.725">ហាត់ខ្លាំង ៦-៧ ថ្ងៃ/សប្តាហ៍ (Active ×1.725)</option>
+                  <option value="1.9">ហាត់ខ្លាំងក្លាបំផុត / អត្តពលិក (Very Active ×1.9)</option>
+                </select>
+              </div>
+
+              <div class="input-group">
+                <label for="inputPersonGoal">គោលដៅសុខភាពរបស់អ្នក</label>
+                <select class="input-control" id="inputPersonGoal">
+                  <option value="loss">សម្រកទម្ងន់ប្រកបដោយសុខភាព (-500 kcal/ថ្ងៃ)</option>
+                  <option value="maintain" selected>រក្សាទម្ងន់ និងសុខភាពរឹងមាំ (តុល្យភាព TDEE)</option>
+                  <option value="gain">បង្កើនសាច់ដុំ និងទម្ងន់ (+300 kcal/ថ្ងៃ)</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem; justify-content: center;">
+                <span>💾</span> រក្សាទុកព័ត៌មានផ្ទាល់ខ្លួន
+              </button>
+            </form>
+          </div>
+
+          <!-- Right Column: Live Caloric & Health Metrics -->
+          <div class="personal-stats-card">
+            <h3 class="card-inner-title"><span>📊</span> សូចនាករសុខភាព & កាឡូរីស្វ័យប្រវត្ត</h3>
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+              គណនាផ្អែកលើរូបមន្តវិទ្យាសាស្ត្រ Mifflin-St Jeor និងអង្គការសុខភាពពិភពលោក (WHO)
+            </p>
+
+            <div class="metrics-kpi-grid">
+              <!-- BMI -->
+              <div class="metric-kpi-card">
+                <div class="kpi-icon-wrap">⚖️</div>
+                <div class="kpi-info">
+                  <span class="kpi-label">សន្ទស្សន៍ម៉ាសរាងកាយ (BMI)</span>
+                  <div class="kpi-value-row">
+                    <span class="kpi-number" id="calcBmiVal">23.0</span>
+                    <span class="bmi-badge-status status-good" id="calcBmiBadge">ទម្ងន់សមស្រប</span>
+                  </div>
+                  <span class="kpi-hint" id="calcBmiHint">ទម្ងន់ស្ថិតក្នុងកម្រិតល្អប្រសើរ</span>
+                </div>
+              </div>
+
+              <!-- BMR -->
+              <div class="metric-kpi-card">
+                <div class="kpi-icon-wrap">🔥</div>
+                <div class="kpi-info">
+                  <span class="kpi-label">អត្រាមេតាបូលីសមូលដ្ឋាន (BMR)</span>
+                  <div class="kpi-value-row">
+                    <span class="kpi-number" id="calcBmrVal">1,485</span>
+                    <span class="kpi-unit">kcal / ថ្ងៃ</span>
+                  </div>
+                  <span class="kpi-hint">ថាមពលដែលរាងកាយដុតបំផ្លាញពេលសម្រាកដកដង្ហើម</span>
+                </div>
+              </div>
+
+              <!-- TDEE -->
+              <div class="metric-kpi-card">
+                <div class="kpi-icon-wrap">⚡</div>
+                <div class="kpi-info">
+                  <span class="kpi-label">ថាមពលប្រចាំថ្ងៃសរុប (TDEE)</span>
+                  <div class="kpi-value-row">
+                    <span class="kpi-number" id="calcTdeeVal">2,302</span>
+                    <span class="kpi-unit">kcal / ថ្ងៃ</span>
+                  </div>
+                  <span class="kpi-hint">កាឡូរីសរុបដែលរាងកាយដុតបំផ្លាញតាមសកម្មភាពប្រចាំថ្ងៃ</span>
+                </div>
+              </div>
+
+              <!-- Recommended Calorie Target -->
+              <div class="metric-kpi-card highlight">
+                <div class="kpi-icon-wrap">🎯</div>
+                <div class="kpi-info">
+                  <span class="kpi-label">កាឡូរីគោលដៅប្រចាំថ្ងៃណែនាំ</span>
+                  <div class="kpi-value-row">
+                    <span class="kpi-number target-num" id="calcTargetGoalVal">2,000</span>
+                    <span class="kpi-unit">kcal / ថ្ងៃ</span>
+                  </div>
+                  <span class="kpi-hint" id="calcTargetGoalHint">បានកែសម្រួលតាមគោលដៅសុខភាពរបស់អ្នក</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sync goal button -->
+            <button type="button" class="btn-sync-goal-auto" id="btnApplyCalculatedGoal">
+              <span>🎯</span> កំណត់ជាគោលដៅកាឡូរីផ្លូវការរបស់កម្មវិធី (Sync Goal)
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION 8: FACEBOOK USER PROFILE PAGE (គំរូដូចរូបទី២ - SEANG KUNTHEA)
+         បង្ហាញក្នុង Frame ខាងក្រោម ដោយទុក Frame ខាងលើដើម្បីចុច វិលទៅទំព័រដើមវិញ
+         ====================================================================== -->
+    <section class="tab-section-view tab-user-profile-view" id="tabUserProfileView">
+      
+      <!-- Profile Return & Breadcrumb Bar -->
+      <div class="profile-return-nav-bar">
+        <button class="btn-profile-back-home" id="btnReturnHomeFromProfileHeader" title="វិលត្រឡប់ទៅទំព័រដើមវិញ">
+          <span>🏠</span> វិលទៅទំព័រដើមវិញ (Return to Home)
+        </button>
+        <div class="profile-breadcrumb-right">
+          <span class="profile-breadcrumb-text">👤 គណនីផ្ទាល់ខ្លួន Seang Kunthea</span>
+          <span class="profile-breadcrumb-pill">Facebook Mode</span>
+        </div>
+      </div>
+      
+      <!-- Main Profile Card Container -->
+      <div class="fb-profile-page-card" id="modalUserProfile">
+        <div class="fb-profile-scroll-body">
+        <!-- Cover Banner Photo with Edit Button -->
+        <div class="fb-profile-cover-wrap">
+          <img src="profile_cover.jpg" alt="Cover Photo" class="fb-profile-cover-img" id="profileCoverImg">
+          <label for="inputCoverPhotoUpload" class="btn-edit-cover-photo" title="កែប្រែរូបភាព Cover">
+            <span>📷</span> Edit cover photo
+          </label>
+          <input type="file" id="inputCoverPhotoUpload" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Profile Header Area with Overlapping Avatar -->
+        <div class="fb-profile-header-tier">
+          <div class="fb-profile-avatar-block">
+            <div class="fb-profile-avatar-circle">
+              <img src="profile_avatar_seang.jpg" alt="Seang Kunthea" id="fbProfileAvatarDisplay">
+              <label for="inputProfileAvatarChange" class="btn-avatar-cam-badge" title="ប្តូររូបថត Profile">
+                <span>📷</span>
+              </label>
+              <input type="file" id="inputProfileAvatarChange" accept="image/*" style="display: none;">
+            </div>
+            <div class="fb-thought-bubble">
+              <span>Share a thought... 💭</span>
+            </div>
+          </div>
+
+          <div class="fb-profile-identity-info">
+            <div class="fb-profile-name-row">
+              <h2 class="fb-profile-fullname" id="fbProfileFullName">Seang Kunthea</h2>
+              <span class="fb-verified-badge" title="គណនីផ្លូវការ">✓</span>
+            </div>
+            <div class="fb-profile-followers-meta">
+              <span id="fbFollowersCount">5.1K followers</span>
+              <span class="bullet-dot">•</span>
+              <span id="fbFollowingCount">838 following</span>
+            </div>
+            <div class="fb-profile-org-subtitle">
+              <span id="fbOrgSubtitle">Royal Cambodia Armed Forces 🇰🇭</span>
+            </div>
+            <div class="fb-profile-bio-chips">
+              <span class="bio-chip">Digital creator</span>
+              <span class="bullet-dot">•</span>
+              <span class="bio-chip">📍 Phnom Penh</span>
+              <span class="bullet-dot">•</span>
+              <span class="bio-chip">🏢 HD&L Co., Ltd.</span>
+              <span class="bullet-dot">•</span>
+              <span class="bio-chip">🏫 Boeng Trabek</span>
+              <span class="bullet-dot">•</span>
+              <span class="bio-chip">👨‍👩‍👧‍👦 មានគ្រួសារនិងរៀបការ</span>
+            </div>
+          </div>
+
+          <div class="fb-profile-action-buttons">
+            <button class="btn-fb-primary" id="btnProfileDashboardAction">
+              <span>📊</span> Dashboard
+            </button>
+            <button class="btn-fb-secondary" id="btnProfileEditAction">
+              <span>✏️</span> Edit
+            </button>
+            <button class="btn-fb-icon" id="btnProfileMoreAction">
+              <span>···</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Profile Nav Tabs (All, About, Reels, Photos, Friends, More) -->
+        <div class="fb-profile-nav-tabs">
+          <button class="fb-tab-item active" data-fb-tab="all">All</button>
+          <button class="fb-tab-item" data-fb-tab="about">About</button>
+          <button class="fb-tab-item" data-fb-tab="reels">Reels</button>
+          <button class="fb-tab-item" data-fb-tab="photos">Photos</button>
+          <button class="fb-tab-item" data-fb-tab="friends">Friends</button>
+          <button class="fb-tab-item" data-fb-tab="more">More ▾</button>
+          <div style="flex: 1;"></div>
+          <button class="fb-tab-item-icon">···</button>
+        </div>
+
+        <!-- Profile Content Grid (Two Columns: Left Intro, Right Posts) -->
+        <div class="fb-profile-content-grid">
+          <!-- Left Column: Personal details / Intro -->
+          <div class="fb-profile-left-col">
+            <div class="fb-intro-card">
+              <div class="fb-card-header">
+                <h3>Personal details</h3>
+                <button class="btn-card-edit-icon" id="btnEditPersonalDetails" title="កែសម្រួល">✏️</button>
+              </div>
+              <div class="fb-intro-details-list">
+                <div class="fb-detail-item">
+                  <span class="detail-icon">📍</span>
+                  <div class="detail-text">
+                    Lives in <strong>Phnom Penh</strong>
+                  </div>
+                </div>
+                <div class="fb-detail-item">
+                  <span class="detail-icon">🏠</span>
+                  <div class="detail-text">
+                    From <strong>Kampot, Cambodia</strong>
+                  </div>
+                </div>
+                <div class="fb-detail-item">
+                  <span class="detail-icon">👨‍👩‍👧‍👦</span>
+                  <div class="detail-text">
+                    Family: <strong>Ph Vanra and VanraRaa</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Health Info Sync Box -->
+              <div class="fb-health-stat-pill-box">
+                <div class="fb-health-pill">
+                  <span>⚖️ BMI:</span> <strong id="profileBmiSummary">23.0</strong>
+                </div>
+                <div class="fb-health-pill">
+                  <span>🔥 BMR:</span> <strong id="profileBmrSummary">1,485 kcal</strong>
+                </div>
+                <div class="fb-health-pill">
+                  <span>🎯 គោលដៅ:</span> <strong id="profileGoalSummary">2,000 kcal</strong>
+                </div>
+              </div>
+
+              <button class="btn-fb-full-edit" id="btnGoToPersonalInfoTab">
+                <span>👤</span> ព័ត៌មានលម្អិត និងកែប្រែទិន្នន័យរាងកាយ
+              </button>
+            </div>
+          </div>
+
+          <!-- Right Column: Profile Composer & User Posts -->
+          <div class="fb-profile-right-col">
+            <!-- Composer Box in Profile -->
+            <div class="fb-profile-composer-box">
+              <div class="fb-profile-composer-top">
+                <img src="profile_avatar_seang.jpg" alt="Avatar" class="profile-composer-avatar" id="profileComposerBoxAvatar">
+                <input type="text" class="profile-composer-input" id="profileComposerQuickInput" placeholder="What's on your mind?">
+              </div>
+              <div class="fb-profile-composer-actions">
+                <button type="button" class="btn-composer-action video">
+                  <span>📹</span> Live video
+                </button>
+                <button type="button" class="btn-composer-action photo" id="btnProfileComposerPhoto">
+                  <span>🖼️</span> Photo/video
+                </button>
+                <button type="button" class="btn-composer-action reel">
+                  <span>🎬</span> Reel
+                </button>
+              </div>
+            </div>
+
+            <!-- Posts Header -->
+            <div class="fb-profile-posts-header">
+              <h3 class="posts-heading">Posts</h3>
+              <div class="posts-header-actions">
+                <button type="button" class="btn-posts-filter">
+                  <span>⚙️</span> Filters
+                </button>
+                <button type="button" class="btn-posts-manage">
+                  <span>⚙️</span> Manage posts
+                </button>
+              </div>
+            </div>
+
+            <!-- User's Posts Feed in Profile -->
+            <div class="fb-profile-posts-list" id="fbProfileUserPostsList">
+              <!-- Injected dynamically by JS -->
+            </div>
+          </div>
+        </div>
+
+        </div>
       </div>
     </section>
 
@@ -1301,17 +1771,279 @@
     </div>
   </div>
 
+  <!-- ======================================================================
+       MODAL 5: USER SIGN UP & ACCOUNT REGISTRATION (ចុះឈ្មោះបង្កើតគណនី)
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalSignUp">
+    <div class="modal-dialog modal-dialog-account">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalSignUpTitle">✨ ចុះឈ្មោះបង្កើតគណនីផ្ទាល់ខ្លួន (Sign Up)</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+            ចុះឈ្មោះជាមួយ Email ដើម្បីអាចបង្ហោះរូបភាព និងចែករំលែកសកម្មភាពសុខភាពជាសាធារណៈ
+          </p>
+        </div>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+
+      <!-- Registration Form -->
+      <form id="formSignUp">
+        <div class="modal-body">
+          <!-- Avatar Upload Preview in Sign Up -->
+          <div class="signup-avatar-center">
+            <div class="signup-avatar-preview" id="signUpAvatarPreviewWrap">
+              <img src="S-Icon1.jpg" id="signUpAvatarImg" alt="Profile Avatar">
+            </div>
+            <label for="inputSignUpAvatarFile" class="btn-avatar-pick-label">
+              <span>📷</span> ជ្រើសរើសរូបថត Profile
+            </label>
+            <input type="file" id="inputSignUpAvatarFile" accept="image/*" style="display: none;">
+          </div>
+
+          <div class="input-group">
+            <label for="signUpInputName">ឈ្មោះពេញ (Full Name)</label>
+            <input type="text" class="input-control" id="signUpInputName" placeholder="ឧ. សុខ វិបុល" required>
+          </div>
+
+          <div class="input-group">
+            <label for="signUpInputEmail">អ៊ីមែលផ្ទាល់ខ្លួន (Email Address)</label>
+            <input type="email" class="input-control" id="signUpInputEmail" placeholder="ឧ. yourname@example.com" required>
+          </div>
+
+          <div class="input-group">
+            <label for="signUpInputPassword">ពាក្យសម្ងាត់ (Password)</label>
+            <input type="password" class="input-control" id="signUpInputPassword" placeholder="បញ្ចូលពាក្យសម្ងាត់យ៉ាងតិច ៦ ខ្ទង់" minlength="6" required>
+          </div>
+
+          <div class="account-terms-box">
+            <label class="terms-label">
+              <input type="checkbox" id="signUpAgreeTerms" required checked>
+              <span>ខ្ញុំយល់ព្រមចែករំលែកសកម្មភាពសុខភាព និងរូបភាពជាលក្ខណៈសាធារណៈ (Public Feed) ក្នុងសហគមន៍ «សុខភាពខ្ញុំ»។</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal>បោះបង់</button>
+          <button type="submit" class="btn-primary" id="btnSubmitSignUp">
+            <span>🚀</span> ចុះឈ្មោះបង្កើតគណនី
+          </button>
+        </div>
+      </form>
+
+      <!-- Already Signed In View (Shown when user already logged in) -->
+      <div id="signUpLoggedInView" style="display: none;" class="modal-body">
+        <div class="account-card-active">
+          <div class="account-avatar-circle" id="loggedAvatarCircle">
+            <img src="S-Icon1.jpg" id="loggedAvatarImg" alt="Avatar">
+          </div>
+          <div class="account-info-detail">
+            <h4 id="loggedName">សុខ វិបុល</h4>
+            <p id="loggedEmail">sokh.vibol@example.com</p>
+            <span class="badge-verified">✅ គណនីបានចុះឈ្មោះត្រឹមត្រូវ (អាច Post សាធារណៈបាន)</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 0.75rem; margin-top: 1.25rem;">
+          <button type="button" class="btn-secondary" id="btnSignOutAccount" style="flex: 1;">
+            <span>🚪</span> ចាកចេញ (Sign Out)
+          </button>
+          <button type="button" class="btn-primary" data-close-modal style="flex: 1;">
+            <span>✅</span> បិទផ្ទាំង
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toastContainer"></div>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <p>«សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព កាឡូរី និងដំណេកឆ្លាតវៃ © ២០២៦ រក្សាសិទ្ធិគ្រប់យ៉ាង</p>
+      <p>សប្បាយ សប្បាយ កាឡូរី និងដំណេកឆ្លាតវៃ © ២០២៦ រក្សាសិទ្ធិគ្រប់យ៉ាង</p>
     </div>
   </footer>
 
+  <!-- ======================================================================
+       MODAL: CREATE STORY (បង្កើត STORY ថ្មី)
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalCreateStory">
+    <div class="modal-dialog modal-dialog-account">
+      <div class="modal-header">
+        <div>
+          <h3>✨ បង្កើត Story ថ្មី (Create Story)</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+            ចែករំលែករូបភាព និងសកម្មភាពប្រចាំថ្ងៃរបស់អ្នករយៈពេល ២៤ ម៉ោង
+          </p>
+        </div>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+      <form id="formCreateStory">
+        <div class="modal-body">
+          <div class="story-create-preview-box" id="storyCreatePreviewBox">
+            <img src="profile_avatar_seang.jpg" id="storyCreatePreviewImg" alt="Story Preview">
+            <span id="storyCreatePreviewText">មើលគំរូ Story</span>
+          </div>
+
+          <div class="input-group" style="margin-top: 1rem;">
+            <label for="inputStoryFile">ជ្រើសរើសរូបថតសម្រាប់ Story</label>
+            <input type="file" class="input-control" id="inputStoryFile" accept="image/*" required>
+          </div>
+
+          <div class="input-group">
+            <label for="inputStoryCaption">សរសេរសារខ្លីលើរូបភាព (ជម្រើសបន្ថែម)</label>
+            <input type="text" class="input-control" id="inputStoryCaption" placeholder="ឧ. អារម្មណ៍ស្រស់ថ្លាពេលព្រឹក! ✨">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" data-close-modal>បោះបង់</button>
+          <button type="submit" class="btn-primary" id="btnSubmitCreateStory">
+            <span>🚀</span> ចែករំលែកទៅកាន់ Story
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- Application Engine -->
   <script src="app.js"></script>
+
+  <!-- ======================================================================
+       MODAL: REQUIRE SIGN UP PROMPT (សូមចុះឈ្មោះជាមុនសិន បែប ងាយ ងាយ)
+       ====================================================================== -->
+  <div class="modal-overlay modal-require-signup-overlay" id="modalGuestRequireSignUp">
+    <div class="modal-dialog modal-dialog-require-signup">
+      <button class="btn-modal-close" data-close-modal title="បិទ">&times;</button>
+      <div class="require-signup-card">
+        <div class="require-signup-badge-icon">✨</div>
+        <h3 class="require-signup-title">សូមចុះឈ្មោះជាមុនសិន បែប ងាយ ងាយ</h3>
+        <p class="require-signup-desc">
+          ដើម្បីអាចចុចចូលចិត្ត បញ្ចេញមតិឆ្លើយតប ចែករំលែក ឬបង្ហោះរូបភាពផ្ទាល់ខ្លួនក្នុងសហគមន៍ សប្បាយ សប្បាយ សូមចុះឈ្មោះបង្កើតគណនីរបស់អ្នកឥឡូវនេះ!
+        </p>
+        <div class="require-signup-actions">
+          <button type="button" class="btn-signup-now-primary" id="btnRequireSignUpTrigger">
+            <span>🚀</span> ចុះឈ្មោះ (Sign Up) ឥឡូវនេះ
+          </button>
+          <button type="button" class="btn-signup-later" data-close-modal>
+            មើលបន្តសិន (Browse Only)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: ACCOUNT ONBOARDING (បំពេញព័ត៌មានផ្ទាល់ខ្លួន & សុខភាពក្រោយ SIGN UP)
+       ====================================================================== -->
+  <div class="modal-overlay" id="modalAccountOnboarding">
+    <div class="modal-dialog modal-dialog-onboarding">
+      <div class="modal-header">
+        <div>
+          <h3>🎉 សូមស្វាគមន៍មកកាន់ សប្បាយ សប្បាយ!</h3>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">
+            សូមបំពេញព័ត៌មានផ្ទាល់ខ្លួន និងទិន្នន័យសុខភាព ដើម្បីរៀបចំ Profile របស់អ្នកឱ្យកាន់តែស្រស់ស្អាត
+          </p>
+        </div>
+        <button class="btn-modal-close" data-close-modal>&times;</button>
+      </div>
+
+      <form id="formAccountOnboarding">
+        <div class="modal-body onboarding-body">
+          
+          <!-- Profile & Cover Photos Upload -->
+          <div class="onboarding-photos-row">
+            <div class="onboarding-avatar-box">
+              <div class="onboarding-avatar-preview">
+                <img src="profile_avatar_seang.jpg" id="onboardingAvatarPreview" alt="Profile">
+              </div>
+              <label for="inputOnboardingAvatar" class="btn-onboarding-photo-pick">
+                <span>📷</span> ប្តូររូប Profile
+              </label>
+              <input type="file" id="inputOnboardingAvatar" accept="image/*" style="display: none;">
+            </div>
+
+            <div class="onboarding-cover-box">
+              <div class="onboarding-cover-preview">
+                <img src="profile_cover.jpg" id="onboardingCoverPreview" alt="Cover">
+              </div>
+              <label for="inputOnboardingCover" class="btn-onboarding-photo-pick">
+                <span>🖼️</span> ប្តូររូប Cover
+              </label>
+              <input type="file" id="inputOnboardingCover" accept="image/*" style="display: none;">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="input-group">
+              <label for="onboardingInputName">ឈ្មោះពេញ (Full Name)</label>
+              <input type="text" class="input-control" id="onboardingInputName" placeholder="ឈ្មោះរបស់អ្នក" required>
+            </div>
+            <div class="input-group">
+              <label for="onboardingSelectGender">ភេទ (Gender)</label>
+              <select class="input-control" id="onboardingSelectGender">
+                <option value="male">ប្រុស (Male)</option>
+                <option value="female">ស្រី (Female)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-3">
+            <div class="input-group">
+              <label for="onboardingInputAge">អាយុ (ឆ្នាំ)</label>
+              <input type="number" class="input-control" id="onboardingInputAge" min="10" max="100" value="30" required>
+            </div>
+            <div class="input-group">
+              <label for="onboardingInputHeight">កម្ពស់ (cm)</label>
+              <input type="number" class="input-control" id="onboardingInputHeight" min="100" max="250" value="168" required>
+            </div>
+            <div class="input-group">
+              <label for="onboardingInputWeight">ទម្ងន់ (kg)</label>
+              <input type="number" class="input-control" id="onboardingInputWeight" min="30" max="200" value="65" required>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="input-group">
+              <label for="onboardingInputGoal">កាឡូរីគោលដៅ (kcal/ថ្ងៃ)</label>
+              <input type="number" class="input-control" id="onboardingInputGoal" min="1000" max="5000" value="2000" required>
+            </div>
+            <div class="input-group">
+              <label for="onboardingInputLocation">ទីលំនៅ (City / Province)</label>
+              <input type="text" class="input-control" id="onboardingInputLocation" placeholder="ឧ. រាជធានីភ្នំពេញ">
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="onboardingInputBio">ជីវប្រវត្តិសង្ខេប / ចំណាប់អារម្មណ៍ (Bio)</label>
+            <input type="text" class="input-control" id="onboardingInputBio" placeholder="ឧ. ស្រលាញ់ការរត់ ហាត់ប្រាណ និងសុខភាព...">
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+            <span>💾</span> រក្សាទុក និងចាប់ផ្តើមប្រើប្រាស់ (Save & Continue)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: PHOTO LIGHTBOX (ចុចលើរូបដើម្បីមើលរូបភាពធំពេញលេញ)
+       ====================================================================== -->
+  <div class="modal-overlay modal-lightbox-overlay" id="modalPhotoLightbox">
+    <div class="lightbox-content-box">
+      <button class="btn-lightbox-close" id="btnCloseLightbox" title="បិទរូបភាព">&times;</button>
+      <div class="lightbox-img-wrap">
+        <img src="" id="lightboxImg" alt="Enlarged Post Photo">
+      </div>
+      <div class="lightbox-caption-bar" id="lightboxCaption"></div>
+    </div>
+  </div>
+
 </body>
 </html>
