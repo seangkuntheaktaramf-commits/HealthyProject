@@ -4,39 +4,69 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>«សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព និងកាឡូរីឆ្លាតវៃ</title>
+  <link rel="icon" type="image/jpeg" href="S-Icon1.jpg">
   <link rel="stylesheet" href="style.css">
   <meta name="description" content="«សុខភាពខ្ញុំ» Web Application គ្រប់គ្រងសុខភាព តាមដានកាឡូរី ដំណេក និងលំហាត់ប្រាណវ័យ ៤០+ ជាភាសាខ្មែរ ១០០% ស្របតាមស្តង់ដារវចនានុក្រមសម្តេចព្រះសង្ឃរាជ ជួន ណាត">
 </head>
 <body>
 
   <!-- ======================================================================
-       HEADER & NAVIGATION BAR (LEFT-ALIGNED BRANDING)
+       HEADER & NAVIGATION BAR (RIGHT-ALIGNED BRANDING)
        ====================================================================== -->
   <header class="site-header">
-    <div class="container header-inner">
+    <div class="container header-container-tiered">
       
-      <!-- Left-Aligned Branding with S-Icon.png -->
-      <a href="#" class="brand-group" id="brandLogoLink" title="«សុខភាពខ្ញុំ»">
-        <img src="S-Icon.png" alt="សុខភាពខ្ញុំ Logo" class="brand-logo" width="44" height="44">
-        <div class="brand-info">
-          <h1 class="brand-title">«សុខភាពខ្ញុំ»</h1>
-          <span class="brand-tagline">កម្មវិធីតាមដានសុខភាព & កាឡូរី</span>
-        </div>
-      </a>
+      <!-- Top Tier: Left Action Controls & Far-Right Branding with Logo S-Icon1.jpg -->
+      <div class="header-top-row">
+        <!-- Left Action Controls -->
+        <div class="header-actions">
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="ប្តូរ Dark / Light Mode" aria-label="Toggle Theme">
+            <span id="themeIcon">☀️</span>
+          </button>
 
-      <!-- Smooth Navigation Links -->
-      <nav class="header-nav" id="mainHeaderNav">
+          <button class="btn-goal-header" id="btnOpenGoalModal" title="កែប្រែកាឡូរីគោលដៅ">
+            <span>🎯</span>
+            <span id="headerGoalDisplay">2,000</span>
+            <span>kcal</span>
+          </button>
+
+          <button class="btn-profile-badge" id="btnOpenProfileModal" title="កែប្រែប្រវត្តិរូប និងគោលដៅ">
+            <span id="headerProfileIcon">👨</span>
+            <span id="headerProfileText">វ័យ ៤៥ ឆ្នាំ</span>
+          </button>
+
+          <div class="live-date-pill" id="liveDatePill">
+            <span>📅</span>
+            <span id="currentDateText">កំពុងផ្ទុកកាលបរិច្ឆេទ...</span>
+          </div>
+        </div>
+
+        <!-- Far-Right Branding with Logo S-Icon1.jpg and Brand Name «សុខភាពខ្ញុំ» -->
+        <a href="#" class="brand-group brand-right" id="brandLogoLink" title="«សុខភាពខ្ញុំ»">
+          <div class="brand-info brand-info-right">
+            <h1 class="brand-title">«សុខភាពខ្ញុំ»</h1>
+            <span class="brand-tagline">កម្មវិធីតាមដានសុខភាព & កាឡូរី</span>
+          </div>
+          <img src="S-Icon1.jpg" alt="សុខភាពខ្ញុំ Logo" class="brand-logo" width="48" height="48">
+        </a>
+      </div>
+
+      <!-- Bottom Tier: Full-Width Navigation Bar (Never Cut-Off) -->
+      <nav class="header-nav-row" id="mainHeaderNav">
         <button class="nav-link-btn active" data-tab-target="tabDashboard">
           <span>⚡</span> ផ្ទាំងគ្រប់គ្រង
         </button>
         <button class="nav-link-btn" data-tab-target="tabFood">
-          <span>🥗</span> កត់ត្រាអាហារ (៥ មុខម្ហូប)
+          <span>🥗</span> កត់ត្រាអាហារ
         </button>
         <button class="nav-link-btn" data-tab-target="tabWorkout">
           <span>🏃</span> ការហាត់ប្រាណ
         </button>
+        <button class="nav-link-btn" data-tab-target="tabCommunity">
+          <span>📸</span> សកម្មភាពហាត់ប្រាណ
+        </button>
         <button class="nav-link-btn" data-tab-target="tabSleep">
-          <span>🌙</span> ដំណេក (យប់/ថ្ងៃ)
+          <span>🌙</span> ដំណេក
         </button>
         <button class="nav-link-btn" data-tab-target="tabAdvisory40">
           <span>🧘‍♂️</span> វ័យ ៤០+
@@ -48,29 +78,6 @@
           <span>💡</span> គន្លឹះសុខភាព
         </button>
       </nav>
-
-      <!-- Right Action Controls -->
-      <div class="header-actions">
-        <div class="live-date-pill" id="liveDatePill">
-          <span>📅</span>
-          <span id="currentDateText">កំពុងផ្ទុកកាលបរិច្ឆេទ...</span>
-        </div>
-
-        <button class="btn-profile-badge" id="btnOpenProfileModal" title="កែប្រែប្រវត្តិរូប និងគោលដៅ">
-          <span id="headerProfileIcon">👨</span>
-          <span id="headerProfileText">វ័យ ៤៥ ឆ្នាំ</span>
-        </button>
-
-        <button class="btn-goal-header" id="btnOpenGoalModal" title="កែប្រែកាឡូរីគោលដៅ">
-          <span>🎯</span>
-          <span id="headerGoalDisplay">2,000</span>
-          <span>kcal</span>
-        </button>
-
-        <button class="theme-toggle-btn" id="themeToggleBtn" title="ប្តូរ Dark / Light Mode" aria-label="Toggle Theme">
-          <span id="themeIcon">☀️</span>
-        </button>
-      </div>
 
     </div>
   </header>
@@ -225,6 +232,33 @@
             </div>
           </div>
 
+          <!-- Water Hydration Monitor Card (ត្រួតពិនិត្យការផឹកទឹក) -->
+          <div class="card-water-monitor-dashboard">
+            <div class="water-monitor-header">
+              <div class="water-monitor-title-group">
+                <span class="water-icon-circle">💧</span>
+                <div>
+                  <h4>ត្រួតពិនិត្យការផឹកទឹកប្រចាំថ្ងៃ (Hydration Monitor)</h4>
+                  <p id="waterMonitorSubtitle">ផឹកបាន ០ / ៨ កែវ (~២,០០០ ml)</p>
+                </div>
+              </div>
+              <div class="water-ml-badge" id="waterDashboardMlText">0 / 2,000 ml</div>
+            </div>
+
+            <div class="water-progress-track">
+              <div class="water-progress-fill" id="waterDashboardProgressBar" style="width: 0%;"></div>
+            </div>
+
+            <div class="water-glasses-quick-row" id="waterDashboardGlassesRow">
+              <!-- Quick 8 glass buttons -->
+            </div>
+
+            <div class="water-status-tip-row">
+              <span id="waterStatusTipText">💡 ចាប់ផ្តើមថ្ងៃថ្មីដោយពិសាទឹក ១-២ កែវ ដើម្បីដាស់ប្រព័ន្ធរំលាយអាហារ។</span>
+              <button type="button" class="btn-secondary" style="font-size: 0.8rem; padding: 0.3rem 0.75rem;" id="btnQuickDrinkGlass">+១ កែវ (250ml)</button>
+            </div>
+          </div>
+
           <!-- Macro Nutrients Breakdown Card -->
           <div class="card-macros">
             <div class="macros-header">
@@ -298,6 +332,89 @@
         </div>
       </div>
 
+      <!-- ======================================================================
+           DASHBOARD: WORKOUT COMMUNITY & PUBLIC PHOTO FEED
+           (រូបភាពដែល USER POST ជា PUBLIC បង្ហាញនៅក្នុង ផ្ទាំងគ្រប់គ្រង)
+           ====================================================================== -->
+      <div class="dashboard-community-showcase" id="dashboardCommunityShowcase">
+        
+        <div class="community-blue-divider">
+          <div class="blue-divider-line"></div>
+          <div class="blue-divider-badge">
+            <span class="blue-divider-icon">📸</span>
+            <span class="blue-divider-text">សកម្មភាពហាត់ប្រាណសហគមន៍ (Public Workout Feed)</span>
+            <span class="blue-divider-sub">• បង្ហាញក្នុងផ្ទាំងគ្រប់គ្រង</span>
+          </div>
+          <div class="blue-divider-line"></div>
+        </div>
+
+        <div class="community-section-wrap">
+          
+          <!-- Banner Card with Quota & Weekly Cleanup Notice -->
+          <div class="community-banner-card">
+            <div class="community-banner-text">
+              <h3><span>📸</span> កម្រងរូបភាពសកម្មភាពហាត់ប្រាណសាធារណៈ</h3>
+              <p>រូបភាព និងបទពិសោធន៍ហាត់ប្រាណពិតៗពីសមាជិក។ ក្នុងម្នាក់អាចបង្ហោះបាន <strong>៣ ដងគត់</strong> ហើយប្រព័ន្ធសម្អាតរូបភាពចោល <strong>១ អាទិត្យម្តង</strong>។</p>
+            </div>
+            
+            <div class="community-quota-group">
+              <div class="community-post-counter-pill" id="dashboardUserQuotaBadge">
+                <span>🔒</span>
+                <span>កូតារបស់អ្នក៖ <strong id="dashboardUserQuotaNum">០</strong>/៣ ដង</span>
+              </div>
+              <div class="feed-auto-purge-notice">
+                <span>🧹</span> សម្អាតក្នុង ១ អាទិត្យ
+                <button type="button" class="btn-manual-purge" id="btnDashboardWeeklyPurge" title="សម្អាតប្រចាំសប្តាហ៍ឡើងវិញ">សម្អាត ១ អាទិត្យ</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Post Creation Box on Dashboard (Facebook / Instagram Style) -->
+          <div class="card-create-post" id="dashboardCreatePostCard">
+            <div class="composer-header">
+              <div class="composer-user-avatar">🏋️‍♂️</div>
+              <div class="composer-user-info">
+                <span class="composer-user-name">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
+                <span class="composer-badge-public">🌍 សាធារណៈ (Public)</span>
+              </div>
+              <span class="composer-quota-tag" id="dashboardQuotaTag">នៅសល់ ៣ ដង</span>
+            </div>
+
+            <form id="formDashboardCreatePost">
+              <div class="composer-body">
+                <textarea class="composer-textarea" id="dashboardPostTextInput" placeholder="តើថ្ងៃនេះអ្នកបានហាត់ប្រាណអ្វីខ្លះ? ចែករំលែករូបភាព និងអារម្មណ៍របស់អ្នកនៅទីនេះ... ឧ. រត់ពេលព្រឹក ៥km ស្រស់ស្រាយណាស់! #សុខភាព #ហាត់ប្រាណ" rows="3" required></textarea>
+                
+                <!-- Image Preview Box -->
+                <div class="post-image-preview-wrap" id="dashboardPostImagePreviewWrap" style="display: none;">
+                  <img id="dashboardPostImagePreviewEl" alt="Preview Image" src="">
+                  <button type="button" class="btn-remove-preview" id="btnDashboardRemovePreview" title="លុបរូបភាពចេញ">&times;</button>
+                </div>
+              </div>
+
+              <div class="composer-footer">
+                <div class="composer-tools">
+                  <label class="btn-tool-upload" for="dashboardPostImageFileInput" title="ជ្រើសរើសរូបភាព">
+                    <span>📷</span> ភ្ជាប់រូបថតហាត់ប្រាណ
+                  </label>
+                  <input type="file" id="dashboardPostImageFileInput" accept="image/*" style="display: none;">
+                  <span class="upload-tip-text" id="dashboardUploadFilenameText">មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ</span>
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnDashboardSubmitPost">
+                  <span>📤</span> ចែករំលែក (Post Now)
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Public Social Feed Posts List on Dashboard -->
+          <div class="community-feed-list" id="dashboardCommunityFeedList">
+            <!-- Injected dynamically by JS -->
+          </div>
+
+        </div>
+      </div>
+
     </section>
 
     <!-- ======================================================================
@@ -343,7 +460,7 @@
               <div class="menu-badge-icon">🌅</div>
               <div>
                 <h3>Menu 1: «សូមជ្រើសរើសអាហារពេលព្រឹក»</h3>
-                <p>មុខម្ហូបពេលព្រឹកខ្មែរពេញនិយមចំនួន ១៩ មុខ ជាមួយជម្រើសជ្រើសរើសទំហំចំណែក (Portions)</p>
+                <p>មុខម្ហូបពេលព្រឹកខ្មែរពេញនិយមចំនួន ២០ មុខ (រួមទាំងទឹកសុទ្ធ) ជាមួយជម្រើសជ្រើសរើសទំហំចំណែក (Portions)</p>
               </div>
             </div>
             <div class="menu-stats-pills">
@@ -375,7 +492,7 @@
               <div class="menu-badge-icon">☀️</div>
               <div>
                 <h3>Menu 2: «សូមជ្រើសរើសអាហារពេលថ្ងៃត្រង់»</h3>
-                <p>មុខម្ហូបបាយ សម្ល និងឆាខ្មែរពេញនិយមចំនួន ២៣ មុខ ផ្តល់ថាមពលពេញមួយថ្ងៃ</p>
+                <p>មុខម្ហូបបាយ សម្ល និងឆាខ្មែរពេញនិយមចំនួន ២៤ មុខ (រួមទាំងទឹកសុទ្ធ) ផ្តល់ថាមពលពេញមួយថ្ងៃ</p>
               </div>
             </div>
             <div class="menu-stats-pills">
@@ -407,7 +524,7 @@
               <div class="menu-badge-icon">🌙</div>
               <div>
                 <h3>Menu 3: «សូមជ្រើសរើសអាហារពេលល្ងាច»</h3>
-                <p>មុខម្ហូបពេលល្ងាចចំនួន ២៣ មុខ ជាមួយចំណែកស្រាលសមស្របសម្រាប់ការរំលាយអាហារពេលយប់</p>
+                <p>មុខម្ហូបពេលល្ងាចចំនួន ២៤ មុខ (រួមទាំងទឹកសុទ្ធ) ជាមួយចំណែកស្រាលសមស្របសម្រាប់ការរំលាយអាហារពេលយប់</p>
               </div>
             </div>
             <div class="menu-stats-pills">
@@ -439,7 +556,7 @@
               <div class="menu-badge-icon">🍿</div>
               <div>
                 <h3>Menu 4: «អាហារសម្រន់របស់អ្នក»</h3>
-                <p>ផ្លែឈើ គ្រាប់ធញ្ញជាតិ និងអាហារសម្រន់សុខភាពចំនួន ៦ មុខ</p>
+                <p>ផ្លែឈើ គ្រាប់ធញ្ញជាតិ និងទឹកសុទ្ធចំនួន ៧ មុខ</p>
               </div>
             </div>
             <div class="menu-stats-pills">
@@ -471,7 +588,7 @@
               <div class="menu-badge-icon">🎉</div>
               <div>
                 <h3>Menu 5: «សូមជ្រើសរើសអាហារក្នុងកម្មវិធីរបស់អ្នក»</h3>
-                <p>ភេសជ្ជៈជប់លៀង គ្រឿងស្រវឹង និងម្ហូបក្លែម ដើម្បីតាមដានតុល្យភាពកាឡូរីក្នុងពិធីជួបជុំ</p>
+                <p>ភេសជ្ជៈជប់លៀង គ្រឿងស្រវឹង ទឹកសុទ្ធ និងម្ហូបក្លែមចំនួន ១៤ មុខ ដើម្បីតាមដានតុល្យភាពកាឡូរី</p>
               </div>
             </div>
             <div class="menu-stats-pills">
@@ -494,6 +611,92 @@
             </div>
             <ul class="meal-items-list" id="list-party"></ul>
           </div>
+        </div>
+
+        <!-- ======================================================================
+             BLUE DIVIDER LINE FOR WORKOUT COMMUNITY (ខ័ណ្ឌចែកដោយបន្ទាត់ពណ៌ខៀវ)
+             ====================================================================== -->
+        <div class="community-blue-divider" id="communityBlueDivider">
+          <div class="blue-divider-line"></div>
+          <div class="blue-divider-badge">
+            <span class="blue-divider-icon">📸</span>
+            <span class="blue-divider-text">សកម្មភាពហាត់ប្រាណ & រូបភាពបង្ហោះជាសាធារណៈ</span>
+            <span class="blue-divider-sub">(Public Workout Feed)</span>
+          </div>
+          <div class="blue-divider-line"></div>
+        </div>
+
+        <!-- ======================================================================
+             WORKOUT COMMUNITY & SOCIAL FEED (បង្ហាញនៅខាងក្រោម MENU ទាំងបួន/ប្រាំ)
+             ====================================================================== -->
+        <div class="community-section-wrap" id="workoutCommunitySection">
+          
+          <!-- Header Info Card -->
+          <div class="community-banner-card">
+            <div class="community-banner-text">
+              <h3><span>📸</span> កម្រងសកម្មភាពហាត់ប្រាណ (Workout Community Feed)</h3>
+              <p>ចែករំលែករូបភាព និងអារម្មណ៍នៃការហាត់ប្រាណរបស់អ្នកជាសាធារណៈ (ក្នុងម្នាក់អាចបង្ហោះបាន <strong>៣ ដងគត់</strong> ហើយប្រព័ន្ធសម្អាតរូបភាពចោល <strong>១ អាទិត្យម្តង</strong>)។</p>
+            </div>
+            <div class="community-post-counter-pill" id="dailyPostCounterBadge">
+              <span>🔒</span>
+              <span>កូតារបស់អ្នក៖ <strong id="dailyPostCountNum">០</strong>/៣ ដង</span>
+            </div>
+          </div>
+
+          <!-- Post Creation Box (Facebook / Instagram Style) -->
+          <div class="card-create-post">
+            <div class="composer-header">
+              <div class="composer-user-avatar">🏋️‍♂️</div>
+              <div class="composer-user-info">
+                <span class="composer-user-name">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
+                <span class="composer-badge-public">🌍 សាធារណៈ (Public)</span>
+              </div>
+              <span class="composer-quota-tag" id="foodQuotaTag">នៅសល់ ៣ ដង</span>
+            </div>
+
+            <form id="formCreatePost">
+              <div class="composer-body">
+                <textarea class="composer-textarea" id="postTextInput" placeholder="តើថ្ងៃនេះអ្នកបានហាត់ប្រាណអ្វីខ្លះ? ចែករំលែករូបភាព និងអារម្មណ៍របស់អ្នកនៅទីនេះ... ឧ. រត់ពេលព្រឹក ៥km ស្រស់ស្រាយណាស់! #សុខភាព #ហាត់ប្រាណ" rows="3" required></textarea>
+                
+                <!-- Image Preview Box -->
+                <div class="post-image-preview-wrap" id="postImagePreviewWrap" style="display: none;">
+                  <img id="postImagePreviewEl" alt="Preview Image" src="">
+                  <button type="button" class="btn-remove-preview" id="btnRemovePreview" title="លុបរូបភាពចេញ">&times;</button>
+                </div>
+              </div>
+
+              <div class="composer-footer">
+                <div class="composer-tools">
+                  <label class="btn-tool-upload" for="postImageFileInput" title="ជ្រើសរើសរូបភាព">
+                    <span>📷</span> ភ្ជាប់រូបថតហាត់ប្រាណ
+                  </label>
+                  <input type="file" id="postImageFileInput" accept="image/*" style="display: none;">
+                  <span class="upload-tip-text" id="uploadFilenameText">មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ</span>
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnSubmitPost">
+                  <span>📤</span> ចែករំលែក (Post Now)
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Feed List Controls & Purge Notice -->
+          <div class="feed-controls-row">
+            <div class="feed-count-title">
+              <span>💬</span> ការបង្ហោះសកម្មភាពថ្មីៗ (<span id="feedTotalCountText">០</span>)
+            </div>
+            <div class="feed-auto-purge-notice">
+              <span>🧹</span> រូបភាពលើសពី ៧ ថ្ងៃ សម្អាតចោលស្វ័យប្រវត្ត
+              <button type="button" class="btn-manual-purge" id="btnManualPurgePosts" title="សម្អាតប្រវត្តិលើសពី ៧ ថ្ងៃ">សម្អាតឥឡូវនេះ</button>
+            </div>
+          </div>
+
+          <!-- Social Feed Posts Grid/List -->
+          <div class="community-feed-list" id="communityFeedList">
+            <!-- Injected dynamically by JS -->
+          </div>
+
         </div>
 
       </div>
@@ -613,6 +816,7 @@
 
       </div>
     </section>
+
 
     <!-- ======================================================================
          SECTION 4: SMART SLEEP TRACKER (ការតាមដានដំណេក យប់/ថ្ងៃ)

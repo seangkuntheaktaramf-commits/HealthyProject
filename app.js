@@ -17,6 +17,7 @@ const STORAGE_KEYS = {
   SLEEP_HISTORY: 'sokhapheap_sleep_history',
   PROFILE: 'sokhapheap_profile',
   HISTORY: 'sokhapheap_history',
+  COMMUNITY_POSTS: 'sokhapheap_community_posts',
 };
 
 // Initial default state
@@ -39,6 +40,7 @@ const AppState = {
     napEnd: '13:00',
   },
   sleepHistory: [],
+  communityPosts: [],
   activeTab: 'tabDashboard',
   activeFoodMenu: 'breakfast',
   activeAnalyticsPeriod: 'daily',
@@ -103,6 +105,7 @@ const MENU_BREAKFAST_ITEMS = [
   { id: 'b_17', name: 'សាច់មាន់ចៀន/ទាចៀន', kcal: 360, p: 26, c: 8, f: 25, portionNote: '១ ចានតូច' },
   { id: 'b_18', name: 'ត្រីងៀត', kcal: 210, p: 32, c: 0, f: 9, portionNote: '១ ចំណែក' },
   { id: 'b_19', name: 'សាច់គោអាំង', kcal: 280, p: 34, c: 2, f: 15, portionNote: '១ ចានតូច' },
+  { id: 'b_water', name: 'ទឹកសុទ្ធ', kcal: 0, p: 0, c: 0, f: 0, portionNote: '១ កែវ (250 ml)' },
 ];
 
 // Menu 2: Lunch (23 items)
@@ -130,6 +133,7 @@ const MENU_LUNCH_ITEMS = [
   { id: 'l_21', name: 'ត្រីងៀត', kcal: 210, p: 32, c: 0, f: 9 },
   { id: 'l_22', name: 'មាន់ដុត', kcal: 300, p: 32, c: 4, f: 17 },
   { id: 'l_23', name: 'សាច់គោអាំង', kcal: 280, p: 34, c: 2, f: 15 },
+  { id: 'l_water', name: 'ទឹកសុទ្ធ', kcal: 0, p: 0, c: 0, f: 0, portionNote: '១ កែវ (250 ml)' },
 ];
 
 // Menu 3: Dinner (23 items mirrored from Menu 2)
@@ -146,6 +150,7 @@ const MENU_SNACKS_ITEMS = [
   { id: 's_4', name: 'គ្រាប់អាល់ម៉ុន', kcal: 160, p: 6, c: 6, f: 14, portionNote: '១ ក្តាប់ដៃ' },
   { id: 's_5', name: 'យ៉ាអួ', kcal: 100, p: 5, c: 14, f: 3, portionNote: '១ កំប៉ុង' },
   { id: 's_6', name: 'នំផ្សេងៗ', kcal: 250, p: 4, c: 35, f: 11, portionNote: '១ ចំណែក' },
+  { id: 's_water', name: 'ទឹកសុទ្ធ', kcal: 0, p: 0, c: 0, f: 0, portionNote: '១ កែវ (250 ml)' },
 ];
 
 // Menu 5: Party & Celebration (Drinks + Appetizers)
@@ -163,6 +168,7 @@ const MENU_PARTY_ITEMS = [
   { id: 'p_11', name: 'ត្រីងៀត (ម្ហូបក្លែម)', kcal: 210, p: 32, c: 0, f: 9 },
   { id: 'p_12', name: 'មាន់ដុត (ម្ហូបក្លែម)', kcal: 300, p: 32, c: 4, f: 17 },
   { id: 'p_13', name: 'សាច់គោអាំង (ម្ហូបក្លែម)', kcal: 280, p: 34, c: 2, f: 15 },
+  { id: 'p_water', name: 'ទឹកសុទ្ធ', kcal: 0, p: 0, c: 0, f: 0, portionNote: '១ កែវ (250 ml)' },
 ];
 
 const ALL_MENUS = {
@@ -288,6 +294,20 @@ function initAppState() {
     saveSleepHistory();
   }
 
+  // Load Community Posts
+  const savedCommunity = localStorage.getItem(STORAGE_KEYS.COMMUNITY_POSTS);
+  if (savedCommunity) {
+    try {
+      AppState.communityPosts = JSON.parse(savedCommunity);
+    } catch (e) {
+      AppState.communityPosts = [];
+    }
+  } else {
+    AppState.communityPosts = generateInitialCommunityPosts();
+    saveCommunityPosts();
+  }
+  purgeOldCommunityPosts();
+
   // Load History for Analytics
   const savedHistory = localStorage.getItem(STORAGE_KEYS.HISTORY);
   if (savedHistory) {
@@ -408,17 +428,499 @@ function updateDailyHistorySnapshot() {
 // 5. RENDERING & UI UPDATES
 // =============================================================================
 
+
+// =============================================================================
+// COMMUNITY POSTS STATE & WEEKLY PURGE LOGIC
+// =============================================================================
+let currentPostImageBase64 = null;
+
+function saveCommunityPosts() {
+  localStorage.setItem(STORAGE_KEYS.COMMUNITY_POSTS, JSON.stringify(AppState.communityPosts));
+}
+
+function purgeOldCommunityPosts(forceReset = false) {
+  // Purge posts older than 7 days (7 * 24 * 60 * 60 * 1000 ms)
+  const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+  const beforeLen = AppState.communityPosts.length;
+  if (forceReset) {
+    // Weekly Reset: removes user posts to reset the 3-post quota for the new week
+    AppState.communityPosts = AppState.communityPosts.filter((p) => !p.isMyPost && p.timestamp >= sevenDaysAgo);
+  } else {
+    AppState.communityPosts = AppState.communityPosts.filter((p) => p.timestamp >= sevenDaysAgo);
+  }
+  if (AppState.communityPosts.length !== beforeLen) {
+    saveCommunityPosts();
+  }
+}
+
+function generateInitialCommunityPosts() {
+  const now = Date.now();
+  const todayStr = new Date().toISOString().split('T')[0];
+  return [
+    {
+      id: 'post_seed_1',
+      isMyPost: false,
+      userName: 'សុខ វិបុល',
+      userAvatar: '🏃‍♂️',
+      text: 'ព្រឹកនេះបានរត់ត្រឹកៗ ៥ គីឡូម៉ែត្រនៅសួនច្បារវត្តភ្នំ អារម្មណ៍ស្រស់ថ្លា និងមានថាមពលពេញមួយថ្ងៃ! 💪🔥 #រត់ពេលព្រឹក #សុខភាពខ្ញុំ #ហាត់ប្រាណ',
+      imageData: null,
+      timestamp: now - 3600 * 1000 * 3, // 3 hours ago
+      dateStr: todayStr,
+      timeStr: '៣ ម៉ោងមុន',
+      likes: 15,
+      isLiked: false,
+    },
+    {
+      id: 'post_seed_2',
+      isMyPost: false,
+      userName: 'លីណា វ័យ ៤២ ឆ្នាំ',
+      userAvatar: '🧘‍♀️',
+      text: 'បានហាត់យូហ្គា និងពត់ពែនខ្លួន ៤០ នាទី ជួយបំបាត់ការឈឺចង្កេះ និងសម្រួលសន្លាក់បានយ៉ាងអស្ចារ្យ។ កុំភ្លេចថែរក្សាសុខភាពទាំងអស់គ្នាណា! ✨🌿 #Yoga #វ័យ៤០ឡើង #សុខភាព',
+      imageData: null,
+      timestamp: now - 3600 * 1000 * 18, // 18 hours ago
+      dateStr: todayStr,
+      timeStr: 'ម្សិលមិញ',
+      likes: 22,
+      isLiked: false,
+    },
+  ];
+}
+
+// Render Water Hydration Monitor on Dashboard
+function renderWaterDashboardMonitor() {
+  const subEl = document.getElementById('waterMonitorSubtitle');
+  const mlEl = document.getElementById('waterDashboardMlText');
+  const barEl = document.getElementById('waterDashboardProgressBar');
+  const glassesRow = document.getElementById('waterDashboardGlassesRow');
+  const tipEl = document.getElementById('waterStatusTipText');
+
+  const maxGlasses = 8;
+  const currentGlasses = AppState.water;
+  const currentMl = currentGlasses * 250;
+
+  if (subEl) subEl.textContent = `ផឹកបាន ${toKhmerNumber(currentGlasses)} / ៨ កែវ (~២,០០០ ml)`;
+  if (mlEl) mlEl.textContent = `${currentMl.toLocaleString()} / 2,000 ml`;
+  if (barEl) barEl.style.width = `${Math.min(100, (currentGlasses / maxGlasses) * 100)}%`;
+
+  if (glassesRow) {
+    glassesRow.innerHTML = '';
+    for (let i = 1; i <= maxGlasses; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `btn-glass-quick ${i <= currentGlasses ? 'filled' : ''}`;
+      btn.innerHTML = i <= currentGlasses ? '💧' : '🥛';
+      btn.title = `កែវទី ${toKhmerNumber(i)} (250 ml)`;
+      btn.addEventListener('click', () => {
+        AppState.water = AppState.water === i ? i - 1 : i;
+        saveWater();
+        renderAll();
+        showToast(`កម្រិតជាតិទឹក៖ ${(AppState.water * 250).toLocaleString()} ml`, 'info');
+      });
+      glassesRow.appendChild(btn);
+    }
+  }
+
+  if (tipEl) {
+    if (currentGlasses === 0) {
+      tipEl.textContent = '💡 ចាប់ផ្តើមថ្ងៃថ្មីដោយពិសាទឹក ១-២ កែវ ដើម្បីដាស់ប្រព័ន្ធរំលាយអាហារ។';
+    } else if (currentGlasses <= 3) {
+      tipEl.textContent = '⚠️ កម្រិតជាតិទឹកទាបពេក! សូមបន្តពិសាទឹកឱ្យបានច្រើនដើម្បីការពារការខ្សោះជាតិទឹក។';
+    } else if (currentGlasses <= 7) {
+      tipEl.textContent = '💧 ល្អណាស់! អ្នកកំពុងបំពេញជាតិទឹកបានល្អ បន្តពិសាបន្ថែមទៀតដើម្បីសម្រេចគោលដៅ។';
+    } else {
+      tipEl.textContent = '🎉 អស្ចារ្យណាស់! អ្នកបានសម្រេចគោលដៅជាតិទឹក ២,០០០ ml ពេញលេញសម្រាប់ថ្ងៃនេះ!';
+    }
+  }
+}
+
+// Render Community Feed (for both Dashboard and Food Tab)
+function renderCommunityFeed() {
+  purgeOldCommunityPosts();
+
+  const dashFeedList = document.getElementById('dashboardCommunityFeedList');
+  const foodFeedList = document.getElementById('communityFeedList');
+  
+  const dashQuotaNum = document.getElementById('dashboardUserQuotaNum');
+  const foodQuotaNum = document.getElementById('dailyPostCountNum');
+  
+  const dashQuotaTag = document.getElementById('dashboardQuotaTag');
+  const foodQuotaTag = document.getElementById('foodQuotaTag');
+  
+  const dashSubmitBtn = document.getElementById('btnDashboardSubmitPost');
+  const foodSubmitBtn = document.getElementById('btnSubmitPost');
+  
+  const feedTotalCountText = document.getElementById('feedTotalCountText');
+
+  // Rule: Max 3 posts per person (ក្នុងមួយនាក់អាច Post បានតែ ៣ ដងគត់)
+  const myPosts = AppState.communityPosts.filter((p) => p.isMyPost);
+  const myCount = myPosts.length;
+  const remaining = Math.max(0, 3 - myCount);
+  const isQuotaFull = myCount >= 3;
+
+  // Update Quota Badges (កូតារបស់អ្នក៖ X/៣ ដង)
+  if (dashQuotaNum) dashQuotaNum.textContent = toKhmerNumber(myCount);
+  if (foodQuotaNum) foodQuotaNum.textContent = toKhmerNumber(myCount);
+  if (feedTotalCountText) feedTotalCountText.textContent = toKhmerNumber(AppState.communityPosts.length);
+
+  // Update Quota Tags
+  [dashQuotaTag, foodQuotaTag].forEach((tag) => {
+    if (tag) {
+      if (isQuotaFull) {
+        tag.textContent = '🔒 គ្រប់កូតា ៣ ដងគត់';
+        tag.classList.add('full');
+      } else {
+        tag.textContent = `នៅសល់ ${toKhmerNumber(remaining)} ដង`;
+        tag.classList.remove('full');
+      }
+    }
+  });
+
+  // Update Submit Buttons
+  [dashSubmitBtn, foodSubmitBtn].forEach((btn) => {
+    if (btn) {
+      if (isQuotaFull) {
+        btn.disabled = true;
+        btn.style.opacity = '0.6';
+        btn.innerHTML = '<span>🔒</span> គ្រប់កូតា ៣ ដងគត់ហើយ';
+        btn.title = 'ក្នុងម្នាក់អាចបង្ហោះបានតែ ៣ ដងគត់ (ប្រព័ន្ធសម្អាតរូបភាពចោល ១ អាទិត្យម្តង)';
+      } else {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.innerHTML = '<span>📤</span> ចែករំលែក (Post Now)';
+        btn.title = `នៅសល់កូតា ${toKhmerNumber(remaining)} ដង`;
+      }
+    }
+  });
+
+  // Build Feed HTML
+  const feedHtml = buildCommunityFeedHtml();
+
+  if (dashFeedList) dashFeedList.innerHTML = feedHtml;
+  if (foodFeedList) foodFeedList.innerHTML = feedHtml;
+
+  // Attach post interaction listeners
+  setupPostCardListeners();
+}
+
+function buildCommunityFeedHtml() {
+  if (AppState.communityPosts.length === 0) {
+    return `
+      <div class="empty-meal-msg" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
+        <span>📸 មិនទាន់មានការបង្ហោះសកម្មភាពហាត់ប្រាណនៅឡើយទេ</span>
+        <span style="font-size: 0.78rem;">(សូមក្លាយជាអ្នកដំបូងគេដែលចែករំលែករូបភាព និងការខិតខំហាត់ប្រាណ!)</span>
+      </div>
+    `;
+  }
+
+  return AppState.communityPosts.map((post) => {
+    const formattedText = escapeHtml(post.text).replace(
+      /(#[^\s#]+)/g,
+      '<span class="post-hashtag">$1</span>'
+    );
+
+    let imageHtml = '';
+    if (post.imageData) {
+      imageHtml = `
+        <div class="post-image-box">
+          <img src="${post.imageData}" alt="សកម្មភាពហាត់ប្រាណ" loading="lazy">
+        </div>
+      `;
+    }
+
+    const deleteBtnHtml = post.isMyPost
+      ? `<button class="btn-item-del" data-del-post="${post.id}" title="លុបការបង្ហោះរបស់អ្នក (ដើម្បីទទួលបានកូតាវិញ)">&times;</button>`
+      : '';
+
+    const myBadgeHtml = post.isMyPost
+      ? `<span style="font-size: 0.72rem; padding: 0.15rem 0.5rem; background: rgba(16, 185, 129, 0.15); color: var(--accent-emerald); border-radius: var(--radius-full); margin-left: 0.4rem; font-weight: 700;">🌟 អ្នក (You)</span>`
+      : '';
+
+    return `
+      <div class="feed-post-card" id="${post.id}">
+        <div class="post-header">
+          <div class="post-author-group">
+            <div class="post-author-avatar">${post.userAvatar || '🏋️‍♂️'}</div>
+            <div>
+              <div class="post-author-name">
+                ${escapeHtml(post.userName)}
+                ${myBadgeHtml}
+              </div>
+              <div class="post-time-meta">⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌍 សាធារណៈ</div>
+            </div>
+          </div>
+          ${deleteBtnHtml}
+        </div>
+
+        <div class="post-content-text">${formattedText}</div>
+
+        ${imageHtml}
+
+        <div class="post-actions-bar">
+          <button class="btn-like-post ${post.isLiked ? 'liked' : ''}" data-like-post="${post.id}">
+            <span>${post.isLiked ? '❤️' : '🤍'}</span>
+            <span>${toKhmerNumber(post.likes || 0)} ចូលចិត្ត</span>
+          </button>
+
+          <div style="display: flex; gap: 0.4rem;">
+            <button class="post-cheers-btn" data-cheer-post="${post.id}">
+              <span>👏</span> លើកទឹកចិត្ត
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function setupPostCardListeners() {
+  // Like button
+  document.querySelectorAll('[data-like-post]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const postId = btn.getAttribute('data-like-post');
+      const post = AppState.communityPosts.find((p) => p.id === postId);
+      if (post) {
+        if (post.isLiked) {
+          post.likes = Math.max(0, (post.likes || 1) - 1);
+          post.isLiked = false;
+        } else {
+          post.likes = (post.likes || 0) + 1;
+          post.isLiked = true;
+          showToast('បានចូលចិត្តការបង្ហោះនេះ! ❤️', 'info');
+        }
+        saveCommunityPosts();
+        renderCommunityFeed();
+      }
+    });
+  });
+
+  // Cheer button
+  document.querySelectorAll('[data-cheer-post]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      showToast('អ្នកបានផ្ញើសារលើកទឹកចិត្ត៖ "តស៊ូឡើង! សុខភាពល្អជាទ្រព្យធនធំបំផុត!" 👏', 'success');
+    });
+  });
+
+  // Delete button
+  document.querySelectorAll('[data-del-post]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const postId = btn.getAttribute('data-del-post');
+      if (confirm('តើអ្នកពិតជាចង់លុបការបង្ហោះនេះមែនទេ?')) {
+        AppState.communityPosts = AppState.communityPosts.filter((p) => p.id !== postId);
+        saveCommunityPosts();
+        renderCommunityFeed();
+        showToast('បានលុបការបង្ហោះរួចរាល់', 'info');
+      }
+    });
+  });
+}
+
+// Compress Image using HTML5 Canvas (keeps base64 small for localStorage)
+function compressImageFile(file, callback) {
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = function () {
+      const canvas = document.createElement('canvas');
+      let width = img.width;
+      let height = img.height;
+      const maxDim = 800; // max dimension
+
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      callback(compressedDataUrl);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+let currentDashboardPostImageBase64 = null;
+let currentFoodPostImageBase64 = null;
+
+function setupCommunityComposerListeners() {
+  function wireComposer({
+    formId,
+    fileInputId,
+    previewWrapId,
+    previewImgId,
+    btnRemovePreviewId,
+    filenameTextId,
+    textInputId,
+    getImage,
+    setImage,
+  }) {
+    const fileInput = document.getElementById(fileInputId);
+    const previewWrap = document.getElementById(previewWrapId);
+    const previewImg = document.getElementById(previewImgId);
+    const btnRemove = document.getElementById(btnRemovePreviewId);
+    const filenameText = document.getElementById(filenameTextId);
+    const formEl = document.getElementById(formId);
+    const textInput = document.getElementById(textInputId);
+
+    if (fileInput) {
+      fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (filenameText) filenameText.textContent = file.name;
+        compressImageFile(file, (base64) => {
+          setImage(base64);
+          if (previewImg) previewImg.src = base64;
+          if (previewWrap) previewWrap.style.display = 'flex';
+        });
+      });
+    }
+
+    if (btnRemove) {
+      btnRemove.addEventListener('click', () => {
+        setImage(null);
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (previewImg) previewImg.src = '';
+        if (fileInput) fileInput.value = '';
+        if (filenameText) filenameText.textContent = 'មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ';
+      });
+    }
+
+    if (formEl) {
+      formEl.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // Rule: Max 3 posts per person strictly (ក្នុងមួយនាក់អាច Post បានតែ ៣ ដងគត់)
+        const myPosts = AppState.communityPosts.filter((p) => p.isMyPost);
+        if (myPosts.length >= 3) {
+          alert('⚠️ លោកអ្នកបានបង្ហោះគ្រប់កូតា ៣ ដងគត់ហើយ! ក្នុងម្នាក់អាចបង្ហោះបានតែ ៣ ដងប៉ុណ្ណោះ។ សូមរង់ចាំការសម្អាតប្រចាំសប្តាហ៍ (៧ ថ្ងៃ) ឬលុបការបង្ហោះចាស់ចេញ ទើបអាចបង្ហោះថ្មីបាន។');
+          return;
+        }
+
+        const text = textInput ? textInput.value.trim() : '';
+        const imgData = getImage();
+
+        if (!text && !imgData) {
+          showToast('សូមសរសេររៀបរាប់ ឬភ្ជាប់រូបភាពមុននឹងចែករំលែក', 'warn');
+          return;
+        }
+
+        const isMale = AppState.profile.gender === 'male';
+        const userAvatar = isMale ? '🏋️‍♂️' : '🧘‍♀️';
+        const now = Date.now();
+        const todayStr = new Date().toISOString().split('T')[0];
+
+        const newPost = {
+          id: 'post_' + now + '_' + Math.floor(Math.random() * 1000),
+          isMyPost: true, // Marked as current user's post
+          userName: isMale ? 'បុរសសុខភាពល្អ' : 'ស្រ្តីសុខភាពល្អ',
+          userAvatar,
+          text,
+          imageData: imgData,
+          timestamp: now,
+          dateStr: todayStr,
+          timeStr: 'ទើបតែបង្ហោះមុននេះ',
+          likes: 0,
+          isLiked: false,
+        };
+
+        AppState.communityPosts.unshift(newPost);
+        saveCommunityPosts();
+
+        // Reset composer
+        if (textInput) textInput.value = '';
+        setImage(null);
+        if (previewWrap) previewWrap.style.display = 'none';
+        if (previewImg) previewImg.src = '';
+        if (fileInput) fileInput.value = '';
+        if (filenameText) filenameText.textContent = 'មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ';
+
+        renderCommunityFeed();
+        showToast('បានចែករំលែកសកម្មភាពហាត់ប្រាណជាសាធារណៈដោយជោគជ័យ! 🎉', 'success');
+      });
+    }
+  }
+
+  // 1. Dashboard Composer
+  wireComposer({
+    formId: 'formDashboardCreatePost',
+    fileInputId: 'dashboardPostImageFileInput',
+    previewWrapId: 'dashboardPostImagePreviewWrap',
+    previewImgId: 'dashboardPostImagePreviewEl',
+    btnRemovePreviewId: 'btnDashboardRemovePreview',
+    filenameTextId: 'dashboardUploadFilenameText',
+    textInputId: 'dashboardPostTextInput',
+    getImage: () => currentDashboardPostImageBase64,
+    setImage: (val) => { currentDashboardPostImageBase64 = val; },
+  });
+
+  // 2. Food Tab Composer
+  wireComposer({
+    formId: 'formCreatePost',
+    fileInputId: 'postImageFileInput',
+    previewWrapId: 'postImagePreviewWrap',
+    previewImgId: 'postImagePreviewEl',
+    btnRemovePreviewId: 'btnRemovePreview',
+    filenameTextId: 'uploadFilenameText',
+    textInputId: 'postTextInput',
+    getImage: () => currentFoodPostImageBase64,
+    setImage: (val) => { currentFoodPostImageBase64 = val; },
+  });
+
+  // Weekly Purge Handlers
+  const handleWeeklyPurge = () => {
+    if (confirm('តើអ្នកចង់សម្អាតរូបភាព និងកំណត់កូតាប្រចាំសប្តាហ៍ឡើងវិញមែនទេ? (រូបភាពទាំងអស់នឹងត្រូវសម្អាត ហើយលោកអ្នកនឹងទទួលបានកូតា ៣ ដងថ្មី)')) {
+      purgeOldCommunityPosts(true);
+      saveCommunityPosts();
+      renderCommunityFeed();
+      showToast('បានសម្អាតរូបភាពប្រចាំសប្តាហ៍រួចរាល់! លោកអ្នកអាចបង្ហោះរូបភាព ៣ ដងថ្មីបាន។ 🧹', 'success');
+    }
+  };
+
+  const btnDashPurge = document.getElementById('btnDashboardWeeklyPurge');
+  if (btnDashPurge) btnDashPurge.addEventListener('click', handleWeeklyPurge);
+
+  const btnFoodPurge = document.getElementById('btnManualPurgePosts');
+  if (btnFoodPurge) btnFoodPurge.addEventListener('click', handleWeeklyPurge);
+
+  // Quick drink glass button on dashboard
+  const btnQuickDrink = document.getElementById('btnQuickDrinkGlass');
+  if (btnQuickDrink) {
+    btnQuickDrink.addEventListener('click', () => {
+      if (AppState.water < 8) {
+        AppState.water++;
+        saveWater();
+        renderAll();
+        showToast('បានបន្ថែមការផឹកទឹក +១ កែវ (250 ml)! 💧', 'info');
+      } else {
+        showToast('អ្នកបានសម្រេចគោលដៅផឹកទឹក ៨ កែវ (២,០០០ ml) រួចហើយ! 🎉', 'success');
+      }
+    });
+  }
+}
+
 function renderAll() {
   renderTheme();
   renderLiveDate();
   renderProfileHeader();
   renderDashboardHero();
   renderThresholdAlerts();
+  renderWaterDashboardMonitor();
   renderFoodMenuGrids();
   renderLoggedFoodLists();
   renderWorkoutsList();
   renderSleepTracker();
   renderAdvisory40();
+  renderCommunityFeed();
   renderWaterTracker();
   renderSmartHealthTip();
   renderAnalytics();
@@ -704,8 +1206,18 @@ function setupPortionButtonListeners() {
 
       AppState.meals.push(newMeal);
       saveMeals();
-      renderAll();
-      showToast(`បានបន្ថែម៖ ${itemData.name} (${finalKcal.toLocaleString()} kcal)`, 'success');
+
+      // If user added ទឹកសុទ្ធ, also sync and increment Water Tracker
+      if (itemData.name === 'ទឹកសុទ្ធ' || itemData.name.includes('ទឹកសុទ្ធ')) {
+        const addedGlasses = Math.max(1, Math.round(multiplier));
+        AppState.water = Math.min(8, AppState.water + addedGlasses);
+        saveWater();
+        renderAll();
+        showToast(`បានបន្ថែម៖ ទឹកសុទ្ធ (${(addedGlasses * 250).toLocaleString()} ml) ចូលក្នុងតារាងតាមដានជាតិទឹក! 💧`, 'success');
+      } else {
+        renderAll();
+        showToast(`បានបន្ថែម៖ ${itemData.name} (${finalKcal.toLocaleString()} kcal)`, 'success');
+      }
     });
   });
 }
@@ -1493,6 +2005,9 @@ function setupEventListeners() {
     btnExport.addEventListener('click', exportBackupJSON);
   }
 
+  // Community Composer & Weekly Purge Handlers
+  setupCommunityComposerListeners();
+
   // Window resize re-draws canvas cleanly
   window.addEventListener('resize', () => {
     drawAnalyticsChart();
@@ -1500,24 +2015,37 @@ function setupEventListeners() {
 }
 
 function switchMainTab(tabId) {
+  if (tabId === 'tabCommunity') {
+    AppState.activeTab = 'tabCommunity';
+    document.querySelectorAll('#mainHeaderNav .nav-link-btn').forEach((btn) => {
+      btn.classList.toggle('active', btn.getAttribute('data-tab-target') === 'tabCommunity');
+    });
+
+    document.querySelectorAll('.tab-section-view').forEach((sec) => {
+      sec.classList.toggle('active', sec.id === 'tabDashboard');
+    });
+
+    setTimeout(() => {
+      const showcase = document.getElementById('dashboardCommunityShowcase');
+      if (showcase) {
+        showcase.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 60);
+    return;
+  }
+
   AppState.activeTab = tabId;
   document.querySelectorAll('#mainHeaderNav .nav-link-btn').forEach((btn) => {
-    if (btn.getAttribute('data-tab-target') === tabId) {
-      btn.classList.add('active');
-    } else {
-      btn.classList.remove('active');
-    }
+    btn.classList.toggle('active', btn.getAttribute('data-tab-target') === tabId);
   });
 
   document.querySelectorAll('.tab-section-view').forEach((sec) => {
-    if (sec.id === tabId) {
-      sec.classList.add('active');
-    } else {
-      sec.classList.remove('active');
-    }
+    sec.classList.toggle('active', sec.id === tabId);
   });
 
-  if (tabId === 'tabAnalytics') {
+  if (tabId === 'tabFood') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tabId === 'tabAnalytics') {
     setTimeout(drawAnalyticsChart, 50);
   }
 }
