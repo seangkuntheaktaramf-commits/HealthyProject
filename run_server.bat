@@ -1,10 +1,9 @@
 @echo off
-title «សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព និងកាឡូរីឆ្លាតវៃ
+title សប្បាយ សប្បាយ - Modern Khmer Social & Health Tracker
 echo ========================================================
-echo   «សុខភាពខ្ញុំ» - កម្មវិធីតាមដានសុខភាព & កាឡូរី (ភាសាខ្មែរ ១០០%%)
+echo   សប្បាយ សប្បាយ - Modern Khmer Social & Health Tracker
 echo   Starting Local Server at http://localhost:8000 ...
 echo ========================================================
 start http://localhost:8000
 python -m http.server 8000
 pause
-

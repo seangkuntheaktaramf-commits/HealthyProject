@@ -4992,3 +4992,371 @@ a {
 .photo-item:hover img {
   transform: scale(1.03);
 }
+
+/* ==========================================================================
+   SECTION 23: FACEBOOK-STYLE NETWORK, PRIVACY & LOGO CUSTOMIZATION
+   ========================================================================== */
+
+/* 1. Header User Switcher */
+.user-switcher-dropdown-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.2s;
+}
+
+.user-switcher-dropdown-wrap:hover {
+  border-color: var(--primary);
+}
+
+.user-switcher-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.header-user-switcher-select {
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+}
+
+.header-user-switcher-select option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* 2. Composer Privacy Dropdown */
+.composer-privacy-dropdown-wrap {
+  display: inline-block;
+  margin-top: 0.2rem;
+}
+
+.composer-privacy-select {
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  color: #3b82f6;
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.composer-privacy-select:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+.composer-privacy-select option {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* 3. Facebook-Style Action Bar (ចូលចិត្ត, បញ្ចេញមតិ, ចែករំលែក រាងៗខ្លួន) */
+.fb-post-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.35rem 0;
+  margin: 0.75rem 0 0.85rem 0;
+}
+
+.btn-fb-action {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+  font-family: inherit;
+}
+
+.btn-fb-action:hover {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+}
+
+.btn-fb-action:active {
+  transform: scale(0.97);
+}
+
+.btn-fb-action.liked {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.btn-fb-action.liked .fb-act-icon {
+  animation: heartPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.fb-act-icon {
+  font-size: 1.15rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fb-act-label {
+  font-size: 0.9rem;
+}
+
+/* 4. Enhanced Post Framing & Privacy Badges */
+.feed-post-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.25rem 1.45rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.feed-post-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+}
+
+.post-privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-full);
+}
+
+.post-privacy-badge.public {
+  background: rgba(16, 185, 129, 0.12);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.post-privacy-badge.private {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* 5. Logo Customization Card in tabPersonalInfo */
+.logo-customization-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.35rem 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.logo-custom-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.logo-preview-box {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--primary);
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.setting-logo-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logo-custom-info h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.logo-custom-info p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.logo-options-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn-logo-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.6rem 1.1rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.btn-logo-opt:hover {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary);
+}
+
+.btn-logo-opt.active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+}
+
+/* 6. Privacy Selection Modal (modalPostPrivacyConfirm) */
+.modal-dialog-privacy {
+  max-width: 520px;
+  width: 92vw;
+}
+
+.privacy-modal-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+.privacy-options-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+}
+
+.privacy-option-card {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--bg-card-subtle);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.privacy-option-card input[type="radio"] {
+  display: none;
+}
+
+.privacy-option-card:hover {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.privacy-option-card.selected {
+  border-color: var(--primary);
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.privacy-icon-circle {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.privacy-icon-circle.public {
+  background: rgba(16, 185, 129, 0.18);
+  color: var(--accent-emerald);
+}
+
+.privacy-icon-circle.private {
+  background: rgba(239, 68, 68, 0.18);
+  color: #ef4444;
+}
+
+.privacy-card-info {
+  flex: 1;
+}
+
+.privacy-card-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.privacy-card-info p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.privacy-check-badge {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: transparent;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.privacy-option-card.selected .privacy-check-badge {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}

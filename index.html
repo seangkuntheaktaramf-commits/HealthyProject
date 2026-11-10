@@ -16,7 +16,7 @@
   <header class="site-header">
     <div class="container header-container-tiered">
       
-      <!-- Top Tier: Left Action Controls & Far-Right Branding with Logo S-Icon1.jpg -->
+      <!-- Top Tier: Left Action Controls & Far-Right Branding with Logo Sabay_Logo.jpg -->
       <div class="header-top-row">
         <!-- Left Action Controls -->
         <div class="header-actions">
@@ -47,6 +47,18 @@
             <span id="logoutBtnText">ចាកចេញ</span>
           </button>
 
+          <!-- Account Switcher Dropdown (ភ្ជាប់គ្នាជាប្រព័ន្ធដូច Facebook) -->
+          <div class="user-switcher-dropdown-wrap" title="ប្តូរគណនី (Connect & Switch Users)">
+            <label for="selectHeaderUserAccount" class="user-switcher-label">👥 គណនី៖</label>
+            <select class="header-user-switcher-select" id="selectHeaderUserAccount">
+              <option value="user_seang">Seang Kunthea</option>
+              <option value="user_hout">Hout Kimsan</option>
+              <option value="user_vibol">សុខ វិបុល</option>
+              <option value="user_lina">លីណា សាន</option>
+              <option value="guest">👤 ភ្ញៀវ (Guest)</option>
+            </select>
+          </div>
+
           <div class="live-date-pill" id="liveDatePill">
             <span>📅</span>
             <span id="currentDateText">កំពុងផ្ទុកកាលបរិច្ឆេទ...</span>
@@ -58,7 +70,7 @@
           <div class="brand-info brand-info-right">
             <h1 class="brand-title">សប្បាយ សប្បាយ</h1>
           </div>
-          <img src="Sabay_Logo.jpg" alt="សប្បាយ សប្បាយ Logo" class="brand-logo" width="48" height="48">
+          <img src="Sabay_Logo.jpg" alt="សប្បាយ សប្បាយ Logo" class="brand-logo" id="headerBrandLogo" width="48" height="48">
         </a>
       </div>
 
@@ -473,8 +485,13 @@
             <div class="composer-header">
               <div class="composer-user-avatar" id="dashboardComposerAvatar">🏋️‍♂️</div>
               <div class="composer-user-info">
-                <span class="composer-user-name" id="dashboardComposerName">អ្នកហាត់ប្រាណ «សុខភាពខ្ញុំ»</span>
-                <span class="composer-badge-public">🌍 សាធារណៈ (Public)</span>
+                <span class="composer-user-name" id="dashboardComposerName">Seang Kunthea</span>
+                <div class="composer-privacy-dropdown-wrap">
+                  <select class="composer-privacy-select" id="dashboardPostPrivacySelect" title="ជ្រើសរើសភាពឯកជននៃការបង្ហោះ">
+                    <option value="public" selected>🌐 សាធារណៈ (Public)</option>
+                    <option value="private">🔒 ឯកជនភាព (Private)</option>
+                  </select>
+                </div>
               </div>
               <span class="composer-quota-tag" id="dashboardQuotaTag">នៅសល់ ៣ ដង</span>
             </div>
@@ -1262,7 +1279,7 @@
         <div class="profile-avatar-overview-card">
           <div class="profile-avatar-box-wrap">
             <div class="profile-avatar-display" id="profileAvatarDisplayBox">
-              <img src="S-Icon1.jpg" alt="រូប Profile" id="profileAvatarImg" class="profile-avatar-image">
+              <img src="Sabay_Logo.jpg" alt="រូប Profile" id="profileAvatarImg" class="profile-avatar-image">
             </div>
             <div class="profile-avatar-buttons">
               <label for="inputProfileAvatarFile" class="btn-avatar-action" title="ចុចដើម្បីជ្រើសរើសរូបថតថ្មី">
@@ -1289,6 +1306,31 @@
             <p class="profile-bio-text" id="profileBioText">
               បានភ្ជាប់គណនីដើម្បីកត់ត្រាអាហារ តាមដានដំណេក និងចែករំលែកសកម្មភាពសុខភាពជាសាធារណៈ។
             </p>
+          </div>
+        </div>
+
+        <!-- Header Logo & Branding Customization Card (ក្នុង Menu ព័ត៌មានផ្ទាល់ខ្លួន អាចប្តូរ Logo ជំនួសដោយរូបម្ចាស់ Account) -->
+        <div class="logo-customization-card" id="logoCustomizationCard">
+          <div class="logo-custom-header">
+            <div class="logo-preview-box">
+              <img id="settingLogoPreviewImg" src="Sabay_Logo.jpg" alt="Logo Preview" class="setting-logo-preview">
+            </div>
+            <div class="logo-custom-info">
+              <h4><span>🎨</span> ការកំណត់ Logo & រូបតំណាងលើ Header</h4>
+              <p>ម្ចាស់ Account អាចជ្រើសរើសប្រើ Logo ផ្លូវការ <strong>Sabay_Logo.jpg</strong> ឬប្តូរដាក់រូប Profile របស់ខ្លួនជំនួស Logo បាន (ដូច Facebook ដែរ)</p>
+            </div>
+          </div>
+          <div class="logo-options-actions">
+            <button type="button" class="btn-logo-opt active" id="btnLogoUseSabay">
+              <span>✨</span> ប្រើ Logo ថ្មី Sabay_Logo.jpg
+            </button>
+            <button type="button" class="btn-logo-opt" id="btnLogoUseOwnerAvatar">
+              <span>👤</span> ប្តូរ Logo ដាក់រូបម្ចាស់ Account
+            </button>
+            <label for="inputCustomLogoUpload" class="btn-logo-opt" title="Upload Logo ផ្ទាល់ខ្លួន">
+              <span>📁</span> Upload Logo ផ្ទាល់ខ្លួន
+            </label>
+            <input type="file" id="inputCustomLogoUpload" accept="image/*" style="display: none;">
           </div>
         </div>
 
@@ -1792,7 +1834,7 @@
           <!-- Avatar Upload Preview in Sign Up -->
           <div class="signup-avatar-center">
             <div class="signup-avatar-preview" id="signUpAvatarPreviewWrap">
-              <img src="S-Icon1.jpg" id="signUpAvatarImg" alt="Profile Avatar">
+              <img src="Sabay_Logo.jpg" id="signUpAvatarImg" alt="Profile Avatar">
             </div>
             <label for="inputSignUpAvatarFile" class="btn-avatar-pick-label">
               <span>📷</span> ជ្រើសរើសរូបថត Profile
@@ -1835,7 +1877,7 @@
       <div id="signUpLoggedInView" style="display: none;" class="modal-body">
         <div class="account-card-active">
           <div class="account-avatar-circle" id="loggedAvatarCircle">
-            <img src="S-Icon1.jpg" id="loggedAvatarImg" alt="Avatar">
+            <img src="Sabay_Logo.jpg" id="loggedAvatarImg" alt="Avatar">
           </div>
           <div class="account-info-detail">
             <h4 id="loggedName">សុខ វិបុល</h4>
@@ -2042,6 +2084,50 @@
         <img src="" id="lightboxImg" alt="Enlarged Post Photo">
       </div>
       <div class="lightbox-caption-bar" id="lightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Post Privacy Selector (ជ្រើសរើស សាធារណៈ ឬ ឯកជនភាព) -->
+  <div class="modal-overlay" id="modalPostPrivacyConfirm">
+    <div class="modal-dialog modal-dialog-privacy">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-title-icon">🔒</span>
+          <h3>ជ្រើសរើសភាពឯកជននៃការបង្ហោះ</h3>
+        </div>
+        <button type="button" class="btn-modal-close" id="btnClosePrivacyModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="privacy-modal-subtitle">តើអ្នកណាខ្លះអាចមើលឃើញការបង្ហោះរូបភាពរបស់អ្នក?</p>
+
+        <div class="privacy-options-cards-list">
+          <label class="privacy-option-card selected" id="optPrivacyPublicCard">
+            <input type="radio" name="postPrivacyChoice" value="public" checked>
+            <div class="privacy-icon-circle public">🌐</div>
+            <div class="privacy-card-info">
+              <h4>សាធារណៈ (Public)</h4>
+              <p>គ្រប់ User ទាំងអស់អាចមើលឃើញរូបភាពនេះនៅលើបណ្តាញសង្គម</p>
+            </div>
+            <span class="privacy-check-badge">✓</span>
+          </label>
+
+          <label class="privacy-option-card" id="optPrivacyPrivateCard">
+            <input type="radio" name="postPrivacyChoice" value="private">
+            <div class="privacy-icon-circle private">🔒</div>
+            <div class="privacy-card-info">
+              <h4>ឯកជនភាព (Private / Only Me)</h4>
+              <p>គ្រប់ User ទាំងអស់មិនអាចមើលឃើញទេ (មានតែអ្នកម្នាក់គត់ដែលអាចមើលឃើញ)</p>
+            </div>
+            <span class="privacy-check-badge">✓</span>
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-action-ghost" id="btnCancelPrivacyPost">បោះបង់</button>
+        <button type="button" class="btn-action-primary" id="btnConfirmPublishPost">
+          <span>🚀</span> បង្ហោះឥឡូវនេះ (Publish)
+        </button>
+      </div>
     </div>
   </div>
 

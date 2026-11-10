@@ -20,6 +20,8 @@ const STORAGE_KEYS = {
   COMMUNITY_POSTS: 'sabay_community_posts',
   USERS: 'sabay_registered_users',
   CURRENT_USER_ID: 'sabay_current_user_id',
+  LOGO_SOURCE: 'sabay_logo_source',
+  CUSTOM_LOGO: 'sabay_custom_logo',
 };
 
 // Pre-seeded Multi-User Directory
@@ -118,6 +120,8 @@ const AppState = {
   currentUser: null,
   isLoggedIn: false,
   viewingUser: null,
+  logoSource: localStorage.getItem(STORAGE_KEYS.LOGO_SOURCE) || 'sabay',
+  customLogo: localStorage.getItem(STORAGE_KEYS.CUSTOM_LOGO) || null,
   account: {
     name: 'Seang Kunthea',
     email: 'seang.kunthea@sabay.com',
@@ -869,23 +873,39 @@ function renderCommunityFeed() {
 }
 
 function buildCommunityFeedHtml() {
-  if (AppState.communityPosts.length === 0) {
+  const currentUserId = AppState.currentUser ? AppState.currentUser.id : null;
+
+  // Privacy Filtering Rule (ដូច Facebook ដែរ):
+  // - Public: គ្រប់ User ទាំងអស់អាចមើលឃើញ
+  // - Private: មានតែម្ចាស់ Post ប៉ុណ្ណោះដែលអាចមើលឃើញ
+  const visiblePosts = AppState.communityPosts.filter((post) => {
+    if (!post.privacy || post.privacy === 'public') return true;
+    if (post.privacy === 'private') {
+      return currentUserId && post.userId === currentUserId;
+    }
+    return true;
+  });
+
+  if (visiblePosts.length === 0) {
     return `
-      <div class="empty-meal-msg" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1px solid var(--border-color);">
-        <span>📸 មិនទាន់មានការបង្ហោះសកម្មភាពនៅឡើយទេ</span>
-        <span style="font-size: 0.78rem;">(សូមក្លាយជាអ្នកដំបូងគេដែលចែករំលែករូបភាព និងការខិតខំហាត់ប្រាណ!)</span>
+      <div class="empty-meal-msg" style="background: var(--bg-card); border-radius: var(--radius-lg); border: 1.5px solid var(--border-color); padding: 2.2rem; text-align: center;">
+        <span style="font-size: 1.8rem; display: block; margin-bottom: 0.5rem;">📸</span>
+        <span style="font-weight: 700; color: var(--text-main);">មិនទាន់មានការបង្ហោះដែលអាចមើលឃើញនៅឡើយទេ</span>
+        <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-top: 0.4rem;">
+          (សូមចែករំលែករូបភាពជាសាធារណៈ ដើម្បីឱ្យ User ទាំងអស់អាចមើលឃើញ និងភ្ជាប់គ្នាដូច Facebook!)
+        </span>
       </div>
     `;
   }
 
-  return AppState.communityPosts.map((post) => {
+  return visiblePosts.map((post) => {
     const isOwner = AppState.currentUser && post.userId === AppState.currentUser.id;
     const formattedText = escapeHtml(post.text).replace(
       /(#[^\s#]+)/g,
       '<span class="post-hashtag">$1</span>'
     );
 
-    // Images Gallery (1, 2, or 3 images)
+    // Images Gallery (1, 2, or 3 images with clean borders and frames)
     const imgs = (post.images && post.images.length > 0)
       ? post.images
       : (post.imageData ? [post.imageData] : []);
@@ -965,12 +985,16 @@ function buildCommunityFeedHtml() {
       `;
     }).join('');
 
-    const currentAvatar = (AppState.currentUser && AppState.currentUser.avatar) ? AppState.currentUser.avatar : 'profile_avatar_seang.jpg';
+    const currentAvatar = (AppState.currentUser && AppState.currentUser.avatar)
+      ? AppState.currentUser.avatar
+      : 'profile_avatar_seang.jpg';
+
+    const isPrivate = post.privacy === 'private';
 
     return `
       <div class="feed-post-card" id="${post.id}">
         
-        <!-- Post Header -->
+        <!-- Post Header: Top-Left Profile Avatar & Account Owner Name (Like Facebook) -->
         <div class="post-header">
           <div class="post-author-group" data-view-user="${post.userId}" title="ចុចដើម្បីមើល Profile របស់ ${escapeHtml(post.userName)}">
             <div class="post-author-avatar-img">
@@ -981,7 +1005,12 @@ function buildCommunityFeedHtml() {
                 <span class="author-name-text">${escapeHtml(post.userName)}</span>
                 ${isOwner ? '<span class="author-owner-badge" style="font-size:0.72rem;padding:0.15rem 0.5rem;background:rgba(16,185,129,0.15);color:var(--accent-emerald);border-radius:var(--radius-full);margin-left:0.4rem;font-weight:700;">🌟 អ្នក</span>' : ''}
               </div>
-              <div class="post-time-meta">⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌐 សាធារណៈ</div>
+              <div class="post-time-meta">
+                <span>⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')}</span> • 
+                <span class="post-privacy-badge ${isPrivate ? 'private' : 'public'}">
+                  ${isPrivate ? '🔒 ឯកជនភាព' : '🌐 សាធារណៈ'}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -995,7 +1024,7 @@ function buildCommunityFeedHtml() {
                 </button>
               ` : `
                 <div class="dropdown-item-disabled" title="User មួយ មិនអាចលុប ឬកែប្រែ ទិន្នន័យ User មួយទៀតបានទេ">
-                  <span>🔒</span> ការពារសិទ្ធិអ្នកនិពន្ធ
+                  <span>🔒</span> ការពារសិទ្ធិ
                 </div>
               `}
             </div>
@@ -1005,7 +1034,7 @@ function buildCommunityFeedHtml() {
         <!-- Post Content Text -->
         <div class="post-content-text">${formattedText}</div>
 
-        <!-- Post Image Gallery (Clickable to Lightbox) -->
+        <!-- Post Image Gallery with Clear Borders/Frames -->
         ${imagesHtml}
 
         <!-- Stats Row -->
@@ -1017,16 +1046,19 @@ function buildCommunityFeedHtml() {
           </div>
         </div>
 
-        <!-- 3 Small Action Buttons (NO TEXT LABELS) -->
-        <div class="post-action-buttons-3">
-          <button type="button" class="btn-action-small ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត (Like)">
-            <span>${post.isLiked ? '❤️' : '👍'}</span>
+        <!-- Facebook-Style Action Bar (ចូលចិត្ត, បញ្ចេញមតិ, ចែករំលែក រាងៗខ្លួន) -->
+        <div class="fb-post-action-bar">
+          <button type="button" class="btn-fb-action ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត (Like)">
+            <span class="fb-act-icon">${post.isLiked ? '❤️' : '👍'}</span>
+            <span class="fb-act-label">${post.isLiked ? 'ចូលចិត្តរួច' : 'ចូលចិត្ត'}</span>
           </button>
-          <button type="button" class="btn-action-small" data-act-comment="${post.id}" title="បញ្ចេញមតិ (Comment)">
-            <span>💬</span>
+          <button type="button" class="btn-fb-action" data-act-comment="${post.id}" title="បញ្ចេញមតិ (Comment)">
+            <span class="fb-act-icon">💬</span>
+            <span class="fb-act-label">បញ្ចេញមតិ</span>
           </button>
-          <button type="button" class="btn-action-small" data-act-share="${post.id}" title="ចែករំលែក (Share)">
-            <span>↗️</span>
+          <button type="button" class="btn-fb-action" data-act-share="${post.id}" title="ចែករំលែក (Share)">
+            <span class="fb-act-icon">↗️</span>
+            <span class="fb-act-label">ចែករំលែក</span>
           </button>
         </div>
 
@@ -1037,9 +1069,9 @@ function buildCommunityFeedHtml() {
           </div>
 
           <form class="form-add-comment" data-comment-form="${post.id}">
-            <img src="${currentAvatar}" class="comment-input-avatar" alt="Avatar">
-            <input type="text" class="comment-input-field" placeholder="សរសេរមតិឆ្លើយតប..." required>
-            <button type="submit" class="btn-send-comment" title="ផ្ញើមតិ">➤</button>
+            <img src="${currentAvatar}" class="comment-avatar" alt="My Avatar">
+            <input type="text" class="input-comment-text" placeholder="សរសេរមតិយោបល់របស់អ្នក..." required>
+            <button type="submit" class="btn-send-comment">ផ្ញើ</button>
           </form>
         </div>
 
@@ -1047,6 +1079,7 @@ function buildCommunityFeedHtml() {
     `;
   }).join('');
 }
+
 
 function setupPostCardListeners() {
   // Lightbox click on photos
@@ -1304,40 +1337,40 @@ function setupCommunityComposerListeners() {
           return;
         }
 
-        const now = Date.now();
-        const todayStr = new Date().toISOString().split('T')[0];
+        // Store pending post and show Privacy Confirmation Modal
+        // (ពេល User Post រូបភាព សូមបង្ហាញសារ អោយជ្រើរើស មានពីរ គឺ សាធារណ និង ឯកជនភាព)
+        const privacySelect = document.getElementById('dashboardPostPrivacySelect');
+        const defaultChoice = privacySelect ? privacySelect.value : 'public';
 
-        // បើ User ចង់ Post រូបភាព គឺត្រូវ Post ចេញ Account របស់ខ្លួនឯង
-        const newPost = {
-          id: 'post_' + now + '_' + Math.floor(Math.random() * 1000),
-          userId: user.id,
-          userName: user.name,
-          userAvatar: user.avatar || 'profile_avatar_seang.jpg',
+        pendingPostForPrivacy = {
+          user,
           text,
-          imageData: imgData,
-          images: imgData ? [imgData] : [],
-          timestamp: now,
-          dateStr: todayStr,
-          timeStr: 'ទើបតែបង្ហោះមុននេះ',
-          likes: 0,
-          isLiked: false,
-          shares: 0,
-          comments: [],
+          imgData,
+          resetForm: () => {
+            if (textInput) textInput.value = '';
+            setImage(null);
+            if (previewWrap) previewWrap.style.display = 'none';
+            if (previewImg) previewImg.src = '';
+            if (fileInput) fileInput.value = '';
+            if (filenameText) filenameText.textContent = 'មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ';
+          },
         };
 
-        AppState.communityPosts.unshift(newPost);
-        saveCommunityPosts();
-
-        // Reset composer
-        if (textInput) textInput.value = '';
-        setImage(null);
-        if (previewWrap) previewWrap.style.display = 'none';
-        if (previewImg) previewImg.src = '';
-        if (fileInput) fileInput.value = '';
-        if (filenameText) filenameText.textContent = 'មិនទាន់ជ្រើសរើសរូបភាពនៅឡើយ';
-
-        renderCommunityFeed();
-        showToast('បានចែករំលែកសកម្មភាពហាត់ប្រាណជាសាធារណៈដោយជោគជ័យ! 🎉', 'success');
+        // Open Privacy Modal
+        const privModal = document.getElementById('modalPostPrivacyConfirm');
+        if (privModal) {
+          // Sync radio selection
+          const radios = privModal.querySelectorAll('input[name="postPrivacyChoice"]');
+          radios.forEach((r) => {
+            r.checked = r.value === defaultChoice;
+            const parentCard = r.closest('.privacy-option-card');
+            if (parentCard) parentCard.classList.toggle('selected', r.value === defaultChoice);
+          });
+          privModal.classList.add('active');
+        } else {
+          // Fallback if modal not present
+          finalizePublishPost('public');
+        }
       });
     }
   }
@@ -1400,6 +1433,78 @@ function setupCommunityComposerListeners() {
   }
 }
 
+
+// Global Pending Post for Privacy Selection
+let pendingPostForPrivacy = null;
+
+// Render Site Logo & Header Branding (Sabay_Logo.jpg vs. Owner Avatar vs. Custom)
+function renderSiteLogo() {
+  const headerLogo = document.getElementById('headerBrandLogo');
+  const previewImg = document.getElementById('settingLogoPreviewImg');
+  const btnSabay = document.getElementById('btnLogoUseSabay');
+  const btnAvatar = document.getElementById('btnLogoUseOwnerAvatar');
+
+  let activeSrc = 'Sabay_Logo.jpg';
+  if (AppState.logoSource === 'owner_avatar') {
+    activeSrc = (AppState.currentUser && AppState.currentUser.avatar)
+      ? AppState.currentUser.avatar
+      : 'profile_avatar_seang.jpg';
+  } else if (AppState.logoSource === 'custom' && AppState.customLogo) {
+    activeSrc = AppState.customLogo;
+  } else {
+    activeSrc = 'Sabay_Logo.jpg';
+  }
+
+  if (headerLogo) headerLogo.src = activeSrc;
+  if (previewImg) previewImg.src = activeSrc;
+
+  if (btnSabay) {
+    btnSabay.classList.toggle('active', AppState.logoSource === 'sabay');
+  }
+  if (btnAvatar) {
+    btnAvatar.classList.toggle('active', AppState.logoSource === 'owner_avatar');
+  }
+}
+
+// Switch Active User / Guest in the Facebook Network System
+function switchActiveUser(userId) {
+  if (userId === 'guest') {
+    AppState.isLoggedIn = false;
+    AppState.currentUser = null;
+    saveUsersAndSession();
+    renderHeaderUserState();
+    renderSiteLogo();
+    renderCommunityFeed();
+    renderStoriesTray();
+    showToast('បានប្តូរទៅជាទម្រង់ភ្ញៀវ (Guest Mode - មិនទាន់ Sign Up)', 'info');
+    return;
+  }
+
+  const user = AppState.users.find((u) => u.id === userId);
+  if (user) {
+    AppState.isLoggedIn = true;
+    AppState.currentUser = user;
+    AppState.profile.gender = user.gender || 'male';
+    AppState.profile.age = user.age || 35;
+    AppState.profile.height = user.height || 168;
+    AppState.profile.weight = user.weight || 65;
+    AppState.goal = user.goal || 2000;
+    saveProfile();
+    saveUsersAndSession();
+
+    renderHeaderUserState();
+    renderSiteLogo();
+    renderCommunityFeed();
+    renderStoriesTray();
+
+    if (AppState.viewingUser) {
+      renderUserProfileView(user);
+    }
+
+    showToast(`🔄 បានប្តូរទៅកាន់គណនី៖ ${user.name}`, 'success');
+  }
+}
+
 function renderAll() {
   renderTheme();
   renderLiveDate();
@@ -1418,6 +1523,7 @@ function renderAll() {
   renderSmartHealthTip();
   renderAnalytics();
   renderHeaderUserState();
+  renderSiteLogo();
 }
 
 // Theme
@@ -2354,6 +2460,10 @@ function renderHeaderUserState() {
   const quickPlaceholder = document.getElementById('quickBarPlaceholderText');
   const storyUserAvatar = document.getElementById('storyUserAvatarImg');
 
+  const selectHeaderUser = document.getElementById('selectHeaderUserAccount');
+  const composerName = document.getElementById('dashboardComposerName');
+  const composerAvatar = document.getElementById('dashboardComposerAvatar');
+
   if (AppState.isLoggedIn && AppState.currentUser) {
     const user = AppState.currentUser;
     if (signUpText) signUpText.textContent = `${user.name} (គណនី)`;
@@ -2364,6 +2474,16 @@ function renderHeaderUserState() {
 
     if (logoutBtn) logoutBtn.style.display = 'inline-flex';
     if (logoutText) logoutText.textContent = 'ចាកចេញ';
+
+    if (selectHeaderUser) selectHeaderUser.value = user.id;
+    if (composerName) composerName.textContent = user.name;
+    if (composerAvatar) {
+      if (user.avatar && (user.avatar.includes('.jpg') || user.avatar.includes('.png') || user.avatar.startsWith('data:image'))) {
+        composerAvatar.innerHTML = `<img src="${user.avatar}" alt="${user.name}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+      } else {
+        composerAvatar.textContent = user.gender === 'female' ? '🧘‍♀️' : '🏋️‍♂️';
+      }
+    }
 
     if (quickAvatar) quickAvatar.src = user.avatar || 'profile_avatar_seang.jpg';
     if (quickPlaceholder) quickPlaceholder.textContent = `តើថ្ងៃនេះអ្នកកំពុងគិតអ្វីដែរ, ${user.name}?`;
@@ -2377,6 +2497,10 @@ function renderHeaderUserState() {
     if (profileIcon) profileIcon.textContent = '👤';
 
     if (logoutBtn) logoutBtn.style.display = 'none';
+
+    if (selectHeaderUser) selectHeaderUser.value = 'guest';
+    if (composerName) composerName.textContent = 'ភ្ញៀវ (Guest)';
+    if (composerAvatar) composerAvatar.textContent = '👤';
 
     if (quickAvatar) quickAvatar.src = 'profile_avatar_seang.jpg';
     if (quickPlaceholder) quickPlaceholder.textContent = 'សូមចុះឈ្មោះជាមុនសិន បែប ងាយ ងាយ...';
@@ -2488,7 +2612,14 @@ function renderProfileUserPosts(targetUserId) {
   if (!listEl) return;
 
   const targetId = targetUserId || (AppState.viewingUser ? AppState.viewingUser.id : AppState.currentUser?.id);
-  const userPosts = AppState.communityPosts.filter((p) => p.userId === targetId);
+  const isOwner = AppState.currentUser && AppState.currentUser.id === targetId;
+
+  // Rule: When viewing own profile, show public and private. When viewing other, show ONLY public!
+  const userPosts = AppState.communityPosts.filter((p) => {
+    if (p.userId !== targetId) return false;
+    if (isOwner) return true;
+    return !p.privacy || p.privacy === 'public';
+  });
 
   if (userPosts.length === 0) {
     listEl.innerHTML = `
@@ -2520,35 +2651,85 @@ function renderProfileUserPosts(targetUserId) {
       ? `<img src="${post.userAvatar}" alt="${escapeHtml(post.userName)}">`
       : `<span style="font-size: 1.4rem;">${post.userAvatar || '🏋️‍♂️'}</span>`;
 
+    const isPrivate = post.privacy === 'private';
+
     return `
       <div class="fb-user-post-card">
         <div class="fb-post-card-header">
-          <div class="fb-post-avatar-circle">
+          <div class="fb-post-avatar-circle" data-view-user="${post.userId}">
             ${avatarHtml}
           </div>
           <div class="fb-post-meta">
             <h4>${escapeHtml(post.userName)}</h4>
-            <span>⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • 🌐 សាធារណៈ</span>
+            <span>⏱️ ${escapeHtml(post.timeStr || 'ថ្មីៗ')} • <span class="post-privacy-badge ${isPrivate ? 'private' : 'public'}">${isPrivate ? '🔒 ឯកជនភាព' : '🌐 សាធារណៈ'}</span></span>
           </div>
         </div>
         <div class="fb-post-body-text">${formattedText}</div>
         ${photosHtml}
         <div class="fb-post-social-bar">
-          <div class="post-action-buttons-3" style="border: none; margin: 0; padding: 0.25rem 0;">
-            <button type="button" class="btn-action-small ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត">
-              <span>${post.isLiked ? '❤️' : '👍'}</span>
+          <div class="fb-post-action-bar" style="margin: 0.3rem 0; width: 100%;">
+            <button type="button" class="btn-fb-action ${post.isLiked ? 'liked' : ''}" data-act-like="${post.id}" title="ចូលចិត្ត (Like)">
+              <span class="fb-act-icon">${post.isLiked ? '❤️' : '👍'}</span>
+              <span class="fb-act-label">${post.isLiked ? 'ចូលចិត្តរួច' : 'ចូលចិត្ត'}</span>
             </button>
-            <button type="button" class="btn-action-small" data-act-comment="${post.id}" title="បញ្ចេញមតិ">
-              <span>💬</span>
+            <button type="button" class="btn-fb-action" data-act-comment="${post.id}" title="បញ្ចេញមតិ (Comment)">
+              <span class="fb-act-icon">💬</span>
+              <span class="fb-act-label">បញ្ចេញមតិ</span>
             </button>
-            <button type="button" class="btn-action-small" data-act-share="${post.id}" title="ចែករំលែក">
-              <span>↗️</span>
+            <button type="button" class="btn-fb-action" data-act-share="${post.id}" title="ចែករំលែក (Share)">
+              <span class="fb-act-icon">↗️</span>
+              <span class="fb-act-label">ចែករំលែក</span>
             </button>
           </div>
         </div>
       </div>
     `;
   }).join('');
+}
+
+
+// Finalize post publication with chosen privacy setting
+function finalizePublishPost(privacyChoice) {
+  if (!pendingPostForPrivacy) return;
+
+  const { user, text, imgData, resetForm } = pendingPostForPrivacy;
+  const now = Date.now();
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const newPost = {
+    id: 'post_' + now + '_' + Math.floor(Math.random() * 1000),
+    userId: user.id,
+    userName: user.name,
+    userAvatar: user.avatar || 'profile_avatar_seang.jpg',
+    text,
+    imageData: imgData,
+    images: imgData ? [imgData] : [],
+    privacy: privacyChoice || 'public', // 'public' | 'private'
+    timestamp: now,
+    dateStr: todayStr,
+    timeStr: 'ទើបតែបង្ហោះមុននេះ',
+    likes: 0,
+    isLiked: false,
+    shares: 0,
+    comments: [],
+  };
+
+  AppState.communityPosts.unshift(newPost);
+  saveCommunityPosts();
+
+  resetForm();
+  pendingPostForPrivacy = null;
+
+  const privModal = document.getElementById('modalPostPrivacyConfirm');
+  if (privModal) privModal.classList.remove('active');
+
+  renderCommunityFeed();
+
+  if (privacyChoice === 'private') {
+    showToast('🔒 បានបង្ហោះជាឯកជនភាពដោយជោគជ័យ! (ឃើញតែអ្នកប៉ុណ្ណោះ)', 'info');
+  } else {
+    showToast('🎉 បានចែករំលែកជាសាធារណៈដោយជោគជ័យ! (គ្រប់ User ទាំងអស់អាចមើលឃើញ)', 'success');
+  }
 }
 
 function setupSabayFeatures() {
@@ -2574,18 +2755,96 @@ function setupSabayFeatures() {
     });
   }
 
+  // Header User Switcher (ភ្ជាប់គ្នាជាប្រព័ន្ធដូច Facebook)
+  const selectHeaderUser = document.getElementById('selectHeaderUserAccount');
+  if (selectHeaderUser) {
+    selectHeaderUser.addEventListener('change', (e) => {
+      switchActiveUser(e.target.value);
+    });
+  }
+
   // Header Logout / Switch to Guest Mode
   const btnHeaderLogout = document.getElementById('btnHeaderLogout');
   if (btnHeaderLogout) {
     btnHeaderLogout.addEventListener('click', () => {
-      if (AppState.isLoggedIn) {
-        AppState.isLoggedIn = false;
-        AppState.currentUser = null;
-        saveUsersAndSession();
-        renderHeaderUserState();
-        renderCommunityFeed();
-        showToast('បានចាកចេញពីគណនី (ស្ថិតក្នុងទម្រង់ជាភ្ញៀវ/Guest)', 'info');
+      switchActiveUser('guest');
+    });
+  }
+
+  // Privacy Confirmation Modal Listeners
+  const modalPrivacy = document.getElementById('modalPostPrivacyConfirm');
+  const btnClosePrivacy = document.getElementById('btnClosePrivacyModal');
+  const btnCancelPrivacy = document.getElementById('btnCancelPrivacyPost');
+  const btnConfirmPrivacy = document.getElementById('btnConfirmPublishPost');
+
+  if (modalPrivacy) {
+    // Radio Cards Selection
+    const cards = modalPrivacy.querySelectorAll('.privacy-option-card');
+    cards.forEach((card) => {
+      card.addEventListener('click', () => {
+        cards.forEach((c) => c.classList.remove('selected'));
+        card.classList.add('selected');
+        const radio = card.querySelector('input[type="radio"]');
+        if (radio) radio.checked = true;
+      });
+    });
+
+    const closePrivacyModal = () => {
+      modalPrivacy.classList.remove('active');
+      pendingPostForPrivacy = null;
+    };
+
+    if (btnClosePrivacy) btnClosePrivacy.addEventListener('click', closePrivacyModal);
+    if (btnCancelPrivacy) btnCancelPrivacy.addEventListener('click', closePrivacyModal);
+
+    if (btnConfirmPrivacy) {
+      btnConfirmPrivacy.addEventListener('click', () => {
+        const checkedRadio = modalPrivacy.querySelector('input[name="postPrivacyChoice"]:checked');
+        const choice = checkedRadio ? checkedRadio.value : 'public';
+        finalizePublishPost(choice);
+      });
+    }
+  }
+
+  // Logo Customization in tabPersonalInfo (ម្ចាស់ Account អាចប្តូរ Logo ជំនួសដោយរូបម្ចាស់ Account)
+  const btnSetSabay = document.getElementById('btnLogoUseSabay');
+  const btnSetOwnerAvatar = document.getElementById('btnLogoUseOwnerAvatar');
+  const inputCustomLogo = document.getElementById('inputCustomLogoUpload');
+
+  if (btnSetSabay) {
+    btnSetSabay.addEventListener('click', () => {
+      AppState.logoSource = 'sabay';
+      localStorage.setItem(STORAGE_KEYS.LOGO_SOURCE, 'sabay');
+      renderSiteLogo();
+      showToast('✨ បានកំណត់ប្រើ Logo ថ្មី Sabay_Logo.jpg ដោយជោគជ័យ!', 'success');
+    });
+  }
+
+  if (btnSetOwnerAvatar) {
+    btnSetOwnerAvatar.addEventListener('click', () => {
+      if (!AppState.currentUser) {
+        checkAuthOrPrompt('logo');
+        return;
       }
+      AppState.logoSource = 'owner_avatar';
+      localStorage.setItem(STORAGE_KEYS.LOGO_SOURCE, 'owner_avatar');
+      renderSiteLogo();
+      showToast('👤 បានប្តូរ Logo លើ Header ទៅជារូបថត Profile របស់ម្ចាស់ Account!', 'success');
+    });
+  }
+
+  if (inputCustomLogo) {
+    inputCustomLogo.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      compressImageFile(file, (b64) => {
+        AppState.logoSource = 'custom';
+        AppState.customLogo = b64;
+        localStorage.setItem(STORAGE_KEYS.LOGO_SOURCE, 'custom');
+        localStorage.setItem(STORAGE_KEYS.CUSTOM_LOGO, b64);
+        renderSiteLogo();
+        showToast('🎨 បាន Upload និងផ្លាស់ប្តូរ Logo ថ្មីដោយជោគជ័យ!', 'success');
+      });
     });
   }
 
